@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox id="LoginPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@LoginCSS.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.LoginView">
+    <children>
+      <Label text="Log in">
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+      </Label>
+      <TextField fx:id="usernameField" id="usernameField" maxWidth="-Infinity" prefWidth="220.0" promptText="Username (xxxYYxxx)">
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+         <tooltip>
+            <Tooltip fx:id="usernameTooltip" text="Empty Tooltip" />
+         </tooltip></TextField>
+      <PasswordField fx:id="passwordField" maxWidth="-Infinity" prefWidth="220.0" promptText="Password">
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin></PasswordField>
+        <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#loginUser" prefWidth="100.0" text="Submit">
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin></Button>
+        <Button id="button-colour" maxWidth="-Infinity" mnemonicParsing="false" onAction="#showRegister" prefWidth="100.0" text="Register" />
+   </children>
+</VBox>
