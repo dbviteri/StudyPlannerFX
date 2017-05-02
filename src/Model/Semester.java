@@ -9,6 +9,8 @@ public class Semester {
 
     // Properties ------------------------------------------------------------------------------------------------------
 
+    String startDate;
+    String endDate;
     ArrayList<Module> modules = new ArrayList<>();
     // Maybe modules should be a hashmap to be able to retrieve by module name.
 
@@ -20,6 +22,14 @@ public class Semester {
 
     public void addModules(Module[] modules) {
 
+    }
+
+    public void setStartDate(String startDate){
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(String endDate){
+        this.endDate = endDate;
     }
 
     public Module getModule() {
