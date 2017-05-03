@@ -4,7 +4,9 @@ import Model.Semester;
 import Model.User;
 import Utils.ControlledScene;
 import Utils.StageHandler;
+import com.sun.xml.internal.bind.v2.TODO;
 
+import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,9 +41,11 @@ public class SemesterController {
 
     private static final String QUERY_FIND_BY_USERNAME_PASSWORD =
             "SELECT * FROM User WHERE username = ? AND password = MD5(?)";
-
-    private static final String QUERY_INSERT =
+    private static final String QUERY_INSERT_USER =
             "INSERT INTO User (email, username, password, firstname, lastname, isStaff) VALUES (?, ?, MD5(?), ?, ?, ?)";
+    private static final String QUERY_INSERT_MODULES =
+            "INSERT INTO Module (name,code,Semester_ID) VALUES (?,?,?)";
+    private static final String QUERY_INSERT_ASSINGMENT = "";
 
 
     // Variables -------------------------------------------------------------------------------------------------------
@@ -62,7 +66,7 @@ public class SemesterController {
 
     /**
      * Find semesters for a given user
-     * @param user
+     * @param
      * @return
      */
     /*
@@ -89,7 +93,7 @@ public class SemesterController {
         try (
             Connection connection = dbhandler.getConnection();
             PreparedStatement statement = prepareStatement(connection, sql, false, properties);
-            ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) formSemester(resultSet);
         } catch (SQLException e) {
@@ -100,9 +104,51 @@ public class SemesterController {
     }
 
     // Load semester file?
+    // TODO : add file checking or rely on SQL checks
+    // TODO : One function for checking and parsing or TWO separate ones ?
+    public boolean checkFile(File file) throws IOException {
+        boolean valid = true;
+        String line;
+        final String separator = ",";
+        BufferedReader reader = openFile(file);
+
+        line = reader.readLine();
+        String[] headers = line.split(separator);
+        if(!headers[0].equals("Module Name")) { valid = false; }
+        if(!headers[1].equals("Module Code")) { valid = false; }
+        if(!headers[2].equals("Assessment Name")) { valid = false; }
+        if(!headers[3].equals("Assessment Type")) { valid = false; }
+        if(!headers[4].equals("Assessment Weight")) { valid = false; }
+        if(!headers[5].equals("Assessment DeadLine")) { valid = false; }
+        if(!headers[6].equals("Assessment Name")) { valid = false; }
+        if(reader != null){
+            while( (line = reader.readLine()) != null){
+                String[] data = line.split(separator);
+                if(data[0].equals("Module")){
+
+                }
+            }
+        }
+        return valid;
+    }
 
     // Helper functions ------------------------------------------------------------------------------------------------
 
+    /** Function takes a file and returns a file reader
+     *
+     * @param file
+     * @return BufferedReader
+     * @throws IOException
+     */
+    private static BufferedReader openFile(File file) throws IOException{
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return reader;
+    }
     private static Semester formSemester(ResultSet resultSet) throws SQLException {
         Semester semester = new Semester();
 

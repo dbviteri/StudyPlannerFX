@@ -51,7 +51,7 @@ public class UserController {
         try(
                 Connection connection = dbhandler.getConnection();
                 PreparedStatement statement = prepareStatement(connection, QUERY_USERNAME_EXISTS, false, username);
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) return true;
         } catch (SQLException e) {
@@ -67,7 +67,7 @@ public class UserController {
         try (
             Connection connection = dbhandler.getConnection();
             PreparedStatement statement = prepareStatement(connection, sql, false, properties);
-            ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) user = formUser(resultSet);
         } catch (SQLException e) {
@@ -95,7 +95,7 @@ public class UserController {
 
         try (
                 Connection connection = dbhandler.getConnection();
-                PreparedStatement statement = prepareStatement(connection, QUERY_INSERT, true, properties);
+                PreparedStatement statement = prepareStatement(connection, QUERY_INSERT, true, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to create new user. No rows affected");
@@ -114,7 +114,7 @@ public class UserController {
      */
     private static User formUser(ResultSet resultSet) throws SQLException{
         User user = new User();
-        user.setId(resultSet.getInt("id"));
+        user.setId(resultSet.getInt("user_id"));
         user.setEmail(resultSet.getString("email"));
         user.setUsername(resultSet.getString("username"));
         user.setFirstname(resultSet.getString("firstname"));

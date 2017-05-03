@@ -1,138 +1,182 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="StudyPlannerDB">
-  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.1">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.0">
     <root id="1"/>
     <schema id="2" parent="1" name="xdn15mcu_studyplanner">
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
     <schema id="3" parent="1" name="information_schema"/>
-    <table id="4" parent="2" name="Module"/>
-    <table id="5" parent="2" name="Semester"/>
-    <table id="6" parent="2" name="User"/>
-    <column id="7" parent="4" name="name">
-      <Position>2</Position>
+    <table id="4" parent="2" name="Assessment">
+      <Comment>Exam = 1, Assingment = 0</Comment>
+    </table>
+    <table id="5" parent="2" name="Module"/>
+    <table id="6" parent="2" name="Semester"/>
+    <table id="7" parent="2" name="User"/>
+    <column id="8" parent="4" name="title">
+      <Position>1</Position>
       <DataType>varchar(60)|0</DataType>
-      <NotNull>1</NotNull>
     </column>
-    <column id="8" parent="4" name="code">
+    <column id="9" parent="4" name="wieght">
       <Position>3</Position>
-      <DataType>varchar(9)|0</DataType>
+      <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="9" parent="4" name="module_id">
+    <column id="10" parent="4" name="deadline">
+      <Position>4</Position>
+      <DataType>date|0</DataType>
+    </column>
+    <column id="11" parent="4" name="completion">
+      <Position>5</Position>
+      <DataType>int(11)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="12" parent="4" name="isExam">
+      <Position>2</Position>
+      <DataType>tinyint(1)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="13" parent="4" name="module_ID">
+      <Position>6</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="14" parent="4" name="Assessment_module_ID_uindex">
+      <ColNames>module_ID</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="15" parent="4" name="Assessment_module_ID_uindex">
+      <ColNames>module_ID</ColNames>
+      <UnderlyingIndexName>Assessment_module_ID_uindex</UnderlyingIndexName>
+    </key>
+    <column id="16" parent="5" name="module_id">
       <Position>1</Position>
       <DataType>bigint(20)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <index id="10" parent="4" name="Module_code_uindex">
+    <column id="17" parent="5" name="name">
+      <Position>2</Position>
+      <DataType>varchar(60)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="18" parent="5" name="code">
+      <Position>3</Position>
+      <DataType>varchar(9)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="19" parent="5" name="Semester_ID">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="20" parent="5" name="Module_code_uindex">
       <ColNames>code</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="11" parent="4" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
+    <index id="21" parent="5" name="Module_Semester_semester_id_fk">
+      <ColNames>Semester_ID</ColNames>
+    </index>
+    <key id="22" parent="5" name="PRIMARY">
       <ColNames>module_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="12" parent="4" name="Module_code_uindex">
+    <key id="23" parent="5" name="Module_code_uindex">
       <ColNames>code</ColNames>
       <UnderlyingIndexName>Module_code_uindex</UnderlyingIndexName>
     </key>
-    <column id="13" parent="5" name="semester_id">
+    <column id="24" parent="6" name="semester_id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="14" parent="5" name="start_date">
+    <column id="25" parent="6" name="start_date">
       <Position>2</Position>
       <DataType>date|0</DataType>
     </column>
-    <column id="15" parent="5" name="end_date">
+    <column id="26" parent="6" name="end_date">
       <Position>3</Position>
       <DataType>date|0</DataType>
     </column>
-    <column id="16" parent="5" name="user_id">
+    <column id="27" parent="6" name="user_id">
       <Position>4</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="17" parent="5" name="Semester_end_date_uindex">
+    <index id="28" parent="6" name="Semester_end_date_uindex">
       <ColNames>end_date</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="18" parent="5" name="Semester_start_date_uindex">
+    <index id="29" parent="6" name="Semester_start_date_uindex">
       <ColNames>start_date</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="19" parent="5" name="Semester_user_id_uindex">
+    <index id="30" parent="6" name="Semester_user_id_uindex">
       <ColNames>user_id</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="20" parent="5" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
+    <key id="31" parent="6" name="PRIMARY">
       <ColNames>semester_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="21" parent="5" name="Semester_start_date_uindex">
+    <key id="32" parent="6" name="Semester_start_date_uindex">
       <ColNames>start_date</ColNames>
       <UnderlyingIndexName>Semester_start_date_uindex</UnderlyingIndexName>
     </key>
-    <key id="22" parent="5" name="Semester_end_date_uindex">
+    <key id="33" parent="6" name="Semester_end_date_uindex">
       <ColNames>end_date</ColNames>
       <UnderlyingIndexName>Semester_end_date_uindex</UnderlyingIndexName>
     </key>
-    <key id="23" parent="5" name="Semester_user_id_uindex">
+    <key id="34" parent="6" name="Semester_user_id_uindex">
       <ColNames>user_id</ColNames>
       <UnderlyingIndexName>Semester_user_id_uindex</UnderlyingIndexName>
     </key>
-    <column id="24" parent="6" name="email">
-      <Position>2</Position>
-      <DataType>varchar(60)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="25" parent="6" name="username">
-      <Position>3</Position>
-      <DataType>varchar(8)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="26" parent="6" name="password">
-      <Position>4</Position>
-      <DataType>varchar(32)|0</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="27" parent="6" name="firstname">
-      <Position>5</Position>
-      <DataType>varchar(40)|0</DataType>
-    </column>
-    <column id="28" parent="6" name="lastname">
-      <Position>6</Position>
-      <DataType>varchar(40)|0</DataType>
-    </column>
-    <column id="29" parent="6" name="isStaff">
-      <Position>7</Position>
-      <Comment>Professor = 1, Student = 0</Comment>
-      <DataType>tinyint(4)|0</DataType>
-      <NotNull>1</NotNull>
-      <DefaultExpression>&apos;0&apos;</DefaultExpression>
-    </column>
-    <column id="30" parent="6" name="user_id">
+    <column id="35" parent="7" name="user_id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <index id="31" parent="6" name="email">
+    <column id="36" parent="7" name="email">
+      <Position>2</Position>
+      <DataType>varchar(60)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="37" parent="7" name="username">
+      <Position>3</Position>
+      <DataType>varchar(8)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="38" parent="7" name="password">
+      <Position>4</Position>
+      <DataType>varchar(32)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="39" parent="7" name="firstname">
+      <Position>5</Position>
+      <DataType>varchar(40)|0</DataType>
+    </column>
+    <column id="40" parent="7" name="lastname">
+      <Position>6</Position>
+      <DataType>varchar(40)|0</DataType>
+    </column>
+    <column id="41" parent="7" name="isStaff">
+      <Position>7</Position>
+      <Comment>Professor = 1, Student = 0</Comment>
+      <DataType>tinyint(1)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <index id="42" parent="7" name="email">
       <ColNames>email</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="32" parent="6" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
+    <key id="43" parent="7" name="PRIMARY">
       <ColNames>user_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="33" parent="6" name="email">
+    <key id="44" parent="7" name="email">
       <ColNames>email</ColNames>
       <UnderlyingIndexName>email</UnderlyingIndexName>
     </key>

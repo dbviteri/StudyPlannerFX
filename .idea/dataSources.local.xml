@@ -9,7 +9,6 @@
       <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
       <user-name>xdn15mcu</user-name>
-      <introspection-schemas>*:xdn15mcu_studyplanner</introspection-schemas>
     </data-source>
   </component>
 </project>
