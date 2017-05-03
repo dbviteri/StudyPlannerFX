@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.User;
 import Utils.SPException;
 import Utils.SPProperties;
 
@@ -83,6 +84,10 @@ public abstract class DatabaseHandler {
 
     public SemesterController getSemesterController() { return new SemesterController(this); }
 
+    public void createSession(User user) { Session.createSession(user); }
+
+    public User getUserSession(){ return Session.getSession().getUser(); }
+
     //----------------------------------------------- ADD MORE CONTROLLERS HERE ----------------------------------------
 
 
@@ -105,6 +110,23 @@ class DriverManagerSP extends DatabaseHandler {
     @Override
     Connection getConnection() throws SQLException{
         return DriverManager.getConnection(url, username, password);
+    }
+}
+
+class Session {
+    private static final Session SESSION = new Session();
+    private User user;
+
+    public static void createSession(User user){
+        SESSION.user = user;
+    }
+
+    public static Session getSession(){
+        return SESSION;
+    }
+
+    public User getUser(){
+        return user;
     }
 }
 
