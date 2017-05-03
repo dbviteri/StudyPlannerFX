@@ -9,10 +9,10 @@ public class Module {
 
     // Properties ------------------------------------------------------------------------------------------------------
 
-    String name;
-    String code;
-    ArrayList<Assessment> assessments = new ArrayList<>();
-    ArrayList<Activity> activities = new ArrayList<>();
+    private String name;
+    private String code;
+    private ArrayList<Assessment> assessments = new ArrayList<>();
+    private ArrayList<Activity> activities = new ArrayList<>();
 
     // Constructors ----------------------------------------------------------------------------------------------------
 

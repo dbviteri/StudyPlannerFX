@@ -1,6 +1,7 @@
 package View;
 
 import Controller.DatabaseHandler;
+import Controller.SemesterController;
 import Controller.UserController;
 import Model.User;
 import Utils.ControlledScene;
@@ -8,7 +9,10 @@ import Utils.StageHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,8 +34,8 @@ public class RegisterView implements ControlledScene {
     public void registerUser(){
         DatabaseHandler studyplannerdb = DatabaseHandler.getInstance("xdn15mcu_studyplanner.jdbc");
         UserController uc = studyplannerdb.getUserController();
-
-        User user = null;
+        SemesterController semC = studyplannerdb.getSemesterController();
+        User user = new User();
 
         String username = generateUserName();
 
@@ -46,8 +50,15 @@ public class RegisterView implements ControlledScene {
         user.setFirstname(nameField.getText());
         user.setLastname(lastNameField.getText());
         user.setStaff(false);
+        File userF = fileChooser();
+        try {
+            if (semC.checkFile(userF)) {
+                uc.create(user);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        uc.create(user);
     }
 
     // TODO: Change this so it doesn't query the database everytime
@@ -63,6 +74,13 @@ public class RegisterView implements ControlledScene {
             if (i == 2) sb.append(df.format(Calendar.getInstance().getTime()));
         }
         return sb.toString();
+    }
+    @FXML
+    public File fileChooser(){
+        final FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(stageHandler.getStage());
+
+        return file;
     }
 
     @FXML
