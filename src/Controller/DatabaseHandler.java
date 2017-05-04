@@ -100,8 +100,9 @@ class DriverManagerSP extends DatabaseHandler {
     private String url;
     private String username;
     private String password;
+    private transient Connection connection;
 
-    DriverManagerSP(String url, String username, String password){
+    DriverManagerSP(String url, String username, String password) {
         this.url = url;
         this.username = username;
         this.password = password;
@@ -109,7 +110,10 @@ class DriverManagerSP extends DatabaseHandler {
 
     @Override
     Connection getConnection() throws SQLException{
-        return DriverManager.getConnection(url, username, password);
+        if (connection == null || connection.isClosed()) {
+            this.connection = DriverManager.getConnection(url,username,password);
+        }
+        return this.connection;
     }
 }
 

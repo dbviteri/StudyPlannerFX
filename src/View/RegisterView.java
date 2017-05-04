@@ -50,6 +50,7 @@ public class RegisterView implements ControlledScene {
         user.setFirstname(nameField.getText());
         user.setLastname(lastNameField.getText());
         user.setStaff(false);
+        // file chooser called in ... button too
         File userF = fileChooser();
         try {
             if (semC.checkFile(userF)) {
@@ -76,7 +77,7 @@ public class RegisterView implements ControlledScene {
         return sb.toString();
     }
     @FXML
-    public File fileChooser(){
+    private File fileChooser(){
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(stageHandler.getStage());
 

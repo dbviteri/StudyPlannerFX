@@ -1,16 +1,24 @@
 package Controller;
 
+import Model.Assessment;
+import Model.Module;
 import Model.Semester;
 import Model.User;
 import Utils.ControlledScene;
+import Utils.SPException;
 import Utils.StageHandler;
 import com.sun.xml.internal.bind.v2.TODO;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 
 import static Controller.DatabaseHandler.prepareStatement;
 
@@ -38,14 +46,14 @@ public class SemesterController {
 
     private static final String QUERY_USERNAME_EXISTS =
             "SELECT * FROM Semester WHERE username = ?";
-
     private static final String QUERY_FIND_BY_USERNAME_PASSWORD =
             "SELECT * FROM User WHERE username = ? AND password = MD5(?)";
     private static final String QUERY_INSERT_USER =
             "INSERT INTO User (email, username, password, firstname, lastname, isStaff) VALUES (?, ?, MD5(?), ?, ?, ?)";
     private static final String QUERY_INSERT_MODULES =
             "INSERT INTO Module (name,code,Semester_ID) VALUES (?,?,?)";
-    private static final String QUERY_INSERT_ASSINGMENT = "";
+    private static final String QUERY_INSERT_ASSINGMENT =
+            "INSERT INTO Assessment (title,isExam,deadline,weight,module_ID) VALUES (?,?,?,?,?)";
 
 
     // Variables -------------------------------------------------------------------------------------------------------
@@ -102,38 +110,50 @@ public class SemesterController {
 
         return semester;
     }
-
     // Load semester file?
     // TODO : add file checking or rely on SQL checks
     // TODO : One function for checking and parsing or TWO separate ones ?
     public boolean checkFile(File file) throws IOException {
-        boolean valid = true;
+        boolean valid = false;
         String line;
         final String separator = ",";
         BufferedReader reader = openFile(file);
+        Module aModule;
+        Assessment anAsse;
 
-        line = reader.readLine();
-        String[] headers = line.split(separator);
-        if(!headers[0].equals("Module Name")) { valid = false; }
-        if(!headers[1].equals("Module Code")) { valid = false; }
-        if(!headers[2].equals("Assessment Name")) { valid = false; }
-        if(!headers[3].equals("Assessment Type")) { valid = false; }
-        if(!headers[4].equals("Assessment Weight")) { valid = false; }
-        if(!headers[5].equals("Assessment DeadLine")) { valid = false; }
-        if(!headers[6].equals("Assessment Name")) { valid = false; }
-        if(reader != null){
-            while( (line = reader.readLine()) != null){
+        reader.readLine();
+        reader.readLine();
+
+        if (reader != null && file.getName().contains(".csv")) {
+            while ((line = reader.readLine()) != null) {
                 String[] data = line.split(separator);
-                if(data[0].equals("Module")){
+                if(data.length == 3) {
+                    aModule = new Module(data[0], data[1]);
+
+                }
+                else {
+                    reader.readLine();
+                    anAsse = new Assessment(data[0],Integer.parseInt(data[1]),
+                            Integer.parseInt(data[2]), makeDate(data[3]));
 
                 }
             }
         }
-        return valid;
-    }
+            return valid;
 
+    }
     // Helper functions ------------------------------------------------------------------------------------------------
 
+    private static Date makeDate(String date) {
+        DateFormat format = new SimpleDateFormat("DD,MM,YYYY", Locale.UK);
+        Date aDate = new Date();
+        try {
+            aDate = format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return aDate;
+    }
     /** Function takes a file and returns a file reader
      *
      * @param file

@@ -18,11 +18,9 @@ public class Module {
 
     // TODO: Decide whether we need constructors
     // Might be optional if we set everything by the setters
-    public Module(String name, String code, Assessment assessment, Activity activity) {
+    public Module(String name, String code) {
         this.name = name;
         this.code = code;
-        assessments.add(assessment);
-        activities.add(activity);
     }
 
     // Getters and setters ---------------------------------------------------------------------------------------------
