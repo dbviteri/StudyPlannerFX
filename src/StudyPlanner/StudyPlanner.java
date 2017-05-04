@@ -31,9 +31,13 @@ public class StudyPlanner extends Application {
         stageHandler.setScene(StageHandler.SCENE.LOGIN, false);
 
         Group root = new Group();
-        root.getChildren().addAll(stageHandler);
+        root.getChildren().add(stageHandler);
 
         Scene scene = new Scene(root);
+
+        //root.scaleXProperty().bind(scene.widthProperty());
+        //root.scaleYProperty().bind(scene.heightProperty());
+        System.out.println(stage.getHeight());
         stage.setScene(scene);
         stage.setTitle(WINDOW_TITLE);
         stage.show();

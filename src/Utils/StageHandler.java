@@ -1,15 +1,19 @@
 package Utils;
 
 import StudyPlanner.StudyPlanner;
+import View.SemesterView;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -27,6 +31,7 @@ public class StageHandler extends StackPane{
 
     private static final double STAGE_WIDTH = 600;
     private static final double STAGE_HEIGHT = 400;
+    private static String FXML_DIR = "../View/";
 
     public enum SCENE {
         LOGIN, REGISTER, SEMESTER
@@ -35,20 +40,48 @@ public class StageHandler extends StackPane{
 
     // Hash map of scene names, and corresponding nodes in the stack pane
     private HashMap<SCENE, Node> scenes = new HashMap<>();
+
     private Stage stage;
+    private ControlledScene controlledScene;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
     /**
-     * Constructs a handler for scenes.
+     * Constructs a handler for scenes. It also creates a listener
      * @param stage The stage where all the scenes are displayed. Needed to be able to resize the window.
      */
     public StageHandler(Stage stage){
         super();
         this.stage = stage;
+        getChildren().addListener((ListChangeListener<Node>) c -> {
+            if (!c.getList().isEmpty()) {
+                doListenerAction(c);
+            }
+        });
     }
 
     // Methods ---------------------------------------------------------------------------------------------------------
+
+    /**
+     * Any logic to do with dynamic display of contents on any scene should be done here.
+     * It listens for a change of scene.
+     * @param c
+     */
+    private void doListenerAction(ListChangeListener.Change<? extends Node> c) {
+        System.out.println(c.getList().get(0).getId());
+
+
+
+        // If we change to semester view
+
+        //TESTING
+
+        // Load the dynamic contents of the scene
+        if (c.getList().get(0).getId().equals("SemesterView")){
+            // Do whatever
+        }
+
+    }
 
     /**
      * It will remove the currently displayed screen if there's already one being displayed
@@ -81,7 +114,6 @@ public class StageHandler extends StackPane{
         }
     }
 
-
     /**
      * Loads a scene to get it ready for use with setScene()
      * @param sceneName The scene name to load
@@ -92,19 +124,41 @@ public class StageHandler extends StackPane{
         try {
             FXMLLoader resourceLoader = new FXMLLoader(getClass().getResource(FXMLName));
 
+
+            /**
+             * In case a view controller needs to load components dynamically prior to be shown,
+             * such as changing the stage's title with a user's name, an instance of this handler
+             * can be passed through the constructor of the view controller.
+             */
+            resourceLoader.setControllerFactory((Class<?> controllerType) -> {
+                if (controllerType == SemesterView.class){
+                    return new SemesterView(this);
+                    //semesterView.wtf(this);
+                } else {
+                    try {
+                        return controllerType.newInstance();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
             // Get a scene based on the fxml
             Parent scene = resourceLoader.load();
 
-            ControlledScene sceneController = resourceLoader.getController();
+            controlledScene = resourceLoader.getController();
 
-            sceneController.setParentScene(this);
+            controlledScene.setParentScene(this);
+
+            //scene.prefHeight(stage.heightProperty().doubleValue());
+            //scene.prefWidth(stage.widthProperty().doubleValue());
+
             //scene.getStyleClass().add("../View/LoginCSS.css");
             //scene.getStyleClass().addAll("root", "button");
             //scene.getStylesheets().add("View/LoginCSS.css");
             //System.out.println(scene.getStyle());
             // Add the scene to hash map
             scenes.put(sceneName, scene);
-
             return  true;
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -112,6 +166,10 @@ public class StageHandler extends StackPane{
             return false;
         }
     }
+//
+//    public StageHandler(ControlledScene controlledScene){
+//        controlledScene.setParentScene(this);
+//    }
 
     /**
      * Sets the displayed scene to the one passed.
@@ -149,22 +207,24 @@ public class StageHandler extends StackPane{
         return setScene(sceneName, resizable, STAGE_WIDTH, STAGE_HEIGHT);
     }
 
+    public void reloadScene(SCENE scene){
+        // Get scene, remove it from hashmap and load it again
+        System.out.println(scenes.get(scene).getId());
+        String id = scenes.get(scene).getId();
+        String fxml = FXML_DIR + id + ".fxml";
+        scenes.remove(scene);
 
-    public Node getScene(SCENE sceneName){
-        return scenes.get(sceneName);
+
+        loadScene(scene, fxml);
+
+        //unloadScene(scene);
+        //loadScene(scene, );
     }
-    public void setStageTitle(String title){
-        stage.setTitle(title);
-    }
+
+//    public Node getScene(SCENE sceneName){
+//        return scenes.get(sceneName);
+//    }
     public Stage getStage(){return stage;}
-    /*
-    public boolean unloadScene(SCENE sceneName) {
-        if (scenes.remove(sceneName) == null) {
-            System.out.println("Scene doesn't exist");
-            return false;
-        } else {
-            return true;
-        }
-    }
-    */
+
+
 }

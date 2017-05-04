@@ -41,6 +41,7 @@ public class Semester {
     @Override
     public String toString() {
         //StringBuilder sb = new StringBuilder();
-        return modules.get(0).toString();
+        //return modules.get(0).toString();
+        return "Semester: " + startDate + ", " + endDate;
     }
 }

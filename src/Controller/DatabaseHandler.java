@@ -72,7 +72,7 @@ public abstract class DatabaseHandler {
      */
     abstract Connection getConnection() throws SQLException;
 
-    // Getters ---------------------------------------------------------------------------------------------------------
+    // Getters & Setters -----------------------------------------------------------------------------------------------
 
     /**
      * Returns the User Controller associated with the database handler
@@ -84,10 +84,11 @@ public abstract class DatabaseHandler {
 
     public SemesterController getSemesterController() { return new SemesterController(this); }
 
-    public void createSession(User user) { Session.createSession(user); }
-
     public User getUserSession(){ return Session.getSession().getUser(); }
 
+    public void createSession(User user) { Session.createSession(user); }
+
+    public void deleteSession(){Session.deleteSession();}
     //----------------------------------------------- ADD MORE CONTROLLERS HERE ----------------------------------------
 
 
@@ -120,6 +121,8 @@ class Session {
     public static void createSession(User user){
         SESSION.user = user;
     }
+
+    public static void deleteSession(){ SESSION.user = null; }
 
     public static Session getSession(){
         return SESSION;

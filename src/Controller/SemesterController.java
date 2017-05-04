@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static Controller.DatabaseHandler.prepareStatement;
 
@@ -69,24 +70,30 @@ public class SemesterController {
      * @param
      * @return
      */
-    /*
-    public Semester find(User user){
+
+    public ArrayList<Semester> findAll(User user){
+        return findAll(QUERY_ALL_SEMESTERS, user.getId());
+    }
+
+
+    public ArrayList<Semester> findAll(String sql, Object... properties){
+        ArrayList<Semester> semesters = new ArrayList<>();
         Semester semester = null;
         try (
                 Connection connection = dbhandler.getConnection();
-                PreparedStatement statement = prepareStatement(connection, QUERY_ALL_SEMESTERS,
+                PreparedStatement statement = prepareStatement(connection, sql,
                         false, properties);
                 ResultSet resultSet = statement.executeQuery();
         ) {
             while (resultSet.next()){
-                formSemester(resultSet);
+                semesters.add(formSemester(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return semester;
+        return semesters;
     }
-*/
+
     public Semester find(String sql, Object... properties){
         Semester semester = null;
 

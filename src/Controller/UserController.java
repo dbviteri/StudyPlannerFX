@@ -41,6 +41,10 @@ public class UserController {
         this.dbhandler = dbhandler;
     }
 
+    public UserController(){}
+
+    public DatabaseHandler getDbhandler() {return dbhandler;}
+
     // Methods ---------------------------------------------------------------------------------------------------------
 
     public User find(String username, String password) throws SPException {

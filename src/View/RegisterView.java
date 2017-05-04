@@ -75,6 +75,7 @@ public class RegisterView implements ControlledScene {
         }
         return sb.toString();
     }
+
     @FXML
     public File fileChooser(){
         final FileChooser fileChooser = new FileChooser();
