@@ -9,32 +9,30 @@ public class Semester {
 
     // Properties ------------------------------------------------------------------------------------------------------
 
-    String startDate;
-    String endDate;
-    ArrayList<Module> modules = new ArrayList<>();
+    private String startDate;
+    private String endDate;
+    private ArrayList<Module> modules = new ArrayList<>();
     // Maybe modules should be a hashmap to be able to retrieve by module name.
 
     // Getters and setters----------------------------------------------------------------------------------------------
-
-    public void addModule(Module module) {
-        modules.add(module);
+    public String getStartDate(){ return startDate; }
+    public String getEndDate(){ return endDate; }
+    public ArrayList<Module> getModules(){ return modules; }
+    public Module getModule() {
+        return modules.get(0);
     }
 
-    public void addModules(Module[] modules) {
-
-    }
+    public void addModule(Module module) { modules.add(module); }
+    public void addModules(Module[] modules) { }
 
     public void setStartDate(String startDate){
         this.startDate = startDate;
     }
-
     public void setEndDate(String endDate){
         this.endDate = endDate;
     }
 
-    public Module getModule() {
-        return modules.get(0);
-    }
+
 
     // Overrides--------------------------------------------------------------------------------------------------------
 
