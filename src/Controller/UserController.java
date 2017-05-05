@@ -1,20 +1,26 @@
 package Controller;
 
 import Model.User;
+import Utils.ControlledScene;
 import Utils.SPException;
+import Utils.StageHandler;
+import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static Controller.DatabaseHandler.prepareStatement;
-
 /**
  *
  * Created by Didac on 30/04/2017.
  */
-public class UserController {
+public abstract class UserController{
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
@@ -35,26 +41,22 @@ public class UserController {
 
     /**
      * Constructs a User controller associated with the database handler
-     * @param dbhandler
+     * @param //dbhandler
      */
-    UserController(DatabaseHandler dbhandler){
-        this.dbhandler = dbhandler;
+    public UserController() {
+        dbhandler = DatabaseHandler.getDatabaseHandler();
+        //System.out.println(dbhandler.getConnection());
     }
 
-    public UserController(){}
+    // METHODS FOR QUERIES ---------------------------------------------------------------------------------------------
 
-    public DatabaseHandler getDbhandler() {return dbhandler;}
-
-    // Methods ---------------------------------------------------------------------------------------------------------
-
-    public User find(String username, String password) throws SPException {
+    protected final User find(String username, String password) throws SPException {
         return find(QUERY_FIND_BY_USERNAME_PASSWORD, username, password);
     }
 
-    public boolean userExists(String username) throws SPException {
+    protected final boolean userExists(String username) throws SPException {
         try(
-                Connection connection = dbhandler.getConnection();
-                PreparedStatement statement = prepareStatement(connection, QUERY_USERNAME_EXISTS, false, username);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_USERNAME_EXISTS, false, username);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) return true;
@@ -65,12 +67,11 @@ public class UserController {
         return false;
     }
 
-    public User find(String sql, Object... properties) throws SPException {
+    protected final User find(String sql, Object... properties) throws SPException {
         User user = null;
 
         try (
-            Connection connection = dbhandler.getConnection();
-            PreparedStatement statement = prepareStatement(connection, sql, false, properties);
+            PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties);
             ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) user = formUser(resultSet);
@@ -81,7 +82,7 @@ public class UserController {
         return user;
     }
 
-    public void create(User user){
+    protected final void create(User user){
         /*
         if(user.getId() != null){
             throw new IllegalArgumentException("Already in db");
@@ -98,8 +99,7 @@ public class UserController {
         };
 
         try (
-                Connection connection = dbhandler.getConnection();
-                PreparedStatement statement = prepareStatement(connection, QUERY_INSERT, true, properties)
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, true, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to create new user. No rows affected");
@@ -107,6 +107,57 @@ public class UserController {
             e.printStackTrace();
         }
     }
+
+    // FXML HANDLING ---------------------------------------------------------------------------------------------------
+
+//    @FXML private TextField usernameField;
+//    @FXML private PasswordField passwordField;
+//    @FXML private Tooltip usernameTooltip;
+//    @FXML private ComboBox comboBox;
+//
+//    @FXML
+//    public void loginUser() {
+//        //User user = dbhandler.getUserSession();
+//        String username = usernameField.getText();//"xdn15mcu";
+//        String password = passwordField.getText();//"test";
+//        User user = find(username, password);
+//
+//        // If user is not null, show the main panel
+//        if(user == null) {
+//            displayTooltip("Username or password is wrong. Please try again.");
+//        } else {
+//            //databaseHandler.createSession(user);
+//
+//            // Reload scene after creating a session
+//            stageHandler.reloadScene(StageHandler.SCENE.SEMESTER);
+//            stageHandler.setScene(StageHandler.SCENE.SEMESTER, true);
+//        }
+//    }
+//
+//    private void displayTooltip(String message){
+//        usernameField.getStyleClass().add("error");
+//        //final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
+//        //usernameField.pseudoClassStateChanged(errorClass, true);
+//
+//        usernameTooltip.setText(message);
+//
+//        Point2D point2D = usernameField.localToScene(0.0, 0.0);
+//        usernameTooltip.setAutoHide(true);
+//        usernameTooltip.show(stageHandler.getStage(),
+//                point2D.getX() + usernameField.getScene().getX() +
+//                        usernameField.getScene().getWindow().getX() + usernameField.getWidth(),
+//                point2D.getY() + usernameField.getScene().getY() + usernameField.getScene().getWindow().getY());
+//    }
+//
+//    @FXML
+//    private void showRegister() {
+//        stageHandler.setScene(StageHandler.SCENE.REGISTER, false);
+//    }
+//
+//    @Override
+//    public void setParentScene(StageHandler parentScene) {
+//        stageHandler = parentScene;
+//    }
 
     // Helper functions ------------------------------------------------------------------------------------------------
 

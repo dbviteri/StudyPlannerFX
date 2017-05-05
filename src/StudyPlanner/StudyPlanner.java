@@ -1,5 +1,6 @@
 package StudyPlanner;
 
+import Controller.DatabaseHandler;
 import Utils.StageHandler;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -44,6 +45,13 @@ public class StudyPlanner extends Application {
 
     }
 
+    @Override
+    public void stop(){
+        //TODO: SAVE STUFF HERE
+        //TODO: This method handles when window closes
+        DatabaseHandler.getDatabaseHandler().closeConnection();
+        System.out.println("Window closing");
+    }
 
     public static void main(String[] args) {
         launch(args);

@@ -1,7 +1,7 @@
 package Utils;
 
+import Controller.SemesterController;
 import StudyPlanner.StudyPlanner;
-import View.SemesterView;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -42,7 +42,6 @@ public class StageHandler extends StackPane{
     private HashMap<SCENE, Node> scenes = new HashMap<>();
 
     private Stage stage;
-    private ControlledScene controlledScene;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
@@ -128,15 +127,14 @@ public class StageHandler extends StackPane{
             /**
              * In case a view controller needs to load components dynamically prior to be shown,
              * such as changing the stage's title with a user's name, an instance of this handler
-             * can be passed through the constructor of the view controller.
+             * can be passed through the constructor of the controller.
              */
-            resourceLoader.setControllerFactory((Class<?> controllerType) -> {
-                if (controllerType == SemesterView.class){
-                    return new SemesterView(this);
-                    //semesterView.wtf(this);
+            resourceLoader.setControllerFactory((Class<?> controlledScene) -> {
+                if (controlledScene == SemesterController.class){
+                    return new SemesterController(this);
                 } else {
                     try {
-                        return controllerType.newInstance();
+                        return controlledScene.newInstance();
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -146,8 +144,7 @@ public class StageHandler extends StackPane{
             // Get a scene based on the fxml
             Parent scene = resourceLoader.load();
 
-            controlledScene = resourceLoader.getController();
-
+            ControlledScene controlledScene = resourceLoader.getController();
             controlledScene.setParentScene(this);
 
             //scene.prefHeight(stage.heightProperty().doubleValue());
@@ -203,8 +200,8 @@ public class StageHandler extends StackPane{
      * @param resizable     Whether it's resizable or not
      * @return
      */
-    public boolean setScene(SCENE sceneName, boolean resizable){
-        return setScene(sceneName, resizable, STAGE_WIDTH, STAGE_HEIGHT);
+    public void setScene(SCENE sceneName, boolean resizable){
+        setScene(sceneName, resizable, STAGE_WIDTH, STAGE_HEIGHT);
     }
 
     public void reloadScene(SCENE scene){

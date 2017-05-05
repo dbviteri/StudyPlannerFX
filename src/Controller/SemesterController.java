@@ -8,6 +8,9 @@ import Utils.ControlledScene;
 import Utils.SPException;
 import Utils.StageHandler;
 import com.sun.xml.internal.bind.v2.TODO;
+import javafx.fxml.FXML;
+import javafx.scene.control.Menu;
+import javafx.scene.layout.VBox;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -20,13 +23,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
 
-import static Controller.DatabaseHandler.prepareStatement;
-
 /**
  *
  * Created by Didac on 01/05/2017.
  */
-public class SemesterController {
+public class SemesterController implements ControlledScene {
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
@@ -55,22 +56,49 @@ public class SemesterController {
     private static final String QUERY_INSERT_ASSINGMENT =
             "INSERT INTO Assessment (title,isExam,deadline,weight,module_ID) VALUES (?,?,?,?,?)";
 
+    @FXML Menu userMenu;
+    @FXML VBox vBox;
 
     // Variables -------------------------------------------------------------------------------------------------------
 
     private DatabaseHandler dbhandler;
+    private StageHandler stageHandler;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
     /**
-     * Constructs a Semester controller associated with the database handler
-     * @param dbhandler
+     * Constructs a Semester controller.
      */
-    SemesterController(DatabaseHandler dbhandler){
-        this.dbhandler = dbhandler;
+    public SemesterController(StageHandler stageHandler){
+        dbhandler = DatabaseHandler.getDatabaseHandler();
+        this.stageHandler = stageHandler;
     }
 
     // Methods ---------------------------------------------------------------------------------------------------------
+
+    /**
+     * Allows for post-processing of the FXML components. It is called after the constructor.
+     */
+    public void initialize() {
+        //semesterLabel.setText("test");
+        if (dbhandler.getUserSession() == null) return;
+
+        User user = dbhandler.getUserSession();
+        userMenu.setText(user.getFirstname());
+
+        stageHandler.getStage().setTitle("Welcome back, " + user.getFirstname() + "!");
+        vBox.prefWidthProperty().bind(stageHandler.getStage().widthProperty());
+        vBox.prefHeightProperty().bind(stageHandler.getStage().heightProperty().subtract(20));
+        System.out.println(user.getEmail());
+    }
+
+    @FXML
+    public void logOut(){
+        //dbhandler.closeConnection();
+        dbhandler.deleteSession();
+        stageHandler.reloadScene(StageHandler.SCENE.LOGIN);
+        stageHandler.setScene(StageHandler.SCENE.LOGIN, false);
+    }
 
     /**
      * Find semesters for a given user
@@ -99,8 +127,7 @@ public class SemesterController {
         Semester semester = null;
 
         try (
-            Connection connection = dbhandler.getConnection();
-            PreparedStatement statement = prepareStatement(connection, sql, false, properties);
+            PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties);
             ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) formSemester(resultSet);
@@ -176,5 +203,10 @@ public class SemesterController {
         semester.setEndDate(resultSet.getString("end_date"));
 
         return semester;
+    }
+
+    @Override
+    public void setParentScene(StageHandler parentScene) {
+        stageHandler = parentScene;
     }
 }

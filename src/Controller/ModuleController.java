@@ -19,8 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
 
-import static Controller.DatabaseHandler.prepareStatement;
-
 /**
  * Created by 100125468 on 04/05/2017.
  */
@@ -32,8 +30,7 @@ public class ModuleController {
     }
     public boolean addModule(String sql, Object... properties){
         try (
-                Connection connection =  dbhandler.getConnection();
-                PreparedStatement statement = prepareStatement(connection,sql,true,properties);
+                PreparedStatement statement = dbhandler.prepareStatement(sql,true,properties);
 
         ) {
             int updatedRows = statement.executeUpdate();

@@ -1,8 +1,5 @@
-package View;
+package Controller;
 
-import Controller.DatabaseHandler;
-import Controller.SemesterController;
-import Controller.UserController;
 import Model.User;
 import Utils.ControlledScene;
 import Utils.StageHandler;
@@ -19,10 +16,9 @@ import java.util.Calendar;
 import java.util.Random;
 
 /**
- *
- * Created by Didac on 30/04/2017.
+ * Created by Didac on 05/05/2017.
  */
-public class RegisterView implements ControlledScene {
+public class RegisterController extends UserController implements ControlledScene{
     @FXML private TextField nameField;
     @FXML private TextField lastNameField;
     @FXML private TextField emailField;
@@ -30,17 +26,18 @@ public class RegisterView implements ControlledScene {
 
     private StageHandler stageHandler;
 
+    public RegisterController(){
+        super();
+    }
+
     @FXML
     public void registerUser(){
-        DatabaseHandler studyplannerdb = DatabaseHandler.getInstance("xdn15mcu_studyplanner.jdbc");
-        UserController uc = studyplannerdb.getUserController();
-        SemesterController semC = studyplannerdb.getSemesterController();
-        User user = new User();
+        User user = null;
 
         String username = generateUserName();
 
         // While there's a username, keep creating a new one
-        while (uc.userExists(username)){
+        while (userExists(username)){
             username = generateUserName();
         }
 
@@ -52,13 +49,15 @@ public class RegisterView implements ControlledScene {
         user.setStaff(false);
         // file chooser called in ... button too
         File userF = fileChooser();
-        try {
-            if (semC.checkFile(userF)) {
-                uc.create(user);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        // TODO: Fix commented code below
+//        try {
+//            if (semC.checkFile(userF)) {
+//                create(user);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -90,8 +89,9 @@ public class RegisterView implements ControlledScene {
         stageHandler.setScene(StageHandler.SCENE.LOGIN, false);
     }
 
+
     @Override
     public void setParentScene(StageHandler parentScene) {
-        stageHandler = parentScene;
+        this.stageHandler = parentScene;
     }
 }
