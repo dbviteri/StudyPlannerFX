@@ -5,6 +5,7 @@ import Model.Module;
 import Model.SemesterProfile;
 import Model.User;
 import Utils.ControlledScene;
+import Utils.SPException;
 import Utils.StageHandler;
 import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
 import javafx.fxml.FXML;
@@ -59,7 +60,7 @@ public class SemesterController implements ControlledScene {
 
     // Variables -------------------------------------------------------------------------------------------------------
 
-    private DatabaseHandler dbhandler;
+    private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
     private StageHandler stageHandler;
     //private MasterController masterC;
 
@@ -69,7 +70,6 @@ public class SemesterController implements ControlledScene {
      * Constructs a SemesterProfile controller.
      */
     public SemesterController(StageHandler stageHandler){
-        dbhandler = DatabaseHandler.getInstance();
         this.stageHandler = stageHandler;
     }
 
@@ -137,7 +137,21 @@ public class SemesterController implements ControlledScene {
         return semesterProfile;
     }
     public static boolean insertSemester(SemesterProfile semester) {
+        Date start = semester.getStartDate();
+        Date end = semester.getEndDate();
+        int userid = dbhandler.getUserSession().getId();
+        try (
+                PreparedStatement statement =
+                        dbhandler.prepareStatement(QUERY_INSERT_SEMESTER,true,start,end,userid);
 
+        ) {
+            int updatedRows = statement.executeUpdate();
+            if (updatedRows == 0) throw new SPException("Failed to add Semester. No rows affected");
+            return true;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
     // Load semester file?
@@ -184,7 +198,8 @@ public class SemesterController implements ControlledScene {
         // Create the semester profile
         SemesterProfile semester = new SemesterProfile(sem_start,sem_end);
         // Add it to the db
-
+        insertSemester(semester);
+        
 
         return false;
     }

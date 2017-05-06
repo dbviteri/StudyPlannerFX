@@ -22,7 +22,7 @@ public class ModuleController {
         String code = module.getCode();
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_INSERT_MODULES,true,name,code,1);
+                        dbhandler.prepareStatement(QUERY_INSERT_MODULES,true,name,code,1)
 
         ) {
             int updatedRows = statement.executeUpdate();
