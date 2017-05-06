@@ -2,7 +2,7 @@ package Controller;
 
 import Model.Assessment;
 import Model.Module;
-import Model.Semester;
+import Model.SemesterProfile;
 import Model.Task;
 import Utils.SPException;
 
@@ -19,18 +19,20 @@ public class TaskController {
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
-    private static final String QUERY_FIND_SPECIFIC_TASK = "SELECT * FROM Task INNER JOIN Assessment WHERE assessment_id = ? AND Task.task_id = 2";
-    private static final String QUERY_FIND_TASKS = "SELECT * FROM Task LEFT JOIN Assessment ON (Task.assessment_id = Assessment.assessment_id) WHERE Assessment.assessment_id = ?";
+    private static final String QUERY_FIND_TASKS =
+            "SELECT * FROM Task LEFT JOIN Assessment ON (Task.assessment_id = Assessment.assessment_id) WHERE Assessment.assessment_id = ?";
     private static final String QUERY_FIND_DEPENDENCY = "SELECT * FROM Task WHERE task_id = ?";
     private static final String QUERY_INSERT =
-            "INSERT INTO Task (title, task_type, time, criterion, criterion_value, progress) VALUES (?,?,?,?,?,?)";
+            "INSERT INTO Task (title, type, time, criterion, criterion_value, progress, assessment_id, dependency) VALUES (?,?,?,?,?,?,?,?)";
+
+    private static final String QUERY_DELETE_TASK = "DELETE FROM Task WHERE task_id = ?";
     private static final String QUERY_INSERT_DEPENDENCY =
             "ADD CONSTRAINT '";
 
     private DatabaseHandler dbhandler;
 
     public TaskController(){
-        dbhandler = DatabaseHandler.getDatabaseHandler();
+        dbhandler = DatabaseHandler.getInstance();
     }
 
     public ArrayList<Task> findAll(Assessment assessment){
@@ -52,7 +54,7 @@ public class TaskController {
         return tasks;
     }
 
-    private Task find_dependency(int depTaskId){
+    private Task findDependency(int depTaskId){
         Task task = null;
         try (
                 PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_DEPENDENCY, false, depTaskId);
@@ -65,8 +67,7 @@ public class TaskController {
         return task;
     }
 
-    public void addTask(Task task){
-
+    public void insertTask(Task task){
         // INSERT TASK
         Object[] properties = {
                 task.getTitle(),
@@ -75,15 +76,16 @@ public class TaskController {
                 task.getCriterion(),
                 task.getCriterionValue(),
                 task.getProgress(),
-                task.getDependencyTask().getId()
-
+                task.getAssessmentId(),
+                null // Dependency
         };
 
-        // CHECK IF DEPENDENCIES
+        // if the dependency of task is null, it has no dependency
+        if (task.getDependencyTask() != null){
+            properties[properties.length - 1] = task.getDependencyTask().getId();
+        }
 
-        // ADD OR DELETE DEPENDENCIES
 
-        // GET ALL DEPENDENCIES COUNT, MATCH AGAINST DEPENDENCIES .SIZE(), FOR EACH ID THAT DOESNAE MATCH, DELETE
 
         try (
                 PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, true, properties)
@@ -108,10 +110,12 @@ public class TaskController {
         Task task = null;
         int dep_id = resultSet.getInt("dependency");
         if (dep_id != 0){
-            task = find_dependency(dep_id);
+            task = findDependency(dep_id);
         }
 
-        return new Task(id, title, taskType, time, criterion, criterionValue, progress, task);
+        int assessmentId = resultSet.getInt("assessment_id");
+
+        return new Task(id, title, taskType, time, criterion, criterionValue, progress, task, assessmentId);
 
     }
 }

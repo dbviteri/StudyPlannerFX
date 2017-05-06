@@ -10,7 +10,7 @@ public class Assessment {
 
     // Properties ------------------------------------------------------------------------------------------------------
 
-    private enum Event {EXAM, ASSIGNMENT}
+    public enum Event {EXAM, ASSIGNMENT}
     private int id;
     private Event type;
     private String title;
@@ -22,7 +22,7 @@ public class Assessment {
     //TODO: Be able to define study tasks contributing towards specific coursework or exams
 
     // EMPTY CONSTRUCTOR FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!
-    public Assessment(int id, String title, int isExam, int weight, Date deadline){
+    public Assessment(int id, String title, Event type, int weight, Date deadline){
         this.id = id;
         this.title = title;
         this.type = type;
