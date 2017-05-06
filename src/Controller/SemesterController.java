@@ -5,6 +5,7 @@ import Model.Module;
 import Model.SemesterProfile;
 import Model.User;
 import Utils.ControlledScene;
+import Utils.SPException;
 import Utils.StageHandler;
 import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
 import javafx.fxml.FXML;
@@ -19,10 +20,13 @@ import java.io.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.Locale;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import sun.misc.JavaIOAccess;
+
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -42,25 +46,20 @@ public class SemesterController implements ControlledScene {
 
     private static final String QUERY_ALL_SEMESTERS =
             "SELECT start_date, end_date FROM SemesterProfile WHERE semester_id = ?";
-
     private static final String QUERY_USER_SEMESTER =
-            "SELECT * from SemesterProfile INNER JOIN User ON SemesterProfile.user_id = User.?";
-
-    private static final String QUERY_USERNAME_EXISTS =
-            "SELECT * FROM SemesterProfile WHERE username = ?";
-    private static final String QUERY_FIND_BY_USERNAME_PASSWORD =
-            "SELECT * FROM User WHERE username = ? AND password = MD5(?)";
-    private static final String QUERY_INSERT_USER =
-            "INSERT INTO User (email, username, password, firstname, lastname, isStaff) VALUES (?, ?, MD5(?), ?, ?, ?)";
+            "SELECT * FROM SemesterProfile INNER JOIN User ON SemesterProfile.user_id = User.?";
     private static final String QUERY_INSERT_SEMESTER =
             "INSERT INTO Semester_Profile (start_date,end_date,user_id) VALUES (?,?,?)";
+    private static final String QUERY_GET_SEMESTER_ID =
+            "SELECT Semester_ID FROM SemesterProfile WHERE user_id = ? ";
+
 
     @FXML Menu userMenu;
     @FXML VBox vBox;
 
     // Variables -------------------------------------------------------------------------------------------------------
 
-    private DatabaseHandler dbhandler;
+    private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
     private StageHandler stageHandler;
     //private MasterController masterC;
 
@@ -72,7 +71,6 @@ public class SemesterController implements ControlledScene {
      * Constructs a SemesterProfile controller.
      */
     public SemesterController(StageHandler stageHandler){
-        dbhandler = DatabaseHandler.getInstance();
         this.stageHandler = stageHandler;
     }
 
@@ -133,11 +131,24 @@ public class SemesterController implements ControlledScene {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return semesterProfile;
     }
     public static boolean insertSemester(SemesterProfile semester) {
+        Date start = semester.getStartDate();
+        Date end = semester.getEndDate();
+        int userid = dbhandler.getUserSession().getId();
+        try (
+                PreparedStatement statement =
+                        dbhandler.prepareStatement(QUERY_INSERT_SEMESTER,true,start,end,userid);
 
+        ) {
+            int updatedRows = statement.executeUpdate();
+            if (updatedRows == 0) throw new SPException("Failed to add Semester. No rows affected");
+            return true;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
     // Load semester file?
@@ -176,64 +187,8 @@ public class SemesterController implements ControlledScene {
 //
 //    }
     // Helper functions ------------------------------------------------------------------------------------------------
-    public boolean parseJson(JSONObject json){
-        // Get data for a Semester profile
-        Date sem_start = (Date)json.get("start_date");
-        Date sem_end = (Date)json.get("end_date");
-        int user_id = dbhandler.getUserSession().getId();
-        // Create the semester profile
-        SemesterProfile semester = new SemesterProfile(sem_start,sem_end);
-        // Add it to the db
 
 
-        return false;
-    }
-    /** Helper Function takes a string representation of a date
-     *  and turns it into Date object (DD,MM,YYYY) format
-     *
-     * @param date
-     * @return date
-     */
-    private static Date makeDate(String date) {
-        DateFormat format = new SimpleDateFormat("DD,MM,YYYY", Locale.UK);
-        Date aDate = new Date();
-        try {
-            aDate = format.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return aDate;
-    }
-    /** Function takes a file and returns a file reader
-     *
-     * @param file
-     * @return BufferedReader
-     * @throws IOException
-     */
-    private static BufferedReader openFile(File file){
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return reader;
-    }
-    private static JSONObject parseFile(File file){
-        JSONParser parser = new JSONParser();
-        try {
-            FileReader rd = new FileReader(file);
-            Object obj = parser.parse(rd);
-            JSONObject json = (JSONObject)obj;
-            return json;
-        } catch (org.json.simple.parser.ParseException e){
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
     private static SemesterProfile formSemester(ResultSet resultSet) throws SQLException {
         SemesterProfile semesterProfile = new SemesterProfile();
 

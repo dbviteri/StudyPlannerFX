@@ -1,25 +1,24 @@
 
 {
-	"start_date" : 15-8-2017,
-	"end_date" : 15-11-2017,
+	"start_date" : "15/08/2017",
+	"end_date" : "15/11/2017",
 	"modules": [
-					{"title": "Programming 2",
-					"code": "5015-Y",
-					"assessments" :
-							[ 	{"title" : "OMDBC++",
-							 	"type" : "assignment",
-							 	"weight" : 20,
-							 	"deadline" : 15-9-2017,
-							 	"module_code": "5015-Y"}
-							]
-					},
+			{"title": "Programming 2",
+			"code": "5015-Y",
+			"assessments" : [
+						{"title" : "OMDBC++",
+						"type" : "assignment",
+						"weight" : 20,
+						"deadline" : "15/09/2017",
+						"module_code": "5015-Y"}
+						]
+			},
+			{"title": "Assembly",
+			"code": "5013A"
+			},
+			{"title": "Data structures",
+			"code": "5014-Y"
+			}
 
-					{"title": "Assembly",
-					"code": "5013A"
-					},
-
-					{"title": "Data structures",
-					"code": "5014-Y"
-					}
-				]
+			]
 }

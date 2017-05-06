@@ -17,12 +17,12 @@ public class ModuleController {
     public ModuleController(){
     }
     //TODO : SHOULD IT BE STATIC OR NOT | MAYBE ANOTHER CLASS FOR DB QUERRY?
-    public static boolean insertModule(Module module, SemesterProfile associatedSemesterProfile){
+    public boolean insertModule(Module module, SemesterProfile associatedSemesterProfile){
         String name = module.getName();
         String code = module.getCode();
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_INSERT_MODULES,true,name,code,1);
+                        dbhandler.prepareStatement(QUERY_INSERT_MODULES,true,name,code,1)
 
         ) {
             int updatedRows = statement.executeUpdate();

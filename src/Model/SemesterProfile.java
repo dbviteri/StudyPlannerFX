@@ -47,6 +47,10 @@ public class SemesterProfile {
     public String toString() {
         //StringBuilder sb = new StringBuilder();
         //return modules.get(0).toString();
-        return "SemesterProfile: " + startDate + ", " + endDate;
+        String astring = "";
+        for (Module amodule : modules){
+            astring += amodule;
+        }
+        return "SemesterProfile: " + startDate + ", " + endDate + " \n" + astring;
     }
 }

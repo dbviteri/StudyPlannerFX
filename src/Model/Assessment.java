@@ -31,6 +31,12 @@ public class Assessment {
         this.completion = 0;
         tasks = new ArrayList<>();
     }
+    public Assessment(String title, Event type, int weight, Date deadline) {
+        this.title = title;
+        this.type = type;
+        this.weight = weight;
+        this.deadline = deadline;
+    }
     // Getters and setters ---------------------------------------------------------------------------------------------
 
     public int getId() { return id; }
