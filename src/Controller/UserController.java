@@ -1,17 +1,8 @@
 package Controller;
 
 import Model.User;
-import Utils.ControlledScene;
 import Utils.SPException;
-import Utils.StageHandler;
-import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,7 +35,7 @@ public abstract class UserController{
      * @param //dbhandler
      */
     public UserController() {
-        dbhandler = DatabaseHandler.getDatabaseHandler();
+        dbhandler = DatabaseHandler.getInstance();
         //System.out.println(dbhandler.getConnection());
     }
 

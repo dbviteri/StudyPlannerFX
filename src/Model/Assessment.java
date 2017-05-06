@@ -25,8 +25,7 @@ public class Assessment {
     public Assessment(int id, String title, int isExam, int weight, Date deadline){
         this.id = id;
         this.title = title;
-        if (isExam == 0) { this.type = Event.ASSIGNMENT; }
-        else this.type = Event.EXAM;
+        this.type = type;
         this.weight = weight;
         this.deadline = deadline;
         this.completion = 0;

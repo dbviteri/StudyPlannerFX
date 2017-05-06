@@ -25,7 +25,7 @@ public class DatabaseHandler {
 
     private Connection connection;
 
-    public static DatabaseHandler getDatabaseHandler(){
+    public static DatabaseHandler getInstance(){
         // Testing
         if (DATABASE_HANDLER.connection == null) {
             DATABASE_HANDLER.openConnection(DB_PROPERTY_PREFIX);

@@ -1,22 +1,29 @@
 package Model;
 
-import java.util.ArrayList;
+import Controller.DatabaseHandler;
 
+import java.util.ArrayList;
+import java.util.Date;
 /**
  * Created by Didac on 02/05/2017.
  */
-public class Semester {
+public class SemesterProfile {
 
     // Properties ------------------------------------------------------------------------------------------------------
 
-    private String startDate;
-    private String endDate;
+    private Date startDate;
+    private Date endDate;
     private ArrayList<Module> modules = new ArrayList<>();
     // Maybe modules should be a hashmap to be able to retrieve by module name.
 
+    public SemesterProfile(){ }
+    public SemesterProfile(Date start, Date end) {
+        this.startDate = start;
+        this.endDate = end;
+    }
     // Getters and setters----------------------------------------------------------------------------------------------
-    public String getStartDate(){ return startDate; }
-    public String getEndDate(){ return endDate; }
+    public Date getStartDate(){ return startDate; }
+    public Date getEndDate(){ return endDate; }
     public ArrayList<Module> getModules(){ return modules; }
     public Module getModule() {
         return modules.get(0);
@@ -25,10 +32,10 @@ public class Semester {
     public void addModule(Module module) { modules.add(module); }
     public void addModules(Module[] modules) { }
 
-    public void setStartDate(String startDate){
+    public void setStartDate(Date startDate){
         this.startDate = startDate;
     }
-    public void setEndDate(String endDate){
+    public void setEndDate(Date endDate){
         this.endDate = endDate;
     }
 
@@ -40,6 +47,6 @@ public class Semester {
     public String toString() {
         //StringBuilder sb = new StringBuilder();
         //return modules.get(0).toString();
-        return "Semester: " + startDate + ", " + endDate;
+        return "SemesterProfile: " + startDate + ", " + endDate;
     }
 }
