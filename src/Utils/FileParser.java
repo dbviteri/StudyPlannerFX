@@ -22,26 +22,28 @@ public class FileParser {
 
     public SemesterProfile parse(JSONObject json){
         // Get data for a Semester profile
-        Date sem_start = (Date)json.get("start_date");
-        Date sem_end = (Date)json.get("end_date");
+        Date sem_start = makeDate((String)json.get("start_date"));
+        Date sem_end = makeDate((String)json.get("end_date"));
         // Create the semester profile
         SemesterProfile semester = new SemesterProfile(sem_start,sem_end);
         JSONArray modules = (JSONArray)json.get("modules");
         for(int i=0; i<modules.size(); i++) {
             JSONObject jsonModule = (JSONObject)modules.get(i);
-            String name = (String)jsonModule.get("name");
+            String name = (String)jsonModule.get("title");
             String code = (String)jsonModule.get("code");
-            JSONArray assingments = (JSONArray)json.get("assessments");
             Module module = new Module(name,code);
-            for(int j=0; j<assingments.size(); j++) {
-                JSONObject jsonAssessment = (JSONObject)assingments.get(i);
-                String title = (String)jsonAssessment.get("title");
-                String t = (String)jsonAssessment.get("type");
-                Assessment.Event type = Assessment.Event.valueOf(t);
-                int weight = (int)jsonAssessment.get("weight");
-                Date deadline = (Date)jsonAssessment.get("deadline");
-                Assessment assessment = new Assessment(title,type,weight,deadline);
-                module.addAssessment(assessment);
+            JSONArray assingments = (JSONArray)json.get("assessments");
+            if(assingments != null) {
+                for (int j = 0; j < assingments.size(); j++) {
+                    JSONObject jsonAssessment = (JSONObject) assingments.get(i);
+                    String title = (String) jsonAssessment.get("title");
+                    String t = (String) jsonAssessment.get("type");
+                    Assessment.Event type = Assessment.Event.valueOf(t);
+                    int weight = (int) jsonAssessment.get("weight");
+                    Date deadline = makeDate((String) jsonAssessment.get("deadline"));
+                    Assessment assessment = new Assessment(title, type, weight, deadline);
+                    module.addAssessment(assessment);
+                }
             }
             semester.addModule(module);
         }
@@ -54,7 +56,7 @@ public class FileParser {
      * @return date
      */
     public static Date makeDate(String date) {
-        DateFormat format = new SimpleDateFormat("DD,MM,YYYY", Locale.UK);
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
         Date aDate = new Date();
         try {
             aDate = format.parse(date);

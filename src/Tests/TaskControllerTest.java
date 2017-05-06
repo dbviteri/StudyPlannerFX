@@ -2,7 +2,7 @@ package Tests;
 
 import Controller.TaskController;
 import Model.Assessment;
-import Model.Semester;
+import Model.SemesterProfile;
 import Model.Task;
 import Model.User;
 import org.junit.After;
@@ -26,7 +26,7 @@ public class TaskControllerTest {
     @Before
     public void setUp() throws Exception {
         taskController = new TaskController();
-        assessment = new Assessment(2, "test", 0, 0, date);
+        //assessment = new Assessment(2, "test", 0, 0, date);
     }
 
     @After
