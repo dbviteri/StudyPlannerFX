@@ -2,7 +2,7 @@ package Controller;
 
 import Model.Assessment;
 import Model.Module;
-import Model.Semester;
+import Model.SemesterProfile;
 import Model.Task;
 import Utils.SPException;
 
@@ -30,7 +30,7 @@ public class TaskController {
     private DatabaseHandler dbhandler;
 
     public TaskController(){
-        dbhandler = DatabaseHandler.getDatabaseHandler();
+        dbhandler = DatabaseHandler.getInstance();
     }
 
     public ArrayList<Task> findAll(Assessment assessment){

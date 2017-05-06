@@ -36,9 +36,6 @@ public class RegisterController extends UserController implements ControlledScen
 
     @FXML
     public void registerUser(){
-        User user = new User();
-
-        String username = generateUserName();
         String email = emailField.getText();
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -52,13 +49,6 @@ public class RegisterController extends UserController implements ControlledScen
             displayTooltip("Username is taken, please choose another one.");
             return;
         }
-
-        user.setEmail(emailField.getText());
-        user.setUsername(username);
-        user.setPassword(passwordField.getText());
-        user.setFirstname(nameField.getText());
-        user.setLastname(lastNameField.getText());
-        user.setStaff(false);
         // file chooser called in ... button too
         File userF = fileChooser();
 
