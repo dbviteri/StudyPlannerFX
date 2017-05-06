@@ -7,13 +7,35 @@ public class User {
 
     // Properties ------------------------------------------------------------------------------------------------------
 
-    private Integer id;
+    private int id;
     private String email;
     private String username;
     private String password;
     private String firstname;
     private String lastname;
     private boolean isStaff;
+
+    // EMPTY CONSTRUCTOR TO TEST!!!!!!!!!!!!!!!!!!!
+    public User(){}
+
+    public User(String email, String username, String password, String firstname, String lastname, boolean isStaff){
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.isStaff = isStaff;
+    }
+
+    public User(int id, String email, String username, String password, String firstname, String lastname, boolean isStaff){
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.isStaff = isStaff;
+    }
 
     // Getters and setters----------------------------------------------------------------------------------------------
 

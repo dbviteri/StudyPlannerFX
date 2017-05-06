@@ -28,6 +28,20 @@ public class Module {
     public String getName() {
         return name;
     }
+    public String getCode() { return code; }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setCode(String code){
+        this.code = code;
+    }
+
+    public void addAssessment(Assessment assessment){
+        assessments.add(assessment);
+    }
+
 
     // Overrides -------------------------------------------------------------------------------------------------------
 

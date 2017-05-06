@@ -4,8 +4,10 @@ import Model.User;
 import Utils.ControlledScene;
 import Utils.StageHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -21,8 +23,10 @@ import java.util.Random;
 public class RegisterController extends UserController implements ControlledScene{
     @FXML private TextField nameField;
     @FXML private TextField lastNameField;
+    @FXML private TextField usernameField;
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
+    @FXML private Tooltip usernameTooltip;
 
     private StageHandler stageHandler;
 
@@ -32,21 +36,20 @@ public class RegisterController extends UserController implements ControlledScen
 
     @FXML
     public void registerUser(){
-        User user = null;
-
-        String username = generateUserName();
+        String email = emailField.getText();
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        String firstname = nameField.getText();
+        String lastname = lastNameField.getText();
+        boolean isStaff = false; // TODO: HANDLE THIS IN REGISTER VIEW
+        User user = new User(email, username, password, firstname, lastname, isStaff);
 
         // While there's a username, keep creating a new one
-        while (userExists(username)){
-            username = generateUserName();
+        if (userExists(username)){
+            displayTooltip("Username is taken, please choose another one.");
+            return;
         }
 
-        user.setEmail(emailField.getText());
-        user.setUsername(username);
-        user.setPassword(passwordField.getText());
-        user.setFirstname(nameField.getText());
-        user.setLastname(lastNameField.getText());
-        user.setStaff(false);
         // file chooser called in ... button too
         File userF = fileChooser();
 
@@ -62,19 +65,19 @@ public class RegisterController extends UserController implements ControlledScen
     }
 
     // TODO: Change this so it doesn't query the database everytime
-    public String generateUserName(){
-        Random r = new Random();
-        StringBuilder sb = new StringBuilder();
-        DateFormat df = new SimpleDateFormat("yy");
-        char[] randomChars = new char[6];
-        //create user name
-        for (int i = 0; i < randomChars.length; i++) {
-            randomChars[i] = (char) (r.nextInt((122 - 97) + 1) + 97);
-            sb.append(randomChars[i]);
-            if (i == 2) sb.append(df.format(Calendar.getInstance().getTime()));
-        }
-        return sb.toString();
-    }
+//    public String generateUserName(){
+//        Random r = new Random();
+//        StringBuilder sb = new StringBuilder();
+//        DateFormat df = new SimpleDateFormat("yy");
+//        char[] randomChars = new char[6];
+//        //create user name
+//        for (int i = 0; i < randomChars.length; i++) {
+//            randomChars[i] = (char) (r.nextInt((122 - 97) + 1) + 97);
+//            sb.append(randomChars[i]);
+//            if (i == 2) sb.append(df.format(Calendar.getInstance().getTime()));
+//        }
+//        return sb.toString();
+//    }
 
     @FXML
     private File fileChooser(){
@@ -89,6 +92,22 @@ public class RegisterController extends UserController implements ControlledScen
         stageHandler.setScene(StageHandler.SCENE.LOGIN, false);
     }
 
+    //TODO: GET RID OF DUPLICATE CODE
+    // This works for now
+    private void displayTooltip(String message){
+        usernameField.getStyleClass().add("error");
+        //final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
+        //usernameField.pseudoClassStateChanged(errorClass, true);
+
+        usernameTooltip.setText(message);
+
+        Point2D point2D = usernameField.localToScene(0.0, 0.0);
+        usernameTooltip.setAutoHide(true);
+        usernameTooltip.show(stageHandler.getStage(),
+                point2D.getX() + usernameField.getScene().getX() +
+                        usernameField.getScene().getWindow().getX() + usernameField.getWidth(),
+                point2D.getY() + usernameField.getScene().getY() + usernameField.getScene().getWindow().getY());
+    }
 
     @Override
     public void setParentScene(StageHandler parentScene) {

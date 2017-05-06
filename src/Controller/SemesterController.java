@@ -9,6 +9,7 @@ import Utils.SPException;
 import Utils.StageHandler;
 import com.sun.xml.internal.bind.v2.TODO;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.VBox;
 
@@ -66,6 +67,11 @@ public class SemesterController implements ControlledScene {
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
+    // CONSTRUCTOR JUST FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public SemesterController(){
+        dbhandler = DatabaseHandler.getDatabaseHandler();
+    }
+
     /**
      * Constructs a Semester controller.
      */
@@ -86,9 +92,8 @@ public class SemesterController implements ControlledScene {
         User user = dbhandler.getUserSession();
         userMenu.setText(user.getFirstname());
 
-        stageHandler.getStage().setTitle("Welcome back, " + user.getFirstname() + "!");
         vBox.prefWidthProperty().bind(stageHandler.getStage().widthProperty());
-        vBox.prefHeightProperty().bind(stageHandler.getStage().heightProperty().subtract(20));
+        vBox.prefHeightProperty().bind(stageHandler.getStage().heightProperty());
         System.out.println(user.getEmail());
     }
 
@@ -105,13 +110,11 @@ public class SemesterController implements ControlledScene {
      * @param
      * @return
      */
-    /*
+
     public Semester find(User user){
         Semester semester = null;
         try (
-                Connection connection = dbhandler.getConnection();
-                PreparedStatement statement = prepareStatement(connection, QUERY_ALL_SEMESTERS,
-                        false, properties);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_USER_SEMESTER, false, user.getId());
                 ResultSet resultSet = statement.executeQuery();
         ) {
             while (resultSet.next()){
@@ -122,8 +125,8 @@ public class SemesterController implements ControlledScene {
         }
         return semester;
     }
-*/
-    public Semester find(String sql, Object... properties){
+
+    private Semester find(String sql, Object... properties){
         Semester semester = null;
 
         try (
@@ -151,21 +154,21 @@ public class SemesterController implements ControlledScene {
         reader.readLine();
         reader.readLine();
 
-        if (reader != null && file.getName().contains(".csv")) {
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(separator);
-                if(data.length == 3) {
-                    aModule = new Module(data[0], data[1]);
-
-                }
-                else {
-                    reader.readLine();
-                    anAsse = new Assessment(data[0],Integer.parseInt(data[1]),
-                            Integer.parseInt(data[2]), makeDate(data[3]));
-
-                }
-            }
-        }
+//        if (reader != null && file.getName().contains(".csv")) {
+//            while ((line = reader.readLine()) != null) {
+//                String[] data = line.split(separator);
+//                if(data.length == 3) {
+//                    aModule = new Module(data[0], data[1]);
+//
+//                }
+//                else {
+//                    reader.readLine();
+//                    anAsse = new Assessment(data[0],Integer.parseInt(data[1]),
+//                            Integer.parseInt(data[2]), makeDate(data[3]));
+//
+//                }
+//            }
+//        }
             return valid;
 
     }
