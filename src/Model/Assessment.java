@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -9,21 +10,32 @@ public class Assessment {
 
     // Properties ------------------------------------------------------------------------------------------------------
 
-    public enum Event {EXAM, ASSIGNMENT}
+    private enum Event {EXAM, ASSIGNMENT}
+    private int id;
     private Event type;
     private String title;
     private int weight;
     private Date deadline;
     private int completion;
+    private ArrayList<Task> tasks;
+    //TODO: Be able to define study milestones which must be attached to coursework or exams
+    //TODO: Be able to define study tasks contributing towards specific coursework or exams
 
-    public Assessment(String title, Event type, int weight, Date deadline ){
+    // EMPTY CONSTRUCTOR FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!
+    public Assessment(int id, String title, int isExam, int weight, Date deadline){
+        this.id = id;
         this.title = title;
         this.type = type;
         this.weight = weight;
         this.deadline = deadline;
         this.completion = 0;
+        tasks = new ArrayList<>();
     }
     // Getters and setters ---------------------------------------------------------------------------------------------
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id;}
 
     public Event getType() {
         return type;
@@ -44,6 +56,12 @@ public class Assessment {
     public int getWeight() {
         return weight;
     }
+
+    public ArrayList<Task> getTasks() { return tasks; }
+
+    //public void addAllTasks(ArrayList<Task> tasks) { this.tasks = tasks; }
+
+    public void addTask(Task task) { tasks.add(task); }
 
     public void setWeight(int weight) {
         this.weight = weight;

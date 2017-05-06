@@ -9,6 +9,7 @@ import Utils.SPException;
 import Utils.StageHandler;
 import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.VBox;
 import java.text.DateFormat;
@@ -66,6 +67,8 @@ public class SemesterController implements ControlledScene {
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
+    // CONSTRUCTOR JUST FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     /**
      * Constructs a SemesterProfile controller.
      */
@@ -85,9 +88,8 @@ public class SemesterController implements ControlledScene {
         User user = dbhandler.getUserSession();
         userMenu.setText(user.getFirstname());
 
-        stageHandler.getStage().setTitle("Welcome back, " + user.getFirstname() + "!");
         vBox.prefWidthProperty().bind(stageHandler.getStage().widthProperty());
-        vBox.prefHeightProperty().bind(stageHandler.getStage().heightProperty().subtract(20));
+        vBox.prefHeightProperty().bind(stageHandler.getStage().heightProperty());
         System.out.println(user.getEmail());
     }
 
@@ -108,9 +110,7 @@ public class SemesterController implements ControlledScene {
     public SemesterProfile find(User user){
         SemesterProfile semester = null;
         try (
-                Connection connection = dbhandler.getConnection();
-                PreparedStatement statement = prepareStatement(connection, QUERY_ALL_SEMESTERS,
-                        false, properties);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_USER_SEMESTER, false, user.getId());
                 ResultSet resultSet = statement.executeQuery();
         ) {
             while (resultSet.next()){

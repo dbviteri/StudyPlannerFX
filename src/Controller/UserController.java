@@ -159,13 +159,14 @@ public abstract class UserController{
      * @throws SQLException
      */
     private static User formUser(ResultSet resultSet) throws SQLException{
-        User user = new User();
-        user.setId(resultSet.getInt("user_id"));
-        user.setEmail(resultSet.getString("email"));
-        user.setUsername(resultSet.getString("username"));
-        user.setFirstname(resultSet.getString("firstname"));
-        user.setLastname(resultSet.getString("lastname"));
-        user.setStaff(resultSet.getBoolean("isStaff"));
-        return user;
+        int id = resultSet.getInt("user_id");
+        String email = resultSet.getString("email");
+        String username = resultSet.getString("username");
+        String password = resultSet.getString("password");
+        String firstname = resultSet.getString("firstname");
+        String lastname = resultSet.getString("lastname");
+        boolean isStaff = resultSet.getBoolean("isStaff");
+
+        return new User(id, email, username, password, firstname, lastname, isStaff);
     }
 }

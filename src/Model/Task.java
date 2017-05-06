@@ -1,35 +1,52 @@
 package Model;
 
+import com.oracle.javafx.jmx.json.JSONDocument;
+
 import java.util.ArrayList;
 
 /**
  * Created by Didac on 02/05/2017.
  */
 public class Task {
-
     // Properties ------------------------------------------------------------------------------------------------------
 
+    private int id;
     private String title;
     private TaskType type;
     private int time;
     private String criterion;
     private int criterionValue;
     private int progress;
+    // TODO: Instead of an array list, have another instance of a class?
+    // 'a task cannot be started before another has been completed'
+    // private Task dependencyTask;
+    private Task dependencyTask;
     private ArrayList<Task> dependencies;
     private ArrayList<Note> notes;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
-    // TODO: Decide whether we need constructors
-    public Task(String title, TaskType type, int time, String criterion,
-                int criterionValue, ArrayList<Task> dependencies) {
+    public Task(int id, String title, TaskType type, int time, String criterion,
+                int criterionValue, int progress, Task dependencyTask) {
+        this.id = id;
         this.title = title;
         this.type = type;
         this.time = time;
         this.criterion = criterion;
         this.criterionValue = criterionValue;
-        this.progress = 0;
-        this.dependencies = dependencies;
+        this.progress = progress;
+        this.dependencyTask = dependencyTask;
+    }
+
+    // TODO: Decide whether we need constructors
+    public Task(String title, TaskType type, int time, String criterion,
+                int criterionValue, int progress) {
+        this.title = title;
+        this.type = type;
+        this.time = time;
+        this.criterion = criterion;
+        this.criterionValue = criterionValue;
+        this.progress = progress;
     }
 
     // Methods ---------------------------------------------------------------------------------------------------------
@@ -43,6 +60,8 @@ public class Task {
     }
 
     // Getters and setters ---------------------------------------------------------------------------------------------
+
+    public int getId() {return id;}
 
     public String getTitle() {
         return title;
@@ -92,6 +111,8 @@ public class Task {
         this.progress = progress;
     }
 
+    public Task getDependencyTask(){return dependencyTask;}
+
     public ArrayList<Task> getDependencies() {
         return dependencies;
     }
@@ -109,4 +130,27 @@ public class Task {
     // Overrides -------------------------------------------------------------------------------------------------------
 
     // TODO: Write toString
+    @Override
+    public String toString(){
+
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(id).append("\n")
+                .append(title).append("\n")
+                .append(type.toString()).append("\n")
+                .append(time).append("\n")
+                .append(criterion).append("\n")
+                .append(criterionValue).append("\n")
+                .append(progress).append("\n");
+
+        if (dependencyTask == null){
+            stringBuilder.append("No dependencies!").append("\n");
+        } else {
+            stringBuilder.append("DEPENDENCIES FOR " + title + ": ").append("\n")
+            .append(dependencyTask.toString()).append("\n");
+        }
+
+        return stringBuilder.toString();
+    }
 }
