@@ -28,6 +28,9 @@ public class Module {
     public String getName() {
         return name;
     }
+    public String getCode(){
+        return code;
+    }
 
     // Overrides -------------------------------------------------------------------------------------------------------
 

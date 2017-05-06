@@ -14,8 +14,8 @@
          <menus>
             <Menu mnemonicParsing="false" text="Semesters...">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Add semester..." />
-                  <MenuItem mnemonicParsing="false" text="Change semester..." />
+                  <MenuItem mnemonicParsing="false" text="Add semesterProfile..." />
+                  <MenuItem mnemonicParsing="false" text="Change semesterProfile..." />
                </items>
             </Menu>
             <Menu fx:id="userMenu" mnemonicParsing="false" text="User">

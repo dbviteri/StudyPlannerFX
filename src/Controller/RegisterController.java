@@ -32,7 +32,7 @@ public class RegisterController extends UserController implements ControlledScen
 
     @FXML
     public void registerUser(){
-        User user = null;
+        User user = new User();
 
         String username = generateUserName();
 

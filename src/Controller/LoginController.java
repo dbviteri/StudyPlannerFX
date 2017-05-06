@@ -2,7 +2,6 @@ package Controller;
 
 import Model.User;
 import Utils.ControlledScene;
-import Utils.SPException;
 import Utils.StageHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -39,7 +38,7 @@ public class LoginController extends UserController implements ControlledScene {
             displayTooltip("Username or password is wrong. Please try again.");
         } else {
             //databaseHandler.createSession(user);
-            DatabaseHandler.getDatabaseHandler().createSession(user);
+            DatabaseHandler.getInstance().createSession(user);
 
             // Reload scene after creating a session
             stageHandler.reloadScene(StageHandler.SCENE.SEMESTER);

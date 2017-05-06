@@ -9,17 +9,16 @@ public class Assessment {
 
     // Properties ------------------------------------------------------------------------------------------------------
 
-    private enum Event {EXAM, ASSIGNMENT}
+    public enum Event {EXAM, ASSIGNMENT}
     private Event type;
     private String title;
     private int weight;
     private Date deadline;
     private int completion;
 
-    public Assessment(String title, int isExam, int weight, Date deadline ){
+    public Assessment(String title, Event type, int weight, Date deadline ){
         this.title = title;
-        if (isExam == 0) { this.type = Event.ASSIGNMENT; }
-        else this.type = Event.EXAM;
+        this.type = type;
         this.weight = weight;
         this.deadline = deadline;
         this.completion = 0;

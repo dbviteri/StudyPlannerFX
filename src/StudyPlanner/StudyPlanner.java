@@ -49,7 +49,7 @@ public class StudyPlanner extends Application {
     public void stop(){
         //TODO: SAVE STUFF HERE
         //TODO: This method handles when window closes
-        DatabaseHandler.getDatabaseHandler().closeConnection();
+        DatabaseHandler.getInstance().closeConnection();
         System.out.println("Window closing");
     }
 

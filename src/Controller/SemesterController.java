@@ -2,26 +2,26 @@ package Controller;
 
 import Model.Assessment;
 import Model.Module;
-import Model.Semester;
+import Model.SemesterProfile;
 import Model.User;
 import Utils.ControlledScene;
-import Utils.SPException;
 import Utils.StageHandler;
-import com.sun.xml.internal.bind.v2.TODO;
+import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.VBox;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.*;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
+import org.json.simple.*;
+import org.json.simple.parser.JSONParser;
+import sun.misc.JavaIOAccess;
 
 /**
  *
@@ -40,21 +40,19 @@ public class SemesterController implements ControlledScene {
             "SELECT *, count *";
 
     private static final String QUERY_ALL_SEMESTERS =
-            "SELECT start_date, end_date FROM Semester WHERE semester_id = ?";
+            "SELECT start_date, end_date FROM SemesterProfile WHERE semester_id = ?";
 
     private static final String QUERY_USER_SEMESTER =
-            "SELECT * from Semester INNER JOIN User ON Semester.user_id = User.?";
+            "SELECT * from SemesterProfile INNER JOIN User ON SemesterProfile.user_id = User.?";
 
     private static final String QUERY_USERNAME_EXISTS =
-            "SELECT * FROM Semester WHERE username = ?";
+            "SELECT * FROM SemesterProfile WHERE username = ?";
     private static final String QUERY_FIND_BY_USERNAME_PASSWORD =
             "SELECT * FROM User WHERE username = ? AND password = MD5(?)";
     private static final String QUERY_INSERT_USER =
             "INSERT INTO User (email, username, password, firstname, lastname, isStaff) VALUES (?, ?, MD5(?), ?, ?, ?)";
-    private static final String QUERY_INSERT_MODULES =
-            "INSERT INTO Module (name,code,Semester_ID) VALUES (?,?,?)";
-    private static final String QUERY_INSERT_ASSINGMENT =
-            "INSERT INTO Assessment (title,isExam,deadline,weight,module_ID) VALUES (?,?,?,?,?)";
+    private static final String QUERY_INSERT_SEMESTER =
+            "INSERT INTO Semester_Profile (start_date,end_date,user_id) VALUES (?,?,?)";
 
     @FXML Menu userMenu;
     @FXML VBox vBox;
@@ -63,14 +61,15 @@ public class SemesterController implements ControlledScene {
 
     private DatabaseHandler dbhandler;
     private StageHandler stageHandler;
+    //private MasterController masterC;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
     /**
-     * Constructs a Semester controller.
+     * Constructs a SemesterProfile controller.
      */
     public SemesterController(StageHandler stageHandler){
-        dbhandler = DatabaseHandler.getDatabaseHandler();
+        dbhandler = DatabaseHandler.getInstance();
         this.stageHandler = stageHandler;
     }
 
@@ -106,8 +105,8 @@ public class SemesterController implements ControlledScene {
      * @return
      */
     /*
-    public Semester find(User user){
-        Semester semester = null;
+    public SemesterProfile find(User user){
+        SemesterProfile semester = null;
         try (
                 Connection connection = dbhandler.getConnection();
                 PreparedStatement statement = prepareStatement(connection, QUERY_ALL_SEMESTERS,
@@ -123,8 +122,8 @@ public class SemesterController implements ControlledScene {
         return semester;
     }
 */
-    public Semester find(String sql, Object... properties){
-        Semester semester = null;
+    public SemesterProfile find(String sql, Object... properties){
+        SemesterProfile semesterProfile = null;
 
         try (
             PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties);
@@ -135,42 +134,66 @@ public class SemesterController implements ControlledScene {
             e.printStackTrace();
         }
 
-        return semester;
+        return semesterProfile;
+    }
+    public static boolean insertSemester(SemesterProfile semester) {
+
+        return false;
     }
     // Load semester file?
     // TODO : add file checking or rely on SQL checks
     // TODO : One function for checking and parsing or TWO separate ones ?
-    public boolean checkFile(File file) throws IOException {
-        boolean valid = false;
-        String line;
-        final String separator = ",";
-        BufferedReader reader = openFile(file);
-        Module aModule;
-        Assessment anAsse;
-
-        reader.readLine();
-        reader.readLine();
-
-        if (reader != null && file.getName().contains(".csv")) {
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(separator);
-                if(data.length == 3) {
-                    aModule = new Module(data[0], data[1]);
-
-                }
-                else {
-                    reader.readLine();
-                    anAsse = new Assessment(data[0],Integer.parseInt(data[1]),
-                            Integer.parseInt(data[2]), makeDate(data[3]));
-
-                }
-            }
-        }
-            return valid;
-
-    }
+//    public boolean checkFile(File file) throws IOException {
+//        boolean valid = false;
+//        String line;
+//        final String separator = ",";
+//        Module aModule;
+//        Assessment assessment;
+//        BufferedReader reader = openFile(file);
+//        SemesterProfile semesterProfile = new SemesterProfile();
+//        User user= dbhandler.getUserSession();
+//
+//        reader.readLine();
+//        reader.readLine();
+//        JSONObject obj = new JSONObject();
+//        if (reader != null && file.getName().contains(".csv")) {
+//            while ((line = reader.readLine()) != null) {
+//                String[] data = line.split(separator);
+//                if(data.length == 2)
+//                if(data.length == 2) {
+//                    aModule = new Module(data[0], data[1]);
+//                    ModuleController.insertModule(aModule);
+//                }
+//                else {
+//                    reader.readLine();
+//                    assessment = new Assessment(data[0],data[1],
+//                            Integer.parseInt(data[2]), makeDate(data[3]));
+//
+//                }
+//            }
+//        }
+//            return valid;
+//
+//    }
     // Helper functions ------------------------------------------------------------------------------------------------
+    public boolean parseJson(JSONObject json){
+        // Get data for a Semester profile
+        Date sem_start = (Date)json.get("start_date");
+        Date sem_end = (Date)json.get("end_date");
+        int user_id = dbhandler.getUserSession().getId();
+        // Create the semester profile
+        SemesterProfile semester = new SemesterProfile(sem_start,sem_end);
+        // Add it to the db
 
+
+        return false;
+    }
+    /** Helper Function takes a string representation of a date
+     *  and turns it into Date object (DD,MM,YYYY) format
+     *
+     * @param date
+     * @return date
+     */
     private static Date makeDate(String date) {
         DateFormat format = new SimpleDateFormat("DD,MM,YYYY", Locale.UK);
         Date aDate = new Date();
@@ -187,7 +210,7 @@ public class SemesterController implements ControlledScene {
      * @return BufferedReader
      * @throws IOException
      */
-    private static BufferedReader openFile(File file) throws IOException{
+    private static BufferedReader openFile(File file){
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(file));
@@ -196,13 +219,28 @@ public class SemesterController implements ControlledScene {
         }
         return reader;
     }
-    private static Semester formSemester(ResultSet resultSet) throws SQLException {
-        Semester semester = new Semester();
+    private static JSONObject parseFile(File file){
+        JSONParser parser = new JSONParser();
+        try {
+            FileReader rd = new FileReader(file);
+            Object obj = parser.parse(rd);
+            JSONObject json = (JSONObject)obj;
+            return json;
+        } catch (org.json.simple.parser.ParseException e){
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        semester.setStartDate(resultSet.getString("start_date"));
-        semester.setEndDate(resultSet.getString("end_date"));
+        return null;
+    }
+    private static SemesterProfile formSemester(ResultSet resultSet) throws SQLException {
+        SemesterProfile semesterProfile = new SemesterProfile();
 
-        return semester;
+        semesterProfile.setStartDate(resultSet.getDate("start_date"));
+        semesterProfile.setEndDate(resultSet.getDate("end_date"));
+
+        return semesterProfile;
     }
 
     @Override
