@@ -20,7 +20,7 @@ import java.util.Locale;
  */
 public class FileParser {
 
-    private static SemesterProfile parse(JSONObject json){
+    private static SemesterProfile parseJson(JSONObject json){
         // Get data for a Semester profile
         Date sem_start = makeDate((String)json.get("start_date"));
         Date sem_end = makeDate((String)json.get("end_date"));
@@ -83,7 +83,7 @@ public class FileParser {
             FileReader rd = new FileReader(file);
             Object obj = parser.parse(rd);
             JSONObject json = (JSONObject)obj;
-            return parse(json);
+            return parseJson(json);
         } catch (org.json.simple.parser.ParseException e){
             e.printStackTrace();
         } catch (IOException e) {
