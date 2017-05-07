@@ -20,7 +20,7 @@ import java.util.Locale;
  */
 public class FileParser {
 
-    public SemesterProfile parse(JSONObject json){
+    private static SemesterProfile parse(JSONObject json){
         // Get data for a Semester profile
         Date sem_start = makeDate((String)json.get("start_date"));
         Date sem_end = makeDate((String)json.get("end_date"));
@@ -38,10 +38,10 @@ public class FileParser {
                     JSONObject jsonAssessment = (JSONObject) assingments.get(i);
                     String title = (String) jsonAssessment.get("title");
                     String t = (String) jsonAssessment.get("type");
-                    Assessment.Event type = Assessment.Event.valueOf(t);
+                    Assessment.Type type = Assessment.Type.valueOf(t);
                     int weight = (int) jsonAssessment.get("weight");
                     Date deadline = makeDate((String) jsonAssessment.get("deadline"));
-                    Assessment assessment = new Assessment(title, type, weight, deadline);
+                    Assessment assessment = new Assessment(title, type, weight, deadline, 0, module.getCode());
                     module.addAssessment(assessment);
                 }
             }
@@ -73,16 +73,20 @@ public class FileParser {
      *  a JSON object containing the data
      *
      * @param file
-     * @return JSONObject
+     * @return SemesterProfile
      * @throws IOException
      */
-    public static JSONObject parseFile(File file){
+    public static SemesterProfile parseFile(File file) throws IOException {
         validate(file);
+        if (!file.getName().contains(".json")) {
+            throw new IOException("Invalid File");
+        }
         JSONParser parser = new JSONParser();
         try {
             FileReader rd = new FileReader(file);
             Object obj = parser.parse(rd);
-            return (JSONObject)obj;
+            JSONObject json = (JSONObject)obj;
+            return parse(json);
         } catch (org.json.simple.parser.ParseException e){
             e.printStackTrace();
         } catch (IOException e) {

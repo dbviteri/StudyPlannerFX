@@ -26,7 +26,7 @@ public class TaskControllerTest {
     @Before
     public void setUp() throws Exception {
         taskController = new TaskController();
-        assessment = new Assessment(2, "test", Assessment.Event.ASSIGNMENT, 0, date);
+        assessment = new Assessment(2, "test", Assessment.Type.ASSIGNMENT, 0, date, 2, "CMP");
     }
 
     @After
@@ -35,7 +35,7 @@ public class TaskControllerTest {
 
     @Test
     public void find() throws Exception {
-        ArrayList<Task> tasks = taskController.findAll(assessment);
+        ArrayList<Task> tasks = taskController.findAll(assessment.getId());
 
         for (Task task : tasks) {
             assessment.addTask(task);
@@ -51,6 +51,18 @@ public class TaskControllerTest {
         Task task = new Task("test4", Task.TaskType.PROGRAMMING, 3, "test4", 4, 5, null, 2);
 
         taskController.insertTask(task);
+    }
+
+    @Test
+    public void deleteTask() throws Exception {
+        ArrayList<Task> allTasks = taskController.findAll(assessment.getId());
+        Task toBeDeleted = allTasks.get(0);
+        taskController.deleteTask(toBeDeleted);
+
+        ArrayList<Task> oneLessTask = taskController.findAll(assessment.getId());
+        Task differentTask = oneLessTask.get(0);
+
+        assert (!toBeDeleted.equals(differentTask));
     }
 
 }

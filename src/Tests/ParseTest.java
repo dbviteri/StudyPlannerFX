@@ -22,9 +22,9 @@ public class ParseTest {
     @Test
     public void parse() throws IOException {
         File file = new File("res/testFile.json");
-        FileParser parser = new FileParser();
-        JSONObject data = FileParser.parseFile(file);
-        SemesterProfile semesterProfile = parser.parse(data);
+        //FileParser parser = new FileParser();
+        //JSONObject data = FileParser.parseFile(file);
+        SemesterProfile semesterProfile = FileParser.parseFile(file);
         System.out.println(semesterProfile);
     }
 }

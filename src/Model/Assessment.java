@@ -10,32 +10,41 @@ public class Assessment {
 
     // Properties ------------------------------------------------------------------------------------------------------
 
-    public enum Event {EXAM, ASSIGNMENT}
+    public enum Type {EXAM, ASSIGNMENT}
     private int id;
-    private Event type;
     private String title;
+    private Type type;
     private int weight;
     private Date deadline;
     private int completion;
     private ArrayList<Task> tasks;
+
+
+    // Foreign key code module
+    private String moduleCode;
+
     //TODO: Be able to define study milestones which must be attached to coursework or exams
     //TODO: Be able to define study tasks contributing towards specific coursework or exams
 
     // EMPTY CONSTRUCTOR FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!
-    public Assessment(int id, String title, Event type, int weight, Date deadline){
+    public Assessment(int id, String title, Type type, int weight, Date deadline, int completion, String moduleCode){
         this.id = id;
         this.title = title;
         this.type = type;
         this.weight = weight;
         this.deadline = deadline;
-        this.completion = 0;
+        this.completion = completion;
+        this.moduleCode = moduleCode;
         tasks = new ArrayList<>();
     }
-    public Assessment(String title, Event type, int weight, Date deadline) {
+    public Assessment(String title, Type type, int weight, Date deadline, int completion, String moduleCode) {
         this.title = title;
         this.type = type;
         this.weight = weight;
         this.deadline = deadline;
+        this.completion = completion;
+        this.moduleCode = moduleCode;
+        tasks = new ArrayList<>();
     }
     // Getters and setters ---------------------------------------------------------------------------------------------
 
@@ -43,11 +52,11 @@ public class Assessment {
 
     public void setId(int id) { this.id = id;}
 
-    public Event getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(Event type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
@@ -77,9 +86,11 @@ public class Assessment {
         return deadline;
     }
 
-    public int completion() {
+    public int getCompletion() {
         return completion;
     }
+
+    public String getModuleCode() { return moduleCode; }
 
     public void setDeadline(Date deadline) {
         this.deadline = deadline;

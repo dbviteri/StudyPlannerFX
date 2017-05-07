@@ -16,7 +16,7 @@ public class Task {
     private int time;
     private String criterion;
     private int criterionValue;
-    private int progress;
+    private int progress; // related to criterion value
     // TODO: Instead of an array list, have another instance of a class?
     // 'a task cannot be started before another has been completed'
     // private Task dependencyTask;
@@ -68,6 +68,8 @@ public class Task {
     // Getters and setters ---------------------------------------------------------------------------------------------
 
     public int getId() {return id;}
+
+    public void setId(int id) { this.id = id; }
 
     public String getTitle() {
         return title;

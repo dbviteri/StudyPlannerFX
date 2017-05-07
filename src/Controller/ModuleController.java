@@ -3,7 +3,9 @@ import Model.Module;
 import Model.SemesterProfile;
 import Utils.SPException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 
 /**
  * Created by 100125468 on 04/05/2017.
@@ -17,7 +19,7 @@ public class ModuleController {
     public ModuleController(){
     }
     //TODO : SHOULD IT BE STATIC OR NOT | MAYBE ANOTHER CLASS FOR DB QUERRY?
-    public boolean insertModule(Module module, SemesterProfile associatedSemesterProfile){
+    public static boolean insertModule(Module module){
         String name = module.getName();
         String code = module.getCode();
         try (

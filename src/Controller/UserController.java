@@ -11,7 +11,7 @@ import java.sql.SQLException;
  *
  * Created by Didac on 30/04/2017.
  */
-public abstract class UserController{
+public class UserController extends MainController<User>{
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ public abstract class UserController{
 
     // Variables -------------------------------------------------------------------------------------------------------
 
-    private DatabaseHandler dbhandler;
+    private DatabaseHandler dbhandler = DatabaseHandler.getInstance();
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
@@ -35,19 +35,19 @@ public abstract class UserController{
      * @param //dbhandler
      */
     public UserController() {
-        dbhandler = DatabaseHandler.getInstance();
+        //dbhandler = DatabaseHandler.getInstance();
         //System.out.println(dbhandler.getConnection());
     }
 
     // METHODS FOR QUERIES ---------------------------------------------------------------------------------------------
 
-    protected final User find(String username, String password) throws SPException {
+    protected final User find(String username, String password){
         return find(QUERY_FIND_BY_USERNAME_PASSWORD, username, password);
     }
 
     protected final boolean userExists(String username) throws SPException {
         try(
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_USERNAME_EXISTS, false, username);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_USERNAME_EXISTS, username);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) return true;
@@ -62,7 +62,7 @@ public abstract class UserController{
         User user = null;
 
         try (
-            PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties);
+            PreparedStatement statement = dbhandler.prepareStatement(sql, properties);
             ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) user = formUser(resultSet);
@@ -118,4 +118,5 @@ public abstract class UserController{
 
         return new User(id, email, username, password, firstname, lastname, isStaff);
     }
+
 }

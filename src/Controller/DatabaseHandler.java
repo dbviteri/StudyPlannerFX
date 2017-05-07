@@ -21,7 +21,7 @@ public class DatabaseHandler {
 
     // Methods ---------------------------------------------------------------------------------------------------------
 
-    private static final DatabaseHandler DATABASE_HANDLER = new DatabaseHandler();
+    protected static final DatabaseHandler DATABASE_HANDLER = new DatabaseHandler();
 
     private Connection connection;
 
@@ -105,11 +105,8 @@ public class DatabaseHandler {
 //        return instance;
 //    }
 
-    public PreparedStatement prepareStatement
-            (String sql, boolean returnGeneratedSet, Object... values)
-            throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(sql,
-                returnGeneratedSet ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS);
+    public PreparedStatement prepareStatement (String sql, Object... values) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(sql);
 
         for (int i = 0; i < values.length; i++){
             statement.setObject(i + 1, values[i]);

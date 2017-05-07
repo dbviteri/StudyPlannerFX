@@ -1,8 +1,5 @@
 package Controller;
 
-import Model.Assessment;
-import Model.Module;
-import Model.SemesterProfile;
 import Model.Task;
 import Utils.SPException;
 
@@ -16,7 +13,6 @@ import java.util.ArrayList;
  * Created by Didac on 04/05/2017.
  */
 public class TaskController {
-
     // Constant queries ------------------------------------------------------------------------------------------------
 
     private static final String QUERY_FIND_TASKS =
@@ -26,22 +22,18 @@ public class TaskController {
             "INSERT INTO Task (title, type, time, criterion, criterion_value, progress, assessment_id, dependency) VALUES (?,?,?,?,?,?,?,?)";
 
     private static final String QUERY_DELETE_TASK = "DELETE FROM Task WHERE task_id = ?";
-    private static final String QUERY_INSERT_DEPENDENCY =
-            "ADD CONSTRAINT '";
 
     private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
 
-    public ArrayList<Task> findAll(Assessment assessment){
-        Task task = null;
+    public ArrayList<Task> findAll(int assessmentId){
         ArrayList<Task> tasks = new ArrayList<>();
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_TASKS, false, assessment.getId());
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_TASKS, assessmentId);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
-                task = formTask(resultSet);
-                tasks.add(task);
+                tasks.add(formTask(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,10 +42,10 @@ public class TaskController {
         return tasks;
     }
 
-    private Task findDependency(int depTaskId){
+    public Task findDependency(int depTaskId){
         Task task = null;
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_DEPENDENCY, false, depTaskId);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_DEPENDENCY, depTaskId);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) task = formTask(resultSet);
@@ -63,7 +55,7 @@ public class TaskController {
         return task;
     }
 
-    public static void insertTask(Task task){
+    public void insertTask(Task task){
         // INSERT TASK
         Object[] properties = {
                 task.getTitle(),
@@ -81,13 +73,30 @@ public class TaskController {
             properties[properties.length - 1] = task.getDependencyTask().getId();
         }
 
-
-
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, true, properties);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, properties);
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to create new task. No rows affected");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteTask(Task task){
+        Object[] properties = {
+                task.getId()
+        };
+
+        try (
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_DELETE_TASK, properties);
+        ) {
+            int updatedRows = statement.executeUpdate();
+            if (updatedRows == 0) {
+                throw new SPException("Failed to delete task. No rows affected");
+            } else {
+                task.setId(0);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

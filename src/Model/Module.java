@@ -42,6 +42,7 @@ public class Module {
         assessments.add(assessment);
     }
 
+    public ArrayList<Assessment> getAssessments(){return assessments;}
 
     // Overrides -------------------------------------------------------------------------------------------------------
 

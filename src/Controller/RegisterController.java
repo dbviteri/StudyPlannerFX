@@ -1,7 +1,8 @@
 package Controller;
 
-import Model.User;
+import Model.*;
 import Utils.ControlledScene;
+import Utils.FileParser;
 import Utils.StageHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -84,7 +85,20 @@ public class RegisterController extends UserController implements ControlledScen
     private File fileChooser(){
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(stageHandler.getStage());
+        try {
+            SemesterProfile semesterProfile = FileParser.parseFile(file);
 
+            SemesterController.insertSemester(semesterProfile);
+            for (Module module : semesterProfile.getModules()){
+                ModuleController.insertModule(module);
+                for (Assessment assessment : module.getAssessments()){
+                    AssessmentController.insertAssessment(assessment);
+                }
+            }
+
+        } catch (IOException e) {
+            // Display a message saying the file is not .json
+        }
         return file;
     }
 

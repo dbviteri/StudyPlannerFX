@@ -7,24 +7,23 @@ import Model.User;
 import Utils.ControlledScene;
 import Utils.SPException;
 import Utils.StageHandler;
-import com.oracle.javafx.jmx.json.impl.JSONStreamReaderImpl;
+import com.sun.xml.internal.bind.v2.TODO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.VBox;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.*;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Locale;
-import org.json.simple.*;
-import org.json.simple.parser.JSONParser;
-import sun.misc.JavaIOAccess;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -65,8 +64,6 @@ public class SemesterController implements ControlledScene {
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
-    // CONSTRUCTOR JUST FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
     /**
      * Constructs a SemesterProfile controller.
      */
@@ -86,8 +83,9 @@ public class SemesterController implements ControlledScene {
         User user = dbhandler.getUserSession();
         userMenu.setText(user.getFirstname());
 
+        stageHandler.getStage().setTitle("Welcome back, " + user.getFirstname() + "!");
         vBox.prefWidthProperty().bind(stageHandler.getStage().widthProperty());
-        vBox.prefHeightProperty().bind(stageHandler.getStage().heightProperty());
+        vBox.prefHeightProperty().bind(stageHandler.getStage().heightProperty().subtract(20));
         System.out.println(user.getEmail());
     }
 
@@ -108,7 +106,9 @@ public class SemesterController implements ControlledScene {
     public SemesterProfile find(User user){
         SemesterProfile semester = null;
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_USER_SEMESTER, false, user.getId());
+                Connection connection = dbhandler.getConnection();
+                PreparedStatement statement = prepareStatement(connection, QUERY_ALL_SEMESTERS,
+                        false, properties);
                 ResultSet resultSet = statement.executeQuery();
         ) {
             while (resultSet.next()){
@@ -133,6 +133,7 @@ public class SemesterController implements ControlledScene {
         }
         return semesterProfile;
     }
+
     public static boolean insertSemester(SemesterProfile semester) {
         Date start = semester.getStartDate();
         Date end = semester.getEndDate();
