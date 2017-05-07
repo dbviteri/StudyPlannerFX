@@ -13,15 +13,17 @@ import java.util.ArrayList;
  * Created by Didac on 04/05/2017.
  */
 public class TaskController {
+
     // Constant queries ------------------------------------------------------------------------------------------------
 
     private static final String QUERY_FIND_TASKS =
             "SELECT * FROM Task LEFT JOIN Assessment ON (Task.assessment_id = Assessment.assessment_id) WHERE Assessment.assessment_id = ?";
-    private static final String QUERY_FIND_DEPENDENCY = "SELECT * FROM Task WHERE task_id = ?";
-    private static final String QUERY_INSERT =
+    private static final String QUERY_FIND_DEPENDENCY =
+            "SELECT * FROM Task WHERE task_id = ?";
+    private static final String QUERY_INSERT_TASK =
             "INSERT INTO Task (title, type, time, criterion, criterion_value, progress, assessment_id, dependency) VALUES (?,?,?,?,?,?,?,?)";
-
-    private static final String QUERY_DELETE_TASK = "DELETE FROM Task WHERE task_id = ?";
+    private static final String QUERY_DELETE_TASK =
+            "DELETE FROM Task WHERE task_id = ?";
 
     private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
 
@@ -74,7 +76,7 @@ public class TaskController {
         }
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, properties);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT_TASK, properties);
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to create new task. No rows affected");
@@ -95,7 +97,7 @@ public class TaskController {
             if (updatedRows == 0) {
                 throw new SPException("Failed to delete task. No rows affected");
             } else {
-                task.setId(0);
+                task.setId(null);
             }
         } catch (SQLException e) {
             e.printStackTrace();

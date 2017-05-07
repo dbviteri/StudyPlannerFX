@@ -17,10 +17,8 @@ public class UserController{
 
     private static final String QUERY_USERNAME_EXISTS =
             "SELECT username FROM User WHERE username = ?";
-
     private static final String QUERY_FIND_BY_USERNAME_PASSWORD =
             "SELECT * FROM User WHERE username = ? AND password = MD5(?)";
-
     private static final String QUERY_INSERT =
             "INSERT INTO User (email, username, password, firstname, lastname, isStaff) VALUES (?, ?, MD5(?), ?, ?, ?)";
 

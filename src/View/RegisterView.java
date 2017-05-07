@@ -92,6 +92,9 @@ public class RegisterView extends UserController implements ControlledScene{
         try {
             SemesterProfile semesterProfile = FileParser.parseFile(file);
 
+            // Set the related user id for this profile
+            semesterProfile.setUserId();
+
             SemesterController.insertSemester(semesterProfile);
             for (Module module : semesterProfile.getModules()){
                 ModuleController.insertModule(module);
@@ -101,7 +104,7 @@ public class RegisterView extends UserController implements ControlledScene{
             }
 
         } catch (IOException e) {
-            // Display a message saying the file is not .json
+            // TODO: Display a message saying the file is not .json
         }
         return file;
     }
