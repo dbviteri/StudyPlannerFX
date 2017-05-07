@@ -21,13 +21,16 @@ public class Task {
     // 'a task cannot be started before another has been completed'
     // private Task dependencyTask;
     private Task dependencyTask;
-    private ArrayList<Task> dependencies;
+    //private ArrayList<Task> dependencies;
     private ArrayList<Note> notes;
+
+    // Foreign key to Assessment
+    private int assessmentId;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
     public Task(int id, String title, TaskType type, int time, String criterion,
-                int criterionValue, int progress, Task dependencyTask) {
+                int criterionValue, int progress, Task dependencyTask, int assessmentId) {
         this.id = id;
         this.title = title;
         this.type = type;
@@ -36,17 +39,20 @@ public class Task {
         this.criterionValue = criterionValue;
         this.progress = progress;
         this.dependencyTask = dependencyTask;
+        this.assessmentId = assessmentId;
     }
 
     // TODO: Decide whether we need constructors
     public Task(String title, TaskType type, int time, String criterion,
-                int criterionValue, int progress) {
+                int criterionValue, int progress, Task dependencyTask, int assessmentId) {
         this.title = title;
         this.type = type;
         this.time = time;
         this.criterion = criterion;
         this.criterionValue = criterionValue;
         this.progress = progress;
+        this.dependencyTask = dependencyTask;
+        this.assessmentId = assessmentId;
     }
 
     // Methods ---------------------------------------------------------------------------------------------------------
@@ -113,13 +119,21 @@ public class Task {
 
     public Task getDependencyTask(){return dependencyTask;}
 
-    public ArrayList<Task> getDependencies() {
-        return dependencies;
+    public void setAssessmentId(int assessmentId){
+        this.assessmentId = assessmentId;
     }
 
-    public void setDependencies(ArrayList<Task> dependencies) {
-        this.dependencies = dependencies;
+    public int getAssessmentId(){
+        return assessmentId;
     }
+
+//    public ArrayList<Task> getDependencies() {
+//        return dependencies;
+//    }
+
+//    public void setDependencies(ArrayList<Task> dependencies) {
+//        this.dependencies = dependencies;
+//    }
 
     public ArrayList<Note> getNotes() {
         return notes;
