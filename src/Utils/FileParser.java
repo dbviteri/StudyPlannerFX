@@ -32,14 +32,14 @@ public class FileParser {
             String name = (String)jsonModule.get("title");
             String code = (String)jsonModule.get("code");
             Module module = new Module(name,code);
-            JSONArray assingments = (JSONArray)json.get("assessments");
-            if(assingments != null) {
-                for (int j = 0; j < assingments.size(); j++) {
-                    JSONObject jsonAssessment = (JSONObject) assingments.get(i);
+            JSONArray assessments = (JSONArray)jsonModule.get("assessments");
+            if(assessments != null) {
+                for (int j = 0; j < assessments.size(); j++) {
+                    JSONObject jsonAssessment = (JSONObject)assessments.get(j);
                     String title = (String) jsonAssessment.get("title");
                     String t = (String) jsonAssessment.get("type");
-                    Assessment.Event type = Assessment.Event.valueOf(t);
-                    int weight = (int) jsonAssessment.get("weight");
+                    Assessment.Event type = Assessment.Event.valueOf(t.toUpperCase());
+                    int weight = (int)(long) jsonAssessment.get("weight");
                     Date deadline = makeDate((String) jsonAssessment.get("deadline"));
                     Assessment assessment = new Assessment(title, type, weight, deadline);
                     module.addAssessment(assessment);
