@@ -29,11 +29,7 @@ public class TaskController {
     private static final String QUERY_INSERT_DEPENDENCY =
             "ADD CONSTRAINT '";
 
-    private DatabaseHandler dbhandler;
-
-    public TaskController(){
-        dbhandler = DatabaseHandler.getInstance();
-    }
+    private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
 
     public ArrayList<Task> findAll(Assessment assessment){
         Task task = null;
@@ -67,7 +63,7 @@ public class TaskController {
         return task;
     }
 
-    public void insertTask(Task task){
+    public static void insertTask(Task task){
         // INSERT TASK
         Object[] properties = {
                 task.getTitle(),
@@ -88,7 +84,7 @@ public class TaskController {
 
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, true, properties)
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, true, properties);
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to create new task. No rows affected");
