@@ -2,6 +2,7 @@ package Utils;
 
 import Controller.SemesterController;
 import StudyPlanner.StudyPlanner;
+import View.SemesterView;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -130,8 +131,8 @@ public class StageHandler extends StackPane{
              * can be passed through the constructor of the controller.
              */
             resourceLoader.setControllerFactory((Class<?> controlledScene) -> {
-                if (controlledScene == SemesterController.class){
-                    return new SemesterController(this);
+                if (controlledScene == SemesterView.class){
+                    return new SemesterView(this);
                 } else {
                     try {
                         return controlledScene.newInstance();
