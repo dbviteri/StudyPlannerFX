@@ -10,7 +10,7 @@ public class Activity {
     // Properties ------------------------------------------------------------------------------------------------------
 
     private String title;
-    private ArrayList<Task> contributions;
+    //private ArrayList<Task> contributions;
     private int quantity;
     private int time;
     private ArrayList<Note> notes;

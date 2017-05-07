@@ -42,7 +42,6 @@ public class SemesterController {
 
     private static final String QUERY_COUNT_SEMESTERS =
             "SELECT *, count *";
-
     private static final String QUERY_ALL_SEMESTERS =
             "SELECT start_date, end_date FROM SemesterProfile WHERE semester_id = ?";
     private static final String QUERY_USER_SEMESTER =
@@ -56,7 +55,6 @@ public class SemesterController {
     // Variables -------------------------------------------------------------------------------------------------------
 
     protected static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
-    private StageHandler stageHandler;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 

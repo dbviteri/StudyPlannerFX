@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Task {
     // Properties ------------------------------------------------------------------------------------------------------
 
-    private int id;
+    private Integer id;
     private String title;
     private TaskType type;
     private int time;
@@ -22,14 +22,16 @@ public class Task {
     // private Task dependencyTask;
     private Task dependencyTask;
     //private ArrayList<Task> dependencies;
+
     private ArrayList<Note> notes;
+    private ArrayList<Activity> activities;
 
     // Foreign key to Assessment
     private int assessmentId;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
-    public Task(int id, String title, TaskType type, int time, String criterion,
+    public Task(Integer id, String title, TaskType type, int time, String criterion,
                 int criterionValue, int progress, Task dependencyTask, int assessmentId) {
         this.id = id;
         this.title = title;
@@ -67,9 +69,9 @@ public class Task {
 
     // Getters and setters ---------------------------------------------------------------------------------------------
 
-    public int getId() {return id;}
+    public Integer getId() {return id;}
 
-    public void setId(int id) { this.id = id; }
+    public void setId(Integer id) { this.id = id; }
 
     public String getTitle() {
         return title;
