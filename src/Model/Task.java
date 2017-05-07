@@ -17,20 +17,16 @@ public class Task {
     private String criterion;
     private int criterionValue;
     private int progress; // related to criterion value
-    // TODO: Instead of an array list, have another instance of a class?
-    // 'a task cannot be started before another has been completed'
-    // private Task dependencyTask;
-    private Task dependencyTask;
-    //private ArrayList<Task> dependencies;
+    // TODO :'a task cannot be started before another has been completed'
+    private ArrayList<Task> dependencies;
     private ArrayList<Note> notes;
-
     // Foreign key to Assessment
     private int assessmentId;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
     public Task(int id, String title, TaskType type, int time, String criterion,
-                int criterionValue, int progress, Task dependencyTask, int assessmentId) {
+                int criterionValue, int progress, ArrayList<Task> dependencies, int assessmentId) {
         this.id = id;
         this.title = title;
         this.type = type;
@@ -38,20 +34,20 @@ public class Task {
         this.criterion = criterion;
         this.criterionValue = criterionValue;
         this.progress = progress;
-        this.dependencyTask = dependencyTask;
+        this.dependencies = dependencies;
         this.assessmentId = assessmentId;
     }
 
     // TODO: Decide whether we need constructors
     public Task(String title, TaskType type, int time, String criterion,
-                int criterionValue, int progress, Task dependencyTask, int assessmentId) {
+                int criterionValue, int progress, ArrayList<Task> dependencies, int assessmentId) {
         this.title = title;
         this.type = type;
         this.time = time;
         this.criterion = criterion;
         this.criterionValue = criterionValue;
         this.progress = progress;
-        this.dependencyTask = dependencyTask;
+        this.dependencies = dependencies;
         this.assessmentId = assessmentId;
     }
 
@@ -119,7 +115,7 @@ public class Task {
         this.progress = progress;
     }
 
-    public Task getDependencyTask(){return dependencyTask;}
+    public ArrayList<Task> getDependencyTask(){return dependencies;}
 
     public void setAssessmentId(int assessmentId){
         this.assessmentId = assessmentId;
@@ -160,11 +156,11 @@ public class Task {
                 .append(criterionValue).append("\n")
                 .append(progress).append("\n");
 
-        if (dependencyTask == null){
+        if (dependencies == null){
             stringBuilder.append("No dependencies!").append("\n");
         } else {
             stringBuilder.append("DEPENDENCIES FOR " + title + ": ").append("\n")
-            .append(dependencyTask.toString()).append("\n");
+            .append(dependencies.toString()).append("\n");
         }
 
         return stringBuilder.toString();
