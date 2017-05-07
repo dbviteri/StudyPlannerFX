@@ -52,29 +52,37 @@ public class FileParser {
     /** Helper Function takes a string representation of a date
      *  and turns it into Date object (DD,MM,YYYY) format
      *
-     * @param date
+     * @param sDate
      * @return date
      */
-    public static Date makeDate(String date) {
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
-        Date aDate = new Date();
+    public static Date makeDate(String sDate) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
         try {
-            aDate = format.parse(date);
+            date = format.parse(sDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return aDate;
+        return date;
     }
-    public static JSONObject parseFile(File file) throws IOException {
-        if (!file.getName().contains(".json")) {
-            throw new IOException("Invalid File");
-        }
+    public static boolean validate(File file){
+        return file.getName().contains(".json");
+    }
+
+    /** Function takes a file, reads it and returns
+     *  a JSON object containing the data
+     *
+     * @param file
+     * @return JSONObject
+     * @throws IOException
+     */
+    public static JSONObject parseFile(File file){
+        validate(file);
         JSONParser parser = new JSONParser();
         try {
             FileReader rd = new FileReader(file);
             Object obj = parser.parse(rd);
-            JSONObject json = (JSONObject)obj;
-            return json;
+            return (JSONObject)obj;
         } catch (org.json.simple.parser.ParseException e){
             e.printStackTrace();
         } catch (IOException e) {
