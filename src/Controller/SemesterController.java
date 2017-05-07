@@ -31,7 +31,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * Created by Didac on 01/05/2017.
  */
-public class SemesterController implements ControlledScene {
+public class SemesterController {
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
@@ -53,49 +53,14 @@ public class SemesterController implements ControlledScene {
             "SELECT Semester_ID FROM SemesterProfile WHERE user_id = ? ";
 
 
-    @FXML Menu userMenu;
-    @FXML VBox vBox;
-
     // Variables -------------------------------------------------------------------------------------------------------
 
-    private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
+    protected static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
     private StageHandler stageHandler;
-    //private MasterController masterC;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
-    /**
-     * Constructs a SemesterProfile controller.
-     */
-    public SemesterController(StageHandler stageHandler){
-        this.stageHandler = stageHandler;
-    }
 
-    // Methods ---------------------------------------------------------------------------------------------------------
-
-    /**
-     * Allows for post-processing of the FXML components. It is called after the constructor.
-     */
-    public void initialize() {
-        //semesterLabel.setText("test");
-        if (dbhandler.getUserSession() == null) return;
-
-        User user = dbhandler.getUserSession();
-        userMenu.setText(user.getFirstname());
-
-        stageHandler.getStage().setTitle("Welcome back, " + user.getFirstname() + "!");
-        vBox.prefWidthProperty().bind(stageHandler.getStage().widthProperty());
-        vBox.prefHeightProperty().bind(stageHandler.getStage().heightProperty().subtract(20));
-        System.out.println(user.getEmail());
-    }
-
-    @FXML
-    public void logOut(){
-        //dbhandler.closeConnection();
-        dbhandler.deleteSession();
-        stageHandler.reloadScene(StageHandler.SCENE.LOGIN);
-        stageHandler.setScene(StageHandler.SCENE.LOGIN, false);
-    }
 
     /**
      * Find semesters for a given user
@@ -199,8 +164,4 @@ public class SemesterController implements ControlledScene {
         return semesterProfile;
     }
 
-    @Override
-    public void setParentScene(StageHandler parentScene) {
-        stageHandler = parentScene;
-    }
 }

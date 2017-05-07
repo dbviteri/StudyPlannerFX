@@ -29,9 +29,6 @@ public class Module {
         return name;
     }
     public String getCode() { return code; }
-    public ArrayList<Assessment> getAssessments(){
-        return assessments;
-    }
 
     public void setName(String name){
         this.name = name;

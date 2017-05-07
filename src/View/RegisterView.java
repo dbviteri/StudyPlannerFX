@@ -1,5 +1,9 @@
-package Controller;
+package View;
 
+import Controller.AssessmentController;
+import Controller.ModuleController;
+import Controller.SemesterController;
+import Controller.UserController;
 import Model.*;
 import Utils.ControlledScene;
 import Utils.FileParser;
@@ -21,7 +25,7 @@ import java.util.Random;
 /**
  * Created by Didac on 05/05/2017.
  */
-public class RegisterController extends UserController implements ControlledScene{
+public class RegisterView extends UserController implements ControlledScene{
     @FXML private TextField nameField;
     @FXML private TextField lastNameField;
     @FXML private TextField usernameField;
@@ -31,7 +35,7 @@ public class RegisterController extends UserController implements ControlledScen
 
     private StageHandler stageHandler;
 
-    public RegisterController(){
+    public RegisterView(){
         super();
     }
 

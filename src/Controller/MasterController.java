@@ -9,13 +9,13 @@
 //public class MasterController {
 //    private DatabaseHandler dbhandler;
 //    private LoginController loginC;
-//    private RegisterController registerC;
+//    private RegisterView registerC;
 //    private ModuleController moduleC;
 //    private AssessmentController assessmentC;
 //    public MasterController(){
 //        dbhandler = DatabaseHandler.getInstance();
 //        loginC = new LoginController();
-//        registerC = new RegisterController();
+//        registerC = new RegisterView();
 //        moduleC = new ModuleController();
 //
 //    }
