@@ -105,7 +105,9 @@ public class Assessment {
     // TODO: Rewrite the tostring
     @Override
     public String toString() {
-        return title;
+        String str="";
+        str += title + "\n" + type + "\n" + "Weight :" + weight +"%";
+        return str;
     }
 
 }

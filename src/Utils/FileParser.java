@@ -32,10 +32,10 @@ public class FileParser {
             String name = (String)jsonModule.get("title");
             String code = (String)jsonModule.get("code");
             Module module = new Module(name,code);
-            JSONArray assingments = (JSONArray)json.get("assessments");
-            if(assingments != null) {
-                for (int j = 0; j < assingments.size(); j++) {
-                    JSONObject jsonAssessment = (JSONObject) assingments.get(i);
+            JSONArray assessments = (JSONArray)jsonModule.get("assessments");
+            if(assessments != null) {
+                for (int j = 0; j < assessments.size(); j++) {
+                    JSONObject jsonAssessment = (JSONObject)assessments.get(j);
                     String title = (String) jsonAssessment.get("title");
                     String t = (String) jsonAssessment.get("type");
                     Assessment.Type type = Assessment.Type.valueOf(t);
@@ -78,9 +78,6 @@ public class FileParser {
      */
     public static SemesterProfile parseFile(File file) throws IOException {
         validate(file);
-        if (!file.getName().contains(".json")) {
-            throw new IOException("Invalid File");
-        }
         JSONParser parser = new JSONParser();
         try {
             FileReader rd = new FileReader(file);

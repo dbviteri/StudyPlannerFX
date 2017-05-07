@@ -1,5 +1,7 @@
 package Tests;
 
+import Model.Assessment;
+import Model.Module;
 import Model.SemesterProfile;
 import Utils.FileParser;
 import org.json.simple.JSONObject;
@@ -26,5 +28,10 @@ public class ParseTest {
         //JSONObject data = FileParser.parseFile(file);
         SemesterProfile semesterProfile = FileParser.parseFile(file);
         System.out.println(semesterProfile);
+        for(Module mod : semesterProfile.getModules()){
+            for(Assessment as : mod.getAssessments()){
+                System.out.println(as.toString());
+            }
+        }
     }
 }
