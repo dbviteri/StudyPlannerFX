@@ -76,4 +76,9 @@ public class Activity {
 
     // Overrides -------------------------------------------------------------------------------------------------------
     // TODO: Write toString
+    @Override
+    public String toString(){
+
+        return null;
+    }
 }

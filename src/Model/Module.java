@@ -47,9 +47,9 @@ public class Module {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("MODULE\n").append(name).append("\n");
-        sb.append(code).append("\n");
-        return sb.toString();
+        String str = "";
+        str += "MODULE\n" + name + "\n";
+        str += code + "\n";
+        return str;
     }
 }
