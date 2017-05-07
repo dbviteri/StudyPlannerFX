@@ -133,7 +133,7 @@ public class SemesterController {
 //        reader.readLine();
 //        reader.readLine();
 //        JSONObject obj = new JSONObject();
-//        if (reader != null && file.getName().contains(".csv")) {
+//        if (reader != null && file.getTitle().contains(".csv")) {
 //            while ((line = reader.readLine()) != null) {
 //                String[] data = line.split(separator);
 //                if(data.length == 2)

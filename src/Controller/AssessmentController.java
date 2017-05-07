@@ -16,7 +16,7 @@ public class AssessmentController {
     private static final String QUERY_INSERT_ASSESSMENT =
             "INSERT INTO Assessment (title, type, weight, deadline, module_code) VALUES (?,?,?,?,?)";
     private static final String QUERY_UPDATE_ASSESSMENT =
-            "UPDATE Assignment SET title = ?, SET type = ?, SET weight = ?, SET deadline = ?, SET completion = ?";
+            "UPDATE Assessment SET title = ?, type = ?, weight = ?, deadline = ?, completion = ? WHERE assessment_id = ?";
     private static final String QUERY_DELETE_ASSESSMENT =
             "";
 

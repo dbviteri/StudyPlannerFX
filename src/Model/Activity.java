@@ -10,7 +10,6 @@ public class Activity {
     // Properties ------------------------------------------------------------------------------------------------------
 
     private String title;
-    private ArrayList<Task> contributions;
     private int quantity;
     private int time;
     private ArrayList<Note> notes;
@@ -18,9 +17,8 @@ public class Activity {
     // Constructor -----------------------------------------------------------------------------------------------------
 
     // TODO: Decide whether we need constructors
-    public Activity(String title, ArrayList<Task> contributions, int quantiy, int time) {
+    public Activity(String title, int quantity, int time) {
         this.title = title;
-        this.contributions = contributions;
         this.quantity = quantity;
         this.time = time;
     }
@@ -40,14 +38,6 @@ public class Activity {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public ArrayList<Task> getContributions() {
-        return contributions;
-    }
-
-    public void setContributions(ArrayList<Task> contributions) {
-        this.contributions = contributions;
     }
 
     public int getQuantity() {

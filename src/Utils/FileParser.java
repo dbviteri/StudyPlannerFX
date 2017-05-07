@@ -28,19 +28,23 @@ public class FileParser {
         SemesterProfile semester = new SemesterProfile(sem_start,sem_end);
         JSONArray modules = (JSONArray)json.get("modules");
         for(int i=0; i<modules.size(); i++) {
+            // Get a module
             JSONObject jsonModule = (JSONObject)modules.get(i);
             String name = (String)jsonModule.get("title");
             String code = (String)jsonModule.get("code");
             Module module = new Module(name,code);
+            // Get all Assessments from module
             JSONArray assessments = (JSONArray)jsonModule.get("assessments");
             if(assessments != null) {
                 for (int j = 0; j < assessments.size(); j++) {
+                    // Get Assessment
                     JSONObject jsonAssessment = (JSONObject)assessments.get(j);
                     String title = (String) jsonAssessment.get("title");
                     String t = (String) jsonAssessment.get("type");
                     Assessment.Type type = Assessment.Type.valueOf(t);
                     int weight = (int) jsonAssessment.get("weight");
                     Date deadline = makeDate((String) jsonAssessment.get("deadline"));
+                    // Create and add assessment to module
                     Assessment assessment = new Assessment(title, type, weight, deadline, 0, module.getCode());
                     module.addAssessment(assessment);
                 }

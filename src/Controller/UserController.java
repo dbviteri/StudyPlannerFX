@@ -11,7 +11,7 @@ import java.sql.SQLException;
  *
  * Created by Didac on 30/04/2017.
  */
-public class UserController extends MainController<User>{
+public class UserController{
 
     // Constant queries ------------------------------------------------------------------------------------------------
 

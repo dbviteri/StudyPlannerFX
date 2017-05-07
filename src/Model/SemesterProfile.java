@@ -14,6 +14,7 @@ public class SemesterProfile {
     private Date startDate;
     private Date endDate;
     private ArrayList<Module> modules = new ArrayList<>();
+    private int semester_id;
     // Maybe modules should be a hashmap to be able to retrieve by module name.
 
     public SemesterProfile(){ }
@@ -21,9 +22,16 @@ public class SemesterProfile {
         this.startDate = start;
         this.endDate = end;
     }
+    public SemesterProfile(Date start, Date end,int semester_id) {
+        this.startDate = start;
+        this.endDate = end;
+        this.semester_id = semester_id;
+    }
     // Getters and setters----------------------------------------------------------------------------------------------
     public Date getStartDate(){ return startDate; }
     public Date getEndDate(){ return endDate; }
+    public int getSemester_id() { return semester_id;
+    }
     public ArrayList<Module> getModules(){ return modules; }
     public Module getModule() {
         return modules.get(0);
@@ -38,6 +46,7 @@ public class SemesterProfile {
     public void setEndDate(Date endDate){
         this.endDate = endDate;
     }
+    public void setSemester_id(int semester_id) { this.semester_id = semester_id;}
 
 
 
