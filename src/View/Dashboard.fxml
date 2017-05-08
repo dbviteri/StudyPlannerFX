@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<HBox xmlns:fx="http://javafx.com/fxml/1" fx:id="scene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" fx:controller="View.DashBoardView">
+    <children>
+        <Pane fx:id="completedDeadlinesPane" prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <Label disable="true" layoutX="10.0" layoutY="3.0" text="Completed deadlines">
+                    <font>
+                        <Font name="System Bold" size="18.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="completedDeadlinesLbl" layoutX="64.0" layoutY="26.0" text="Assignment"/>
+            </children>
+        </Pane>
+        <Pane fx:id="upcomingDeadlinesPane" prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <Label disable="true" layoutX="13.0" layoutY="3.0" text="Upcoming deadlines">
+                    <font>
+                        <Font name="System Bold" size="18.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="upcomingDeadlinesLbl" layoutX="63.0" layoutY="26.0" text="Assignment"/>
+            </children>
+        </Pane>
+        <Pane fx:id="missedDeadlinesPane" prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <Label alignment="CENTER" disable="true" layoutX="27.0" layoutY="3.0" text="Missed deadlines"
+                       textAlignment="CENTER">
+                    <font>
+                        <Font name="System Bold" size="18.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="missedDeadlinesLbl" layoutX="64.0" layoutY="26.0" text="Assignment"/>
+            </children>
+        </Pane>
+    </children>
+</HBox>
