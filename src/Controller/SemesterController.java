@@ -59,10 +59,10 @@ public class SemesterController {
     }
 
     private static SemesterProfile formSemester(ResultSet resultSet) throws SQLException {
-        SemesterProfile semesterProfile = null;
-
-        semesterProfile.setStartDate(resultSet.getDate("start_date"));
-        semesterProfile.setEndDate(resultSet.getDate("end_date"));
+        Date start = resultSet.getDate("start_date");
+        Date end = resultSet.getDate("end_date");
+        int userID = resultSet.getInt("user_id");
+        SemesterProfile semesterProfile = new SemesterProfile(start,end,userID);
 
         return semesterProfile;
     }
