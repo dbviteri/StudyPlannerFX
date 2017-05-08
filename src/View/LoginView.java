@@ -6,11 +6,9 @@ import Model.User;
 import Utils.ControlledScene;
 import Utils.StageHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 
 /**
  * Created by Didac on 07/05/2017.
@@ -21,8 +19,6 @@ public class LoginView extends UserController implements ControlledScene{
     @FXML
     private TextField usernameField;
     @FXML private PasswordField passwordField;
-    @FXML private Tooltip usernameTooltip;
-    @FXML private ComboBox comboBox;
 
     @FXML
     public void loginUser() {
@@ -33,30 +29,17 @@ public class LoginView extends UserController implements ControlledScene{
 
         // If user is not null, show the main panel
         if(user == null) {
-            displayTooltip("Username or password is wrong. Please try again.");
-        } else {
-            //databaseHandler.createSession(user);
-            DatabaseHandler.getInstance().createSession(user);
-
-            // Reload scene after creating a session
-            stageHandler.reloadScene(StageHandler.SCENE.SEMESTER);
-            stageHandler.setScene(StageHandler.SCENE.SEMESTER, true);
+            new AlertDialog(Alert.AlertType.INFORMATION, "User doesn't exist. Try again.");
+            return;
         }
-    }
 
-    private void displayTooltip(String message){
-        usernameField.getStyleClass().add("error");
-        //final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
-        //usernameField.pseudoClassStateChanged(errorClass, true);
+        //databaseHandler.createSession(user);
+        DatabaseHandler.getInstance().createSession(user);
 
-        usernameTooltip.setText(message);
+        // Reload scene after creating a session
+        stageHandler.reloadScene(StageHandler.SCENE.SEMESTER);
+        stageHandler.setScene(StageHandler.SCENE.SEMESTER, true);
 
-        Point2D point2D = usernameField.localToScene(0.0, 0.0);
-        usernameTooltip.setAutoHide(true);
-        usernameTooltip.show(stageHandler.getStage(),
-                point2D.getX() + usernameField.getScene().getX() +
-                        usernameField.getScene().getWindow().getX() + usernameField.getWidth(),
-                point2D.getY() + usernameField.getScene().getY() + usernameField.getScene().getWindow().getY());
     }
 
     @FXML

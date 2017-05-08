@@ -4,23 +4,21 @@ import Controller.AssessmentController;
 import Controller.ModuleController;
 import Controller.SemesterController;
 import Controller.UserController;
-import Model.*;
+import Model.Assessment;
+import Model.Module;
+import Model.SemesterProfile;
+import Model.User;
 import Utils.ControlledScene;
 import Utils.FileParser;
 import Utils.StageHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Random;
 
 /**
  * Created by Didac on 05/05/2017.
@@ -31,7 +29,6 @@ public class RegisterView extends UserController implements ControlledScene{
     @FXML private TextField usernameField;
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
-    @FXML private Tooltip usernameTooltip;
 
     private StageHandler stageHandler;
 
@@ -41,6 +38,16 @@ public class RegisterView extends UserController implements ControlledScene{
 
     @FXML
     public void registerUser(){
+        SemesterProfile semesterProfile = parseProfile();
+        if (semesterProfile == null) {
+            new AlertDialog(Alert.AlertType.ERROR, "Wrong file.");
+            return;
+        }
+
+        if (userExists(usernameField.getText())) {
+            new AlertDialog(Alert.AlertType.INFORMATION, "Username is taken!");
+            return;
+        }
 
         String email = emailField.getText();
         String username = usernameField.getText();
@@ -48,17 +55,20 @@ public class RegisterView extends UserController implements ControlledScene{
         String firstname = nameField.getText();
         String lastname = lastNameField.getText();
         boolean isStaff = false; // TODO: HANDLE THIS IN REGISTER VIEW
+
         User user = new User(email, username, password, firstname, lastname, isStaff);
 
-        // While there's a username, keep creating a new one
-        if (userExists(username)){
-            displayTooltip("Username is taken, please choose another one.");
-            return;
+        UserController.create(user);
+        semesterProfile.setUserId(user.getId());
+
+
+        SemesterController.insertSemester(semesterProfile);
+        for (Module module : semesterProfile.getModules()) {
+            ModuleController.insertModule(module);
+            for (Assessment assessment : module.getAssessments()) {
+                AssessmentController.insertAssessment(assessment);
+            }
         }
-
-        // file chooser called in ... button too
-        File userF = fileChooser();
-
         // TODO: Fix commented code below
 //        try {
 //            if (semC.checkFile(userF)) {
@@ -86,49 +96,25 @@ public class RegisterView extends UserController implements ControlledScene{
 //    }
 
     @FXML
-    private File fileChooser(){
+    private SemesterProfile parseProfile() {
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(stageHandler.getStage());
+
+        SemesterProfile semesterProfile = null;
+
         try {
-            SemesterProfile semesterProfile = FileParser.parseFile(file);
-
-            // Set the related user id for this profile
-            semesterProfile.setUserId();
-
-            SemesterController.insertSemester(semesterProfile);
-            for (Module module : semesterProfile.getModules()){
-                ModuleController.insertModule(module);
-                for (Assessment assessment : module.getAssessments()){
-                    AssessmentController.insertAssessment(assessment);
-                }
-            }
-
+            semesterProfile = FileParser.parseFile(file);
         } catch (IOException e) {
             // TODO: Display a message saying the file is not .json
+            //new AlertDialog(Alert.AlertType.ERROR, e.getMessage());
         }
-        return file;
+
+        return semesterProfile;
     }
 
     @FXML
     public void showLoginScreen() {
         stageHandler.setScene(StageHandler.SCENE.LOGIN, false);
-    }
-
-    //TODO: GET RID OF DUPLICATE CODE
-    // This works for now
-    private void displayTooltip(String message){
-        usernameField.getStyleClass().add("error");
-        //final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
-        //usernameField.pseudoClassStateChanged(errorClass, true);
-
-        usernameTooltip.setText(message);
-
-        Point2D point2D = usernameField.localToScene(0.0, 0.0);
-        usernameTooltip.setAutoHide(true);
-        usernameTooltip.show(stageHandler.getStage(),
-                point2D.getX() + usernameField.getScene().getX() +
-                        usernameField.getScene().getWindow().getX() + usernameField.getWidth(),
-                point2D.getY() + usernameField.getScene().getY() + usernameField.getScene().getWindow().getY());
     }
 
     @Override

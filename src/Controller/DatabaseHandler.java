@@ -3,8 +3,13 @@ package Controller;
 import Model.User;
 import Utils.SPException;
 import Utils.SPProperties;
+import View.AlertDialog;
+import javafx.scene.control.Alert;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * Created by Didac on 29/04/2017.
@@ -21,7 +26,7 @@ public class DatabaseHandler {
 
     // Methods ---------------------------------------------------------------------------------------------------------
 
-    protected static final DatabaseHandler DATABASE_HANDLER = new DatabaseHandler();
+    private static final DatabaseHandler DATABASE_HANDLER = new DatabaseHandler();
 
     private Connection connection;
 
@@ -51,7 +56,8 @@ public class DatabaseHandler {
         try {
             DATABASE_HANDLER.connection = DriverManager.getConnection(url,username,password);
         } catch (SQLException e) {
-            e.printStackTrace();
+            new AlertDialog(Alert.AlertType.ERROR,
+                    "Couldn't connect to the internet:\n" + e.getMessage());
         }
     }
 

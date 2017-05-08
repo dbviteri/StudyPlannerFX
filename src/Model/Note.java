@@ -12,14 +12,26 @@ public class Note {
     private String title;
     private String text;
     private Date date;
+    private Integer taskId;
+    private Integer activityId;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
     // TODO: Decide whether we need constructors
-    public Note(String title, String text) {
+    public Note(String title, String text, Date date, Integer taskId, Integer activityId) {
+        this.title = title;
+        this.text = text;
+        this.date = date;
+        this.taskId = taskId;
+        this.activityId = activityId;
+    }
+
+    public Note(String title, String text, Integer taskId, Integer activityId) {
         this.title = title;
         this.text = text;
         this.date = new Date();
+        this.taskId = taskId;
+        this.activityId = activityId;
     }
 
     // Getters and setters ---------------------------------------------------------------------------------------------

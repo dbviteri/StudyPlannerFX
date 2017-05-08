@@ -1,31 +1,12 @@
 package Controller;
 
-import Model.Assessment;
-import Model.Module;
 import Model.SemesterProfile;
-import Model.User;
-import Utils.ControlledScene;
 import Utils.SPException;
-import Utils.StageHandler;
-import com.sun.xml.internal.bind.v2.TODO;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.layout.VBox;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.io.*;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.Locale;
-
-import javax.swing.filechooser.FileNameExtensionFilter;
+import java.util.Date;
 
 /**
  *
@@ -58,52 +39,13 @@ public class SemesterController {
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
-
-
-    /**
-     * Find semesters for a given user
-     * @param
-     * @return
-     */
-    /*
-    public SemesterProfile find(User user){
-        SemesterProfile semester = null;
-        try (
-                Connection connection = dbhandler.getConnection();
-                PreparedStatement statement = prepareStatement(connection, QUERY_ALL_SEMESTERS,
-                        false, properties);
-                ResultSet resultSet = statement.executeQuery();
-        ) {
-            while (resultSet.next()){
-                formSemester(resultSet);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return semester;
-    }
-*/
-    public SemesterProfile find(String sql, Object... properties){
-        SemesterProfile semesterProfile = null;
-
-        try (
-            PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties);
-            ResultSet resultSet = statement.executeQuery()
-        ) {
-            if (resultSet.next()) formSemester(resultSet);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return semesterProfile;
-    }
-
     public static boolean insertSemester(SemesterProfile semester) {
         Date start = semester.getStartDate();
         Date end = semester.getEndDate();
         int userid = dbhandler.getUserSession().getId();
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_INSERT_SEMESTER,true,start,end,userid);
+                        dbhandler.prepareStatement(QUERY_INSERT_SEMESTER, start, end, userid)
 
         ) {
             int updatedRows = statement.executeUpdate();
@@ -114,6 +56,15 @@ public class SemesterController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private static SemesterProfile formSemester(ResultSet resultSet) throws SQLException {
+        SemesterProfile semesterProfile = null;
+
+        semesterProfile.setStartDate(resultSet.getDate("start_date"));
+        semesterProfile.setEndDate(resultSet.getDate("end_date"));
+
+        return semesterProfile;
     }
     // Load semester file?
     // TODO : add file checking or rely on SQL checks
@@ -152,13 +103,41 @@ public class SemesterController {
 //    }
     // Helper functions ------------------------------------------------------------------------------------------------
 
+    /**
+     * Find semesters for a given user
+     *
+     * @param
+     * @return
+     */
+    /*
+    public SemesterProfile find(User user){
+        SemesterProfile semester = null;
+        try (
+                Connection connection = dbhandler.getConnection();
+                PreparedStatement statement = prepareStatement(connection, QUERY_ALL_SEMESTERS,
+                        false, properties);
+                ResultSet resultSet = statement.executeQuery();
+        ) {
+            while (resultSet.next()){
+                formSemester(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return semester;
+    }
+*/
+    public SemesterProfile find(String sql, Object... properties) {
+        SemesterProfile semesterProfile = null;
 
-    private static SemesterProfile formSemester(ResultSet resultSet) throws SQLException {
-        SemesterProfile semesterProfile = new SemesterProfile();
-
-        semesterProfile.setStartDate(resultSet.getDate("start_date"));
-        semesterProfile.setEndDate(resultSet.getDate("end_date"));
-
+        try (
+                PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            if (resultSet.next()) formSemester(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return semesterProfile;
     }
 

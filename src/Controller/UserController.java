@@ -11,7 +11,7 @@ import java.sql.SQLException;
  *
  * Created by Didac on 30/04/2017.
  */
-public class UserController extends MainController<User>{
+public class UserController {
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ public class UserController extends MainController<User>{
 
     // Variables -------------------------------------------------------------------------------------------------------
 
-    private DatabaseHandler dbhandler = DatabaseHandler.getInstance();
+    private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
@@ -39,39 +39,7 @@ public class UserController extends MainController<User>{
 
     // METHODS FOR QUERIES ---------------------------------------------------------------------------------------------
 
-    protected final User find(String username, String password){
-        return find(QUERY_FIND_BY_USERNAME_PASSWORD, username, password);
-    }
-
-    protected final boolean userExists(String username) throws SPException {
-        try(
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_USERNAME_EXISTS, username);
-                ResultSet resultSet = statement.executeQuery()
-        ) {
-            if (resultSet.next()) return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    protected final User find(String sql, Object... properties) throws SPException {
-        User user = null;
-
-        try (
-            PreparedStatement statement = dbhandler.prepareStatement(sql, properties);
-            ResultSet resultSet = statement.executeQuery()
-        ) {
-            if (resultSet.next()) user = formUser(resultSet);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return user;
-    }
-
-    protected final void create(User user){
+    public static void create(User user) {
         /*
         if(user.getId() != null){
             throw new IllegalArgumentException("Already in db");
@@ -97,8 +65,6 @@ public class UserController extends MainController<User>{
         }
     }
 
-    // Helper functions ------------------------------------------------------------------------------------------------
-
     /**
      * Matches a user from a row of a result set
      * @param resultSet
@@ -115,6 +81,40 @@ public class UserController extends MainController<User>{
         boolean isStaff = resultSet.getBoolean("isStaff");
 
         return new User(id, email, username, password, firstname, lastname, isStaff);
+    }
+
+    protected final User find(String username, String password) {
+        return find(QUERY_FIND_BY_USERNAME_PASSWORD, username, password);
+    }
+
+    protected final boolean userExists(String username) throws SPException {
+        try (
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_USERNAME_EXISTS, username);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            if (resultSet.next()) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    // Helper functions ------------------------------------------------------------------------------------------------
+
+    protected final User find(String sql, Object... properties) throws SPException {
+        User user = null;
+
+        try (
+                PreparedStatement statement = dbhandler.prepareStatement(sql, properties);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+            if (resultSet.next()) user = formUser(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 
 }

@@ -71,12 +71,12 @@ public class TaskController {
         };
 
         // if the dependency of task is null, it has no dependency
-        if (task.getDependencyTask() != null){
-            properties[properties.length - 1] = task.getDependencyTask().getId();
+        if (task.getDependencyTasks() != null) {
+            properties[properties.length - 1] = task.getDependencyTasks().get(0).getId();
         }
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT_TASK, properties);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT_TASK, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to create new task. No rows affected");
@@ -91,7 +91,7 @@ public class TaskController {
         };
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_DELETE_TASK, properties);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_DELETE_TASK, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) {

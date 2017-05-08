@@ -1,7 +1,5 @@
 package Model;
 
-import com.oracle.javafx.jmx.json.JSONDocument;
-
 import java.util.ArrayList;
 
 /**
@@ -53,13 +51,13 @@ public class Task {
 
     // Methods ---------------------------------------------------------------------------------------------------------
 
-    public boolean addNote(String title, String text) {
-        Note aNote = new Note(title, text);
-        if (notes.add(aNote)) {
-            return true;
-        }
-        return false;
-    }
+//    public boolean addNote(String title, String text) {
+//        Note aNote = new Note(title, text);
+//        if (notes.add(aNote)) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     // Getters and setters ---------------------------------------------------------------------------------------------
 
@@ -115,14 +113,14 @@ public class Task {
         this.progress = progress;
     }
 
-    public ArrayList<Task> getDependencyTask(){return dependencies;}
-
-    public void setAssessmentId(int assessmentId){
-        this.assessmentId = assessmentId;
-    }
+    public ArrayList<Task> getDependencyTasks() {return dependencies;}
 
     public int getAssessmentId(){
         return assessmentId;
+    }
+
+    public void setAssessmentId(int assessmentId) {
+        this.assessmentId = assessmentId;
     }
 
 //    public ArrayList<Task> getDependencies() {
@@ -136,10 +134,6 @@ public class Task {
     public ArrayList<Note> getNotes() {
         return notes;
     }
-
-    public enum TaskType {PROGRAMMING, READING}
-
-    // Overrides -------------------------------------------------------------------------------------------------------
 
     // TODO: Write toString
     @Override
@@ -156,7 +150,7 @@ public class Task {
                 .append(criterionValue).append("\n")
                 .append(progress).append("\n");
 
-        if (dependencies == null){
+        if (dependencies.size() == 0) {
             stringBuilder.append("No dependencies!").append("\n");
         } else {
             stringBuilder.append("DEPENDENCIES FOR " + title + ": ").append("\n")
@@ -165,4 +159,8 @@ public class Task {
 
         return stringBuilder.toString();
     }
+
+    // Overrides -------------------------------------------------------------------------------------------------------
+
+    public enum TaskType {PROGRAMMING, READING}
 }
