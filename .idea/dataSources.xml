@@ -6,6 +6,7 @@
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://johnny.heliohost.org:3306/xdn15mcu_studyplanner</jdbc-url>
+      <default-dialect>MySQL</default-dialect>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />
