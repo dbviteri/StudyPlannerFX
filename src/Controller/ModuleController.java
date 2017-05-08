@@ -1,6 +1,8 @@
 package Controller;
+
 import Model.Module;
 import Utils.SPException;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,7 +57,7 @@ public class ModuleController {
      * @param semesterID
      * @return ArrayList
      */
-    public ArrayList<Module> findAll(int semesterID){
+    public static ArrayList<Module> findAll(int semesterID) {
         ArrayList<Module> modules = new ArrayList<>();
         try (
                 PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_MODULES, semesterID);
@@ -69,6 +71,23 @@ public class ModuleController {
         }
 
         return modules;
+    }
+
+    /**
+     * Function used to create an object from
+     * a resultSet received from the database
+     *
+     * @param resultSet
+     * @return Module
+     * @throws SQLException
+     */
+    private static Module formModule(ResultSet resultSet) throws SQLException {
+        String title = resultSet.getString("title");
+        String code = resultSet.getString("code");
+        int semesterID = resultSet.getInt("Semester_ID");
+
+        Module module = new Module(title, code, semesterID);
+        return module;
     }
 
     /** Function used to update
@@ -91,22 +110,5 @@ public class ModuleController {
             e.printStackTrace();
         }
         return false;
-    }
-
-
-    /** Function used to create an object from
-     *  a resultSet received from the database
-     *
-     * @param resultSet
-     * @return Module
-     * @throws SQLException
-     */
-    private static Module formModule(ResultSet resultSet) throws SQLException {
-        String title = resultSet.getString("name");
-        String code = resultSet.getString("code");
-        int semesterID = resultSet.getInt("Semester_ID");
-
-        Module module = new Module(title,code,semesterID);
-        return module;
     }
 }

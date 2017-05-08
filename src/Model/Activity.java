@@ -25,6 +25,13 @@ public class Activity {
         this.time = time;
     }
 
+    public Activity(String title, int quantity, int time) {
+        this.activityId = activityId;
+        this.title = title;
+        this.quantity = quantity;
+        this.time = time;
+    }
+
     // Methods ---------------------------------------------------------------------------------------------------------
 
     public boolean addNote(String title, String text) {

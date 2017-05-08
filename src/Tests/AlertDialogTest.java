@@ -1,8 +1,9 @@
 package Tests;
 
-import Utils.SPException;
+import View.AlertDialog;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.scene.control.Alert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,8 +23,8 @@ public class AlertDialogTest {
         Thread thread = new Thread(() -> {
             new JFXPanel(); // Initializes the JavaFx Platform
             Platform.runLater(() -> {
-                throw new SPException("Test");
-                //new AlertDialog("Error message"); // Create and
+                //throw new SPException("Test");
+                new AlertDialog(Alert.AlertType.ERROR, "Error message"); // Create and
                 // initialize
                 // your app.
 

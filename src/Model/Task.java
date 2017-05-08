@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Created by Didac on 02/05/2017.
  */
 public class Task {
+
     // Properties ------------------------------------------------------------------------------------------------------
 
     private Integer id;
@@ -18,13 +19,14 @@ public class Task {
     // TODO :'a task cannot be started before another has been completed'
     private ArrayList<Task> dependencies;
     private ArrayList<Note> notes;
+
     // Foreign key to Assessment
-    private int assessmentId;
+    //private int assessmentId;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
     public Task(Integer id, String title, TaskType type, int time, String criterion,
-                int criterionValue, int progress, Task dependencyTask, int assessmentId) {
+                int criterionValue, int progress, Task dependencyTask) {
         this.id = id;
         this.title = title;
         this.type = type;
@@ -33,12 +35,12 @@ public class Task {
         this.criterionValue = criterionValue;
         this.progress = progress;
         this.dependencies = dependencies;
-        this.assessmentId = assessmentId;
+        //this.assessmentId = assessmentId;
     }
 
     // TODO: Decide whether we need constructors
     public Task(String title, TaskType type, int time, String criterion,
-                int criterionValue, int progress, ArrayList<Task> dependencies, int assessmentId) {
+                int criterionValue, int progress, ArrayList<Task> dependencies) {
         this.title = title;
         this.type = type;
         this.time = time;
@@ -46,7 +48,7 @@ public class Task {
         this.criterionValue = criterionValue;
         this.progress = progress;
         this.dependencies = dependencies;
-        this.assessmentId = assessmentId;
+        //this.assessmentId = assessmentId;
     }
 
     // Methods ---------------------------------------------------------------------------------------------------------
@@ -115,13 +117,13 @@ public class Task {
 
     public ArrayList<Task> getDependencyTasks() {return dependencies;}
 
-    public int getAssessmentId(){
-        return assessmentId;
-    }
+//    public int getAssessmentId(){
+//        return assessmentId;
+//    }
 
-    public void setAssessmentId(int assessmentId) {
-        this.assessmentId = assessmentId;
-    }
+//    public void setAssessmentId(int assessmentId) {
+//        this.assessmentId = assessmentId;
+//    }
 
 //    public ArrayList<Task> getDependencies() {
 //        return dependencies;

@@ -17,7 +17,7 @@ public class TaskController {
     // Constant queries ------------------------------------------------------------------------------------------------
 
     private static final String QUERY_FIND_TASKS =
-            "SELECT * FROM Task LEFT JOIN Assessment ON (Task.assessment_id = Assessment.assessment_id) WHERE Assessment.assessment_id = ?";
+            "SELECT * FROM Task LEFT JOIN Assessment ON (Task.assessment_id = Assessment.assessment_id) WHERE Task.assessment_id = ?";
     private static final String QUERY_FIND_DEPENDENCY =
             "SELECT * FROM Task WHERE task_id = ?";
     private static final String QUERY_INSERT_TASK =
@@ -66,7 +66,7 @@ public class TaskController {
                 task.getCriterion(),
                 task.getCriterionValue(),
                 task.getProgress(),
-                task.getAssessmentId(),
+                //task.getAssessmentId(),
                 null // Dependency
         };
 
@@ -120,9 +120,9 @@ public class TaskController {
             task = findDependency(dep_id);
         }
 
-        int assessmentId = resultSet.getInt("assessment_id");
+        //int assessmentId = resultSet.getInt("assessment_id");
 
-        return new Task(id, title, taskType, time, criterion, criterionValue, progress, task, assessmentId);
-
+        //return new Task(id, title, taskType, time, criterion, criterionValue, progress, task, assessmentId);
+        return new Task(id, title, taskType, time, criterion, criterionValue, progress, task);
     }
 }

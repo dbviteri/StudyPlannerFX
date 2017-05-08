@@ -59,7 +59,7 @@ public class RegisterView extends UserController implements ControlledScene{
         User user = new User(email, username, password, firstname, lastname, isStaff);
 
         UserController.create(user);
-        semesterProfile.setUserId(user.getId());
+        //semesterProfile.setUserId(user.getId());
 
 
         SemesterController.insertSemester(semesterProfile);
