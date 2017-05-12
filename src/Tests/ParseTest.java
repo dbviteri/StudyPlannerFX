@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by 100125468 on 06/05/2017.
@@ -28,9 +29,10 @@ public class ParseTest {
         //JSONObject data = FileParser.parseFile(file);
         SemesterProfile semesterProfile = FileParser.parseFile(file);
         System.out.println(semesterProfile);
-        for(Module mod : semesterProfile.getModules()){
-            for(Assessment as : mod.getAssessments()){
-                System.out.println(as.toString());
+        for(HashMap.Entry entry : semesterProfile.getModules().entrySet()){
+            Module module = (Module)entry.getValue();
+            for(HashMap.Entry entry1 : module.getAssessments().entrySet()){
+                System.out.println(entry1.toString());
             }
         }
     }

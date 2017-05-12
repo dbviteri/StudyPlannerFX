@@ -2,6 +2,7 @@ package Controller;
 
 import Model.User;
 import Utils.SPException;
+import com.mysql.jdbc.Statement;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,6 +41,7 @@ public class UserController {
 
     // METHODS FOR QUERIES ---------------------------------------------------------------------------------------------
 
+    @SuppressWarnings("ConstantConditions")
     public static Integer create(User user) {
         /*
         if(user.getId() != null){
@@ -55,21 +57,22 @@ public class UserController {
                 user.getLastname(),
                 user.isStaff(),
         };
-
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, properties);
-                PreparedStatement statement1 = dbhandler.prepareStatement(QUERY_FIND_BY_USERNAME_PASSWORD,properties[1],properties[2]);
-                ResultSet resultSet = statement1.executeQuery();
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, properties, Statement.RETURN_GENERATED_KEYS);
+                ResultSet set = statement.getGeneratedKeys();
+
+
         ) {
 
             int updatedRows = statement.executeUpdate();
-            UID = resultSet.getInt(1);
-            user.setId(UID);
-            dbhandler.createSession(user);
-            if (updatedRows == 0) throw new SPException("Failed to create new user. No rows affected");
+            set.next();
+            UID = set.getInt(1);
+            if (updatedRows == 0 || UID == null) throw new SPException("Failed to create new user. No rows affected");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        user.setId(UID);
+        dbhandler.createSession(user);
         return UID;
     }
 

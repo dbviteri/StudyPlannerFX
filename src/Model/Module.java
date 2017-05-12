@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Didac on 02/05/2017.
@@ -11,8 +12,8 @@ public class Module {
 
     private String title;
     private String code;
-    private ArrayList<Assessment> assessments = new ArrayList<>();
-    private ArrayList<Activity> activities = new ArrayList<>();
+    private HashMap<Integer,Assessment> assessments = new HashMap<>();
+    private HashMap<Integer,Activity> activities = new HashMap<>();
     private int semesterID;
 
     // Constructors ----------------------------------------------------------------------------------------------------
@@ -36,6 +37,8 @@ public class Module {
     }
     public String getCode() { return code; }
     public int getSemesterID() { return semesterID;}
+    public HashMap<Integer,Activity> getActivities() {  return activities;}
+    public HashMap<Integer,Assessment> getAssessments(){return assessments;}
 
     public void setTitle(String title){
         this.title = title;
@@ -46,10 +49,9 @@ public class Module {
     public void setSemesterID(int semesterID) {this.semesterID = semesterID;}
 
     public void addAssessment(Assessment assessment){
-        assessments.add(assessment);
+        assessments.put(assessment.getId(),assessment);
     }
 
-    public ArrayList<Assessment> getAssessments(){return assessments;}
 
     // Overrides -------------------------------------------------------------------------------------------------------
 

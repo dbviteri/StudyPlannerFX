@@ -19,6 +19,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Created by Didac on 05/05/2017.
@@ -63,10 +64,11 @@ public class RegisterView extends UserController implements ControlledScene{
 
 
         SemesterController.insertSemester(semesterProfile);
-        for (Module module : semesterProfile.getModules()) {
+        for (HashMap.Entry entry : semesterProfile.getModules().entrySet()) {
+            Module module = (Module)entry.getValue();
             ModuleController.insertModule(module);
-            for (Assessment assessment : module.getAssessments()) {
-                AssessmentController.insertAssessment(assessment);
+            for (HashMap.Entry aEntry : module.getAssessments().entrySet()) {
+                AssessmentController.insertAssessment((Assessment)aEntry.getValue());
             }
         }
         // TODO: Fix commented code below
