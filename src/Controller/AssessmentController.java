@@ -19,7 +19,7 @@ public class AssessmentController {
             //"SELECT * FROM Assessment LEFT JOIN Assessment ON (Assessment.module_code = Module.code) WHERE Module.code = ?";
             "SELECT * FROM Assessment WHERE Assessment.module_code = ?";
     private static final String QUERY_INSERT_ASSESSMENT =
-            "INSERT INTO Assessment (title, type, weight, deadline, module_code) VALUES (?,?,?,?,?)";
+            "INSERT INTO Assessment (title, type, weight, deadline, completion,module_code) VALUES (?,?,?,?,?,?)";
     private static final String QUERY_UPDATE_ASSESSMENT =
             "UPDATE Assessment SET title = ?, type = ?, weight = ?, deadline = ?, completion = ? WHERE assessment_id = ?";
     private static final String QUERY_DELETE_ASSESSMENT =
@@ -54,13 +54,13 @@ public class AssessmentController {
                 assessment.getType().toString(),
                 assessment.getWeight(),
                 assessment.getDeadLine(),
-                assessment.getCompletion(),
+                0,
                 assessment.getModuleCode()
         };
 
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_INSERT_ASSESSMENT,true, properties)
+                        dbhandler.prepareStatement(QUERY_INSERT_ASSESSMENT, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to add Assessmentsd. No rows affected");

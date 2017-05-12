@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Didac on 02/05/2017.
@@ -13,7 +14,7 @@ public class Activity {
     private String title;
     private int quantity;
     private int time;
-    private ArrayList<Note> notes;
+    private HashMap<Integer, Note> notes;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
@@ -36,7 +37,8 @@ public class Activity {
 
     public boolean addNote(String title, String text) {
         Note note = new Note(title, text, null, activityId);
-        return notes.add(note);
+        notes.put(note.getId(),note);
+        return true;
     }
 
     // Getters and setters ---------------------------------------------------------------------------------------------
@@ -65,12 +67,12 @@ public class Activity {
         this.time = time;
     }
 
-    public ArrayList<Note> getNotes() {
+    public HashMap<Integer,Note> getNotes() {
         return notes;
     }
 
-    public void setNotes(ArrayList<Note> notes) {
-        this.notes = notes;
+    public void setNotes(HashMap<Integer,Note> notes) {
+        this.notes.putAll(notes);
     }
 
     // Overrides -------------------------------------------------------------------------------------------------------

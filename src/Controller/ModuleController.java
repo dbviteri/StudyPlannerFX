@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class ModuleController {
     private static final String QUERY_INSERT_MODULE =
-            "INSERT INTO Module (name,code,Semester_ID) VALUES (?,?,?)";
+            "INSERT INTO Module (title,code,Semester_ID) VALUES (?,?,?)";
     private static final String QUERY_FIND_MODULES =
             "SELECT * FROM Module WHERE Semester_ID = ?";
     private static final String QUERY_UPDATE_MODULE =
@@ -38,7 +38,7 @@ public class ModuleController {
         int id = module.getSemesterID();
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_INSERT_MODULE,true,name,code,id)
+                        dbhandler.prepareStatement(QUERY_INSERT_MODULE,name,code,id)
 
         ) {
             int updatedRows = statement.executeUpdate();

@@ -1,7 +1,7 @@
 package Model;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
+
 /**
  * Created by Didac on 02/05/2017.
  */
@@ -14,7 +14,7 @@ public class SemesterProfile {
     private Date endDate;
     //private Integer userId;
 
-    private ArrayList<Module> modules = new ArrayList<>();
+    private HashMap<String,Module> modules = new HashMap<>();
     private int semester_id;
     // Maybe modules should be a hashmap to be able to retrieve by module name.
 
@@ -53,7 +53,7 @@ public class SemesterProfile {
 
     public void setSemester_id(int semester_id) { this.semester_id = semester_id;}
 
-    public ArrayList<Module> getModules(){ return modules; }
+    public HashMap<String,Module> getModules(){ return modules; }
 
 //    public Integer getUserId() { return userId; }
 //    public void setUserId(Integer userId) { this.userId = userId; }
@@ -66,7 +66,7 @@ public class SemesterProfile {
 
     public void setSemesterId(Integer semesterId) { this.semesterId = semesterId; }
 
-    public void addModule(Module module) { modules.add(module); }
+    public void addModule(Module module) { modules.put(module.getCode(),module); }
 
     public void addModules(Module[] modules) { }
 
@@ -76,12 +76,12 @@ public class SemesterProfile {
 
     @Override
     public String toString() {
-        //StringBuilder sb = new StringBuilder();
-        //return modules.get(0).toString();
-        String astring = "";
-        for (Module amodule : modules){
-            astring += amodule;
+        StringBuilder sb = new StringBuilder();
+        sb.append("SemesterProfile: ").append(semester_id).append("\n ");
+        sb.append(startDate).append(" - ").append(endDate);
+        for (HashMap.Entry module : modules.entrySet()) {
+            sb.append(module.getValue());
         }
-        return "SemesterProfile: " + startDate + ", " + endDate + " \n" + astring;
+        return "SemesterProfile: " + startDate + ", " + endDate + " \n" + sb;
     }
 }

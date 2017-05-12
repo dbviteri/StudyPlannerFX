@@ -8,7 +8,7 @@ import java.util.Date;
 public class Note {
 
     // Properties ------------------------------------------------------------------------------------------------------
-
+    private Integer id;
     private String title;
     private String text;
     private Date date;
@@ -40,19 +40,25 @@ public class Note {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public Integer getId(){ return id;}
 
     public String getText() {
         return text;
+    }
+
+
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setText(String text) {
         this.text = text;
     }
 
-    public Date date() {
+    public void setId(Integer id) { this.id = id;}
+
+    public Date getDate() {
         return date;
     }
 

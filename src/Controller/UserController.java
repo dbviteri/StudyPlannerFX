@@ -21,6 +21,7 @@ public class UserController {
             "SELECT * FROM User WHERE username = ? AND password = MD5(?)";
     private static final String QUERY_INSERT =
             "INSERT INTO User (email, username, password, firstname, lastname, isStaff) VALUES (?, ?, MD5(?), ?, ?, ?)";
+    private static  final  String QUERY_FIND_LAST_INSERT_ID = "SELECT * FROM User WHERE username = ?";
 
     // Variables -------------------------------------------------------------------------------------------------------
 
@@ -39,13 +40,13 @@ public class UserController {
 
     // METHODS FOR QUERIES ---------------------------------------------------------------------------------------------
 
-    public static void create(User user) {
+    public static Integer create(User user) {
         /*
         if(user.getId() != null){
             throw new IllegalArgumentException("Already in db");
         }
         */
-
+        Integer UID = null;
         Object[] properties = {
                 user.getEmail(),
                 user.getUsername(),
@@ -56,13 +57,20 @@ public class UserController {
         };
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, true, properties)
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, properties);
+                PreparedStatement statement1 = dbhandler.prepareStatement(QUERY_FIND_BY_USERNAME_PASSWORD,properties[1],properties[2]);
+                ResultSet resultSet = statement1.executeQuery();
         ) {
+
             int updatedRows = statement.executeUpdate();
+            UID = resultSet.getInt(1);
+            user.setId(UID);
+            dbhandler.createSession(user);
             if (updatedRows == 0) throw new SPException("Failed to create new user. No rows affected");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return UID;
     }
 
     /**

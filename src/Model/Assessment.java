@@ -2,6 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by Didac on 02/05/2017.
@@ -17,7 +18,7 @@ public class Assessment {
     private int weight;
     private Date deadline;
     private int completion;
-    private ArrayList<Task> tasks;
+    private HashMap<Integer,Task> tasks;
 
 
     // Foreign key code module
@@ -35,7 +36,7 @@ public class Assessment {
         this.deadline = deadline;
         this.completion = completion;
         this.moduleCode = moduleCode;
-        tasks = new ArrayList<>();
+        tasks = new HashMap<>();
     }
     public Assessment(String title, Type type, int weight, Date deadline, int completion, String moduleCode) {
         this.title = title;
@@ -44,7 +45,7 @@ public class Assessment {
         this.deadline = deadline;
         this.completion = completion;
         this.moduleCode = moduleCode;
-        tasks = new ArrayList<>();
+        tasks = new HashMap<>();
     }
     // Getters and setters ---------------------------------------------------------------------------------------------
 
@@ -72,11 +73,11 @@ public class Assessment {
         return weight;
     }
 
-    public ArrayList<Task> getTasks() { return tasks; }
+    public HashMap<Integer, Task> getTasks() { return tasks; }
 
     //public void addAllTasks(ArrayList<Task> tasks) { this.tasks = tasks; }
 
-    public void addTask(Task task) { tasks.add(task); }
+    public void addTask(Task task) { tasks.put(task.getId(),task); }
 
     public void setWeight(int weight) {
         this.weight = weight;
