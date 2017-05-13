@@ -6,7 +6,6 @@ import Model.SemesterProfile;
 import Model.User;
 import Utils.FileParser;
 import Utils.SPException;
-import com.mysql.jdbc.Statement;
 
 import java.io.File;
 import java.sql.PreparedStatement;
@@ -64,7 +63,7 @@ public class UserController {
                 user.isStaff(),
         };
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, properties, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             ResultSet set = statement.getGeneratedKeys();
