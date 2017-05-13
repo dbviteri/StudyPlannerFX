@@ -93,7 +93,7 @@ public class SemesterController {
         int userid = dbhandler.getUserSession().getId();
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_INSERT_SEMESTER, start, end, userid)
+                        dbhandler.prepareStatement(QUERY_INSERT_SEMESTER, start, end,userid)
 
         ) {
             int updatedRows = statement.executeUpdate();

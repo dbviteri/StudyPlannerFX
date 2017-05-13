@@ -1,25 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<TabPane fx:id="tabPane" minHeight="400.0" minWidth="600.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.SemesterView">
-  <tabs>
-    <Tab text="Modules">
-         <content>
-            <ScrollPane>
-               <content>
-                  <HBox minHeight="1000.0" minWidth="1000.0" />
-               </content>
-            </ScrollPane>
-         </content>
-    </Tab>
-    <Tab text="Untitled Tab 2">
-         <content>
-            <ScrollPane />
-         </content>
-    </Tab>
-  </tabs>
-</TabPane>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" id="SemesterView" fx:id="semesterView" prefHeight="400.0" prefWidth="600.0"
+      xmlns="http://javafx.com/javafx/8" fx:controller="View.SemesterView">
+   <children>
+      <MenuBar maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+         <menus>
+            <Menu mnemonicParsing="false" text="Semesters...">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Add semesterProfile..." />
+                  <MenuItem mnemonicParsing="false" text="Change semesterProfile..." />
+               </items>
+            </Menu>
+            <Menu fx:id="userMenu" mnemonicParsing="false" text="User">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#logOut" text="Log out" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <TabPane prefHeight="400.0" prefWidth="600.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <tabs>
+          <Tab text="Dashboard">
+            <content>
+                <fx:include fx:id="dashboard" source="Dashboard.fxml"/>
+            </content>
+          </Tab>
+          <Tab text="Modules">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</VBox>

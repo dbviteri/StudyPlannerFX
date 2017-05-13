@@ -1,11 +1,18 @@
 package Controller;
 
+import Model.Assessment;
+import Model.Module;
+import Model.SemesterProfile;
 import Model.User;
+import Utils.FileParser;
 import Utils.SPException;
+import com.mysql.jdbc.Statement;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  *
@@ -21,6 +28,7 @@ public class UserController {
             "SELECT * FROM User WHERE username = ? AND password = MD5(?)";
     private static final String QUERY_INSERT =
             "INSERT INTO User (email, username, password, firstname, lastname, isStaff) VALUES (?, ?, MD5(?), ?, ?, ?)";
+    private static  final  String QUERY_FIND_LAST_INSERT_ID = "SELECT * FROM User WHERE username = ?";
 
     // Variables -------------------------------------------------------------------------------------------------------
 
@@ -39,13 +47,14 @@ public class UserController {
 
     // METHODS FOR QUERIES ---------------------------------------------------------------------------------------------
 
-    public static void create(User user) {
+    @SuppressWarnings("ConstantConditions")
+    public static Integer create(User user) {
         /*
         if(user.getId() != null){
             throw new IllegalArgumentException("Already in db");
         }
         */
-
+        Integer UID = null;
         Object[] properties = {
                 user.getEmail(),
                 user.getUsername(),
@@ -54,17 +63,36 @@ public class UserController {
                 user.getLastname(),
                 user.isStaff(),
         };
-
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, true, properties)
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, properties, Statement.RETURN_GENERATED_KEYS);
         ) {
             int updatedRows = statement.executeUpdate();
-            if (updatedRows == 0) throw new SPException("Failed to create new user. No rows affected");
+            ResultSet set = statement.getGeneratedKeys();
+            if(set.next()){
+                UID = set.getInt(1);
+            }
+            if (updatedRows == 0 || UID == null) throw new SPException("Failed to create new user. No rows affected");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        user.setId(UID);
+        dbhandler.createSession(user);
+        return UID;
     }
-
+    private SemesterProfile parseProfile(File file){
+        SemesterProfile profile = FileParser.parseFile(file);
+        return profile;
+    }
+    public static void insertProfile(SemesterProfile profile){
+        SemesterController.insertSemester(profile);
+        for (HashMap.Entry entry : profile.getModules().entrySet()) {
+            Module module = (Module)entry.getValue();
+            ModuleController.insertModule(module);
+            for (HashMap.Entry aEntry : module.getAssessments().entrySet()) {
+                AssessmentController.insertAssessment((Assessment)aEntry.getValue());
+            }
+        }
+    }
     /**
      * Matches a user from a row of a result set
      * @param resultSet

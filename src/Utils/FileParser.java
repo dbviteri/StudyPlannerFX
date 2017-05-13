@@ -38,8 +38,8 @@ public class FileParser {
                     JSONObject jsonAssessment = (JSONObject)assessments.get(j);
                     String title = (String) jsonAssessment.get("title");
                     String t = (String) jsonAssessment.get("type");
-                    Assessment.Type type = Assessment.Type.valueOf(t);
-                    int weight = (int) jsonAssessment.get("weight");
+                    Assessment.Type type = Assessment.Type.valueOf(t.toUpperCase());
+                    int weight = (int)(long) jsonAssessment.get("weight");
                     Date deadline = makeDate((String) jsonAssessment.get("deadline"));
                     // Create and add assessment to module
                     Assessment assessment = new Assessment(title, type, weight, deadline, 0);
@@ -78,7 +78,7 @@ public class FileParser {
      * @return SemesterProfile
      * @throws IOException
      */
-    public static SemesterProfile parseFile(File file) throws IOException {
+    public static SemesterProfile parseFile(File file) {
         validate(file);
         JSONParser parser = new JSONParser();
         try {

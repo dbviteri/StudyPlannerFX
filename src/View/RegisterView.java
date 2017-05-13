@@ -15,6 +15,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Created by Didac on 05/05/2017.
@@ -54,25 +55,10 @@ public class RegisterView extends UserController implements ControlledScene{
 
         User user = new User(email, username, password, firstname, lastname, isStaff);
 
-        UserController.create(user);
-        //semesterProfile.setUserId(user.getId());
+        Integer UID = UserController.create(user);
+        UserController.insertProfile(semesterProfile);
 
 
-        SemesterController.insertSemester(semesterProfile);
-//        for (Module module : semesterProfile.getModules()) {
-//            ModuleController.insertModule(module);
-////            for (Assessment assessment : module.getAssessments()) {
-////                AssessmentController.insertAssessment(assessment);
-////            }
-//        }
-        // TODO: Fix commented code below
-//        try {
-//            if (semC.checkFile(userF)) {
-//                create(user);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
     }
 
@@ -98,16 +84,15 @@ public class RegisterView extends UserController implements ControlledScene{
 
         SemesterProfile semesterProfile = null;
 
-        try {
-            semesterProfile = FileParser.parseFile(file);
-        } catch (IOException e) {
-            // TODO: Display a message saying the file is not .json
-            //new AlertDialog(Alert.AlertType.ERROR, e.getMessage());
-        }
+        semesterProfile = FileParser.parseFile(file);
 
         return semesterProfile;
     }
-
+    private File directRegistry(){
+        final FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog((stageHandler.getStage()));
+        return file;
+    }
     @FXML
     public void showLoginScreen() {
         stageHandler.setScene(StageHandler.SCENE.LOGIN, false);

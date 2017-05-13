@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class ModuleController {
     private static final String QUERY_INSERT_MODULE =
-            "INSERT INTO Module (name,code,Semester_ID) VALUES (?,?,?)";
+            "INSERT INTO Module (title,code,Semester_ID) VALUES (?,?,?)";
     private static final String QUERY_FIND_MODULES =
             "SELECT * FROM Module WHERE Semester_ID = ?";
     private static final String QUERY_UPDATE_MODULE =

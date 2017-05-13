@@ -77,13 +77,12 @@ public class SemesterProfile {
 
     @Override
     public String toString() {
-        //StringBuilder sb = new StringBuilder();
-        //return modules.get(0).toString();
-        String astring = "";
-//        for (Module amodule : modules){
-//            astring += amodule;
-//        }
-        return "SemesterProfile: " + startDate + ", " + endDate + " \n" + astring;
+        StringBuilder sb = new StringBuilder();
+        sb.append("SemesterProfile: ").append(semester_id).append("\n ");
+        sb.append(startDate).append(" - ").append(endDate);
+        for (HashMap.Entry module : modules.entrySet()) {
+            sb.append(module.getValue());
+        }
+        return "SemesterProfile: " + startDate + ", " + endDate + " \n" + sb;
     }
-
 }
