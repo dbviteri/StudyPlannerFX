@@ -80,7 +80,7 @@ public class FileParser {
      * @return SemesterProfile
      * @throws IOException
      */
-    public static SemesterProfile parseFile(File file) throws IOException {
+    public static SemesterProfile parseFile(File file) {
         validate(file);
         JSONParser parser = new JSONParser();
         try {

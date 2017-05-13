@@ -16,8 +16,7 @@ import javafx.scene.control.TextField;
 public class LoginView extends UserController implements ControlledScene{
     private StageHandler stageHandler;
 
-    @FXML
-    private TextField usernameField;
+    @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
 
     @FXML
