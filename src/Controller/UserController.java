@@ -83,7 +83,7 @@ public class UserController {
         return new User(id, email, username, password, firstname, lastname, isStaff);
     }
 
-    protected final User find(String username, String password) {
+    public static User find(String username, String password) {
         return find(QUERY_FIND_BY_USERNAME_PASSWORD, username, password);
     }
 
@@ -102,7 +102,7 @@ public class UserController {
 
     // Helper functions ------------------------------------------------------------------------------------------------
 
-    protected final User find(String sql, Object... properties) throws SPException {
+    private static User find(String sql, Object... properties) throws SPException {
         User user = null;
 
         try (

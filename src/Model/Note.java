@@ -12,26 +12,20 @@ public class Note {
     private String title;
     private String text;
     private Date date;
-    private Integer taskId;
-    private Integer activityId;
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
     // TODO: Decide whether we need constructors
-    public Note(String title, String text, Date date, Integer taskId, Integer activityId) {
+    public Note(String title, String text, Date date) {
         this.title = title;
         this.text = text;
         this.date = date;
-        this.taskId = taskId;
-        this.activityId = activityId;
     }
 
-    public Note(String title, String text, Integer taskId, Integer activityId) {
+    public Note(String title, String text) {
         this.title = title;
         this.text = text;
         this.date = new Date();
-        this.taskId = taskId;
-        this.activityId = activityId;
     }
 
     // Getters and setters ---------------------------------------------------------------------------------------------
@@ -52,7 +46,7 @@ public class Note {
         this.text = text;
     }
 
-    public Date date() {
+    public Date getDate() {
         return date;
     }
 
@@ -61,7 +55,7 @@ public class Note {
     @Override
     public String toString() {
         String str = "";
-        str += "\t " + title + "\n"
+        str += title + "\n"
                 + text + "\n" + date;
         return str;
 

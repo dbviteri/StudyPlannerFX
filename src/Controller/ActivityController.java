@@ -14,7 +14,7 @@ public class ActivityController {
 
     // QUERIES ---------------------------------------------------------------------------------------------------------
 
-    private static String QUERY_FIND_ACTIVITIES = "";
+    private static final String QUERY_FIND_ACTIVITIES = "SELECT * FROM Activity WHERE task_id = ?";
 
     // DATABASE INSTANCE -----------------------------------------------------------------------------------------------
 
@@ -22,25 +22,29 @@ public class ActivityController {
 
     // METHODS ---------------------------------------------------------------------------------------------------------
 
-    public ArrayList<Activity> activities(int taskId) {
-        ArrayList<Activity> assessments = new ArrayList<>();
+    public static ArrayList<Activity> findAll(int taskId) {
+        ArrayList<Activity> activities = new ArrayList<>();
 
         try (
                 PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_ACTIVITIES, taskId);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
-                assessments.add(formActivity(resultSet));
+                activities.add(formActivity(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return assessments;
+        return activities;
     }
 
-    private Activity formActivity(ResultSet resultSet) {
-        return null;
+    public static Activity formActivity(ResultSet resultSet) throws SQLException {
+        Integer activityId = resultSet.getInt("activity_ID");
+        int quantity = resultSet.getInt("quantity");
+        int time = resultSet.getInt("time");
+        String title = resultSet.getString("activity_title");
+        return new Activity(activityId, title, quantity, time);
         //return new Activity();
     }
 }

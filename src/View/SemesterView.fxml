@@ -3,10 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" id="SemesterView" fx:id="semesterView" prefHeight="400.0" prefWidth="600.0"
+<VBox xmlns:fx="http://javafx.com/fxml/1" id="SemesterView" fx:id="semesterView" prefHeight="400" prefWidth="600"
       xmlns="http://javafx.com/javafx/8" fx:controller="View.SemesterView">
    <children>
-      <MenuBar maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+       <MenuBar fx:id="menuBar" maxHeight="25" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
          <menus>
             <Menu mnemonicParsing="false" text="Semesters...">
                <items>
@@ -26,7 +26,8 @@
             </Menu>
          </menus>
       </MenuBar>
-      <TabPane prefHeight="400.0" prefWidth="600.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+       <TabPane fx:id="tabPane" prefHeight="400.0" prefWidth="600.0" side="LEFT" tabClosingPolicy="UNAVAILABLE"
+                VBox.vgrow="ALWAYS">
         <tabs>
           <Tab text="Dashboard">
             <content>

@@ -33,12 +33,15 @@ public class ModuleController {
      * @return true/false
      */
     public static boolean insertModule(Module module){
-        String name = module.getTitle();
-        String code = module.getCode();
-        int id = module.getSemesterID();
+
+        Object[] properties = {
+                module.getTitle(),
+                module.getCode()
+        };
+        //int id = module.getSemesterID();
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_INSERT_MODULE,true,name,code,id)
+                        dbhandler.prepareStatement(QUERY_INSERT_MODULE, properties)
 
         ) {
             int updatedRows = statement.executeUpdate();
@@ -81,13 +84,11 @@ public class ModuleController {
      * @return Module
      * @throws SQLException
      */
-    private static Module formModule(ResultSet resultSet) throws SQLException {
-        String title = resultSet.getString("title");
+    public static Module formModule(ResultSet resultSet) throws SQLException {
+        int moduleId = resultSet.getInt("module_id");
+        String title = resultSet.getString("module_title");
         String code = resultSet.getString("code");
-        int semesterID = resultSet.getInt("Semester_ID");
-
-        Module module = new Module(title, code, semesterID);
-        return module;
+        return new Module(moduleId, title, code);
     }
 
     /** Function used to update
@@ -96,12 +97,15 @@ public class ModuleController {
      * @return
      */
     public boolean updateModule(Module module){
-        String title = module.getTitle();
-        String code = module.getCode();
-        int semesterID = module.getSemesterID();
+
+        Object[] properties = {
+                module.getId(),
+                module.getTitle(),
+                module.getCode()
+        };
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_UPDATE_MODULE,true,title,code,semesterID)
+                        dbhandler.prepareStatement(QUERY_UPDATE_MODULE, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to update Modules. No rows affected");

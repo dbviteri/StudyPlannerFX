@@ -22,9 +22,11 @@ public class LoginView extends UserController implements ControlledScene{
 
     @FXML
     public void loginUser() {
-        //User user = dbhandler.getUserSession();
+        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+
         String username = usernameField.getText();//"xdn15mcu";
         String password = passwordField.getText();//"test";
+
         User user = find(username, password);
 
         // If user is not null, show the main panel

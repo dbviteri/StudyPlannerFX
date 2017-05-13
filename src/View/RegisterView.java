@@ -1,11 +1,7 @@
 package View;
 
-import Controller.AssessmentController;
-import Controller.ModuleController;
 import Controller.SemesterController;
 import Controller.UserController;
-import Model.Assessment;
-import Model.Module;
 import Model.SemesterProfile;
 import Model.User;
 import Utils.ControlledScene;
@@ -63,12 +59,12 @@ public class RegisterView extends UserController implements ControlledScene{
 
 
         SemesterController.insertSemester(semesterProfile);
-        for (Module module : semesterProfile.getModules()) {
-            ModuleController.insertModule(module);
-            for (Assessment assessment : module.getAssessments()) {
-                AssessmentController.insertAssessment(assessment);
-            }
-        }
+//        for (Module module : semesterProfile.getModules()) {
+//            ModuleController.insertModule(module);
+////            for (Assessment assessment : module.getAssessments()) {
+////                AssessmentController.insertAssessment(assessment);
+////            }
+//        }
         // TODO: Fix commented code below
 //        try {
 //            if (semC.checkFile(userF)) {

@@ -1,6 +1,7 @@
 package Model;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Didac on 02/05/2017.
@@ -13,9 +14,11 @@ public class Activity {
     private String title;
     private int quantity;
     private int time;
-    private ArrayList<Note> notes;
+    private Map<ActivityNote, ActivityNote> notes = new HashMap<>();
 
     // Constructor -----------------------------------------------------------------------------------------------------
+
+    public Activity() {}
 
     // TODO: Decide whether we need constructors
     public Activity(Integer activityId, String title, int quantity, int time) {
@@ -34,16 +37,24 @@ public class Activity {
 
     // Methods ---------------------------------------------------------------------------------------------------------
 
-    public boolean addNote(String title, String text) {
-        Note note = new Note(title, text, null, activityId);
-        return notes.add(note);
+//    public boolean addNote(String title, String text) {
+//        ActivityNote note = new ActivityNote(activityId, title, text, new Date());
+//        return notes.add(note);
+//    }
+
+    public void addNote(ActivityNote note) {
+        notes.put(note, note);
     }
 
     // Getters and setters ---------------------------------------------------------------------------------------------
 
+    public Integer getActivityId() { return activityId; }
+
     public String getTitle() {
         return title;
     }
+
+    public void setActivityId(Integer activityId) { this.activityId = activityId; }
 
     public void setTitle(String title) {
         this.title = title;
@@ -65,19 +76,39 @@ public class Activity {
         this.time = time;
     }
 
-    public ArrayList<Note> getNotes() {
+    public Map<ActivityNote, ActivityNote> getNotes() {
         return notes;
     }
 
-    public void setNotes(ArrayList<Note> notes) {
-        this.notes = notes;
-    }
+//    public void setNotes(ArrayList<ActivityNote> notes) {
+//        this.notes = notes;
+//    }
 
     // Overrides -------------------------------------------------------------------------------------------------------
     // TODO: Write toString
     @Override
     public String toString(){
-
-        return null;
+        return title + "\n" + quantity + "\n" + time + "\n";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (getClass() != obj.getClass())
+            return false;
+
+        if (activityId == null) return false;
+
+
+        Activity activity = (Activity) obj;
+        return this.activityId.equals(activity.activityId);
+    }
+
+    @Override
+    public int hashCode() {
+        if (activityId == null)
+            return title.hashCode();
+
+        return activityId.hashCode();
+    }
+
 }

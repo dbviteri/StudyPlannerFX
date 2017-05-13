@@ -1,6 +1,9 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Didac on 02/05/2017.
@@ -8,6 +11,8 @@ import java.util.ArrayList;
 public class Task {
 
     // Properties ------------------------------------------------------------------------------------------------------
+
+    public enum TaskType {PROGRAMMING, READING}
 
     private Integer id;
     private String title;
@@ -17,16 +22,17 @@ public class Task {
     private int criterionValue;
     private int progress; // related to criterion value
     // TODO :'a task cannot be started before another has been completed'
-    private ArrayList<Task> dependencies;
-    private ArrayList<Note> notes;
 
-    // Foreign key to Assessment
-    //private int assessmentId;
+    private Map<Task, Task> dependencies = new HashMap<>();
+    private Map<TaskNote, TaskNote> notes = new HashMap<>();
+    private Map<Activity, Activity> activities = new HashMap<>();
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
+    public Task() {}
+
     public Task(Integer id, String title, TaskType type, int time, String criterion,
-                int criterionValue, int progress, Task dependencyTask) {
+                int criterionValue, int progress) {
         this.id = id;
         this.title = title;
         this.type = type;
@@ -34,34 +40,28 @@ public class Task {
         this.criterion = criterion;
         this.criterionValue = criterionValue;
         this.progress = progress;
-        this.dependencies = dependencies;
-        //this.assessmentId = assessmentId;
     }
 
     // TODO: Decide whether we need constructors
     public Task(String title, TaskType type, int time, String criterion,
-                int criterionValue, int progress, ArrayList<Task> dependencies) {
+                int criterionValue, int progress) {
         this.title = title;
         this.type = type;
         this.time = time;
         this.criterion = criterion;
         this.criterionValue = criterionValue;
         this.progress = progress;
-        this.dependencies = dependencies;
-        //this.assessmentId = assessmentId;
     }
 
     // Methods ---------------------------------------------------------------------------------------------------------
 
-//    public boolean addNote(String title, String text) {
-//        Note aNote = new Note(title, text);
-//        if (notes.add(aNote)) {
-//            return true;
-//        }
-//        return false;
-//    }
+    public void addNote(TaskNote note) {
+        if (!notes.containsKey(note))
+            notes.put(note, note);
+    }
 
     // Getters and setters ---------------------------------------------------------------------------------------------
+
 
     public Integer getId() {return id;}
 
@@ -115,31 +115,31 @@ public class Task {
         this.progress = progress;
     }
 
-    public ArrayList<Task> getDependencyTasks() {return dependencies;}
+    //public Map<Task, Task> getDependencyTasks() {return dependencies;}
+    public Map<Task, Task> getDependencies() { return new HashMap<>(dependencies); }
 
-//    public int getAssessmentId(){
-//        return assessmentId;
-//    }
-
-//    public void setAssessmentId(int assessmentId) {
-//        this.assessmentId = assessmentId;
-//    }
-
-//    public ArrayList<Task> getDependencies() {
-//        return dependencies;
-//    }
-
-//    public void setDependencies(ArrayList<Task> dependencies) {
-//        this.dependencies = dependencies;
-//    }
-
-    public ArrayList<Note> getNotes() {
-        return notes;
+    public void addActivity(Activity activity) {
+        if (!activities.containsKey(activity))
+            activities.put(activity, activity);
     }
 
-    // TODO: Write toString
+    //public Map<Activity, Activity> getActivities() { return activities; }
+    public Map<Activity, Activity> getActivities() { return new HashMap<>(activities); }
+
+    public void addDependency(Task dependency) {
+        if (!dependencies.containsKey(dependency))
+            dependencies.put(dependency, dependency);
+    }
+
+//    public Map<TaskNote, TaskNote> getNotes() {
+//        return notes;
+//    }
+
+    public List<TaskNote> getNotes() { return new ArrayList<>(notes.values()); }
+    // Overrides -------------------------------------------------------------------------------------------------------
+
     @Override
-    public String toString(){
+    public String toString() {
 
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -155,14 +155,32 @@ public class Task {
         if (dependencies.size() == 0) {
             stringBuilder.append("No dependencies!").append("\n");
         } else {
-            stringBuilder.append("DEPENDENCIES FOR " + title + ": ").append("\n")
-            .append(dependencies.toString()).append("\n");
+            stringBuilder.append(title + " has " + dependencies.size() + " dependencies: ");
+//            for (Task task : dependencies){
+//                stringBuilder.append(task.title + ", ");
+//            }
         }
 
         return stringBuilder.toString();
     }
 
-    // Overrides -------------------------------------------------------------------------------------------------------
+    @Override
+    public boolean equals(Object obj) {
+        if (getClass() != obj.getClass())
+            return false;
 
-    public enum TaskType {PROGRAMMING, READING}
+        if (id == null) return false;
+
+
+        Task task = (Task) obj;
+        return this.id.equals(task.id);
+    }
+
+    @Override
+    public int hashCode() {
+        if (id == null)
+            return title.hashCode();
+
+        return id.hashCode();
+    }
 }

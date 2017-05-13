@@ -1,20 +1,14 @@
 package Utils;
 
-import Controller.SemesterController;
-import StudyPlanner.StudyPlanner;
 import View.SemesterView;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -219,9 +213,12 @@ public class StageHandler extends StackPane{
         //loadScene(scene, );
     }
 
-//    public Node getScene(SCENE sceneName){
+//    public Scene getScene(SCENE sceneName){
+//        Node node = scenes.get(sceneName);
+//        node.
 //        return scenes.get(sceneName);
 //    }
+
     public Stage getStage(){return stage;}
 
 

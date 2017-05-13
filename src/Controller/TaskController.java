@@ -18,8 +18,8 @@ public class TaskController {
 
     private static final String QUERY_FIND_TASKS =
             "SELECT * FROM Task LEFT JOIN Assessment ON (Task.assessment_id = Assessment.assessment_id) WHERE Task.assessment_id = ?";
-    private static final String QUERY_FIND_DEPENDENCY =
-            "SELECT * FROM Task WHERE task_id = ?";
+    private static final String QUERY_FIND_DEPENDENCIES =
+            "SELECT * FROM Task WHERE dependency = ?"; // taskId
     private static final String QUERY_INSERT_TASK =
             "INSERT INTO Task (title, type, time, criterion, criterion_value, progress, assessment_id, dependency) VALUES (?,?,?,?,?,?,?,?)";
     private static final String QUERY_DELETE_TASK =
@@ -27,11 +27,19 @@ public class TaskController {
 
     private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
 
-    public ArrayList<Task> findAll(int assessmentId){
+    public static ArrayList<Task> findAll(int assessmentId) {
+        return findAll(QUERY_FIND_TASKS, assessmentId);
+    }
+
+    public static ArrayList<Task> findAllDependencies(int taskId) {
+        return findAll(QUERY_FIND_DEPENDENCIES, taskId);
+    }
+
+    private static ArrayList<Task> findAll(String sql, Object... properties) {
         ArrayList<Task> tasks = new ArrayList<>();
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_TASKS, assessmentId);
+                PreparedStatement statement = dbhandler.prepareStatement(sql, properties);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
@@ -42,19 +50,6 @@ public class TaskController {
         }
 
         return tasks;
-    }
-
-    public Task findDependency(int depTaskId){
-        Task task = null;
-        try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_DEPENDENCY, depTaskId);
-                ResultSet resultSet = statement.executeQuery()
-        ) {
-            if (resultSet.next()) task = formTask(resultSet);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return task;
     }
 
     public void insertTask(Task task){
@@ -71,9 +66,9 @@ public class TaskController {
         };
 
         // if the dependency of task is null, it has no dependency
-        if (task.getDependencyTasks() != null) {
-            properties[properties.length - 1] = task.getDependencyTasks().get(0).getId();
-        }
+//        if (task.getDependencyTasks() != null) {
+//            properties[properties.length - 1] = task.getDependencyTasks().get(0).getId();
+//        }
 
         try (
                 PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT_TASK, properties)
@@ -104,25 +99,32 @@ public class TaskController {
         }
     }
 
-    private Task formTask(ResultSet resultSet) throws SQLException {
+    public static Task formTask(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("task_id");
-        String title = resultSet.getString("title");
-        Task.TaskType taskType = Task.TaskType.valueOf(resultSet.getString("type"));
+        String title = resultSet.getString("task_title");
+        Task.TaskType taskType = Task.TaskType.valueOf(resultSet.getString("task_type"));
         int time = resultSet.getInt("time");
         String criterion = resultSet.getString("criterion");
         int criterionValue = resultSet.getInt("criterion_value");
         int progress = resultSet.getInt("progress");
 
-        // For the dependency, we will retrieve the id of the task it depends on
-        Task task = null;
-        int dep_id = resultSet.getInt("dependency");
-        if (dep_id != 0){
-            task = findDependency(dep_id);
-        }
-
+        // Find the dependencies for this task
+        //ArrayList<Task> dependencies = findAllDependencies(id);
         //int assessmentId = resultSet.getInt("assessment_id");
 
         //return new Task(id, title, taskType, time, criterion, criterionValue, progress, task, assessmentId);
-        return new Task(id, title, taskType, time, criterion, criterionValue, progress, task);
+        return new Task(id, title, taskType, time, criterion, criterionValue, progress);
+    }
+
+    public static Task formDependency(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("dep_id");
+        String title = resultSet.getString("dep_title");
+        Task.TaskType taskType = Task.TaskType.valueOf(resultSet.getString("dep_type"));
+        int time = resultSet.getInt("dep_time");
+        String criterion = resultSet.getString("dep_criterion");
+        int criterionValue = resultSet.getInt("dep_crit_val");
+        int progress = resultSet.getInt("dep_progress");
+
+        return new Task(id, title, taskType, time, criterion, criterionValue, progress);
     }
 }

@@ -1,12 +1,13 @@
 package Controller;
 
-import Model.SemesterProfile;
+import Model.*;
 import Utils.SPException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.Map;
 
 /**
  *
@@ -26,7 +27,29 @@ public class SemesterController {
     private static final String QUERY_ALL_SEMESTERS =
             "SELECT start_date, end_date FROM SemesterProfile WHERE semester_id = ?";
     private static final String QUERY_USER_SEMESTER =
-            "SELECT * FROM Semester_Profile WHERE Semester_Profile.user_id = ?";
+            //"SELECT * FROM Semester_Profile WHERE Semester_Profile.user_id = ?";
+            "SELECT Semester_Profile.*, Module.*, Assessment.*, Task.*," +
+                    "dep_task.task_id AS 'dep_id'," +
+                    "dep_task.task_title AS 'dep_title'," +
+                    "dep_task.task_type AS 'dep_type'," +
+                    "dep_task.time AS 'dep_time'," +
+                    "dep_task.criterion AS 'dep_criterion'," +
+                    "dep_task.criterion_value AS 'dep_crit_val'," +
+                    "dep_task.progress AS 'dep_progress'," +
+                    "Activity.*," +
+                    "Note.note_title," +
+                    "Note.text," +
+                    "Note.task_id AS 'note_task_id'," +
+                    "Note.activity_id AS 'note_activity_id'," +
+                    "Note.date " +
+                    "FROM Semester_Profile " +
+                    "JOIN Module ON (Semester_Profile.semester_id = Module.Semester_ID) " +
+                    "LEFT JOIN Assessment ON (Module.module_id = Assessment.module_id) " +
+                    "LEFT JOIN Task ON (Assessment.assessment_id = Task.assessment_id) " +
+                    "LEFT JOIN Task dep_task ON (Task.task_id = dep_task.dependency) " +
+                    "LEFT JOIN Activity ON (Activity.task_id = Task.task_id) " +
+                    "LEFT JOIN Note ON (Note.activity_ID = Activity.activity_ID OR Note.task_ID = Task.task_id) " +
+                    "WHERE user_id = ?";
     private static final String QUERY_INSERT_SEMESTER =
             "INSERT INTO Semester_Profile (start_date,end_date,user_id) VALUES (?,?,?)";
     private static final String QUERY_GET_SEMESTER_ID =
@@ -84,11 +107,101 @@ public class SemesterController {
     }
 
     private static SemesterProfile formSemester(ResultSet resultSet) throws SQLException {
-        int semesterId = resultSet.getInt("semester_id");
-        Date startDate = resultSet.getDate("start_date");
-        Date endDate = resultSet.getDate("end_date");
+        SemesterProfile semesterProfile = new SemesterProfile();
+        Map<Module, Module> modules = semesterProfile.getModules();
+        //ArrayList<Module> modules = semesterProfile.getModules();
+        while (resultSet.next()) {
 
-        return new SemesterProfile(semesterId, startDate, endDate);
+            /** BUILD SEMESTER **/
+            semesterProfile.setSemesterId(resultSet.getInt("semester_id"));
+            semesterProfile.setStartDate(resultSet.getDate("start_date"));
+            semesterProfile.setEndDate(resultSet.getDate("end_date"));
+
+            /** BUILD MODULE **/
+            Module module = ModuleController.formModule(resultSet);
+
+            semesterProfile.addModule(module);
+
+            /** BUILD ASSESSMENT **/
+
+            Assessment assessment = AssessmentController.formAssessment(resultSet);
+
+            modules.get(module).addAssessment(assessment);
+
+            /** IF SEMESTER HAS TASK BUILD TASKS AND ADD IT TO MODULES **/
+            int task_id = resultSet.getInt("task_id");
+            if (!resultSet.wasNull()) {
+                Task task = TaskController.formTask(resultSet);
+
+                modules.get(module).getAssessments()
+                        .get(assessment).addTask(task);
+
+                /** IF TASK HAS DEPENDENCIES BUILD DEPENDENCY AND ADD IT TO MODULES **/
+                int depId = resultSet.getInt("dep_id");
+                if (!resultSet.wasNull()) { // Add the dependency
+                    Task dependency = TaskController.formDependency(resultSet);
+
+                    modules.get(module).getAssessments()
+                            .get(assessment).getTasks().get(task)
+                            .addDependency(dependency);
+                    //task.addDependency(depId, dependency);
+
+                }
+
+                /** IF TASK HAS ACTIVITIES BUILD IT AND ADD IT TO MODULES **/
+                int activityId = resultSet.getInt("activity_ID");
+                if (!resultSet.wasNull()) {
+                    Activity activity = ActivityController.formActivity(resultSet);
+
+                    modules.get(module).getAssessments()
+                            .get(assessment).getTasks().get(task)
+                            .addActivity(activity);
+
+                    int noteActivityId = resultSet.getInt("note_activity_id");
+                    if (!resultSet.wasNull()) {
+                        Note note = NoteController.formNote(resultSet);
+                        ActivityNote activityNote = new ActivityNote(noteActivityId, note.getTitle(), note.getText(), note.getDate());
+
+                        modules.get(module).getAssessments()
+                                .get(assessment).getTasks().get(task)
+                                .getActivities().get(activity).addNote(activityNote);
+                    }
+                }
+
+                int noteTaskId = resultSet.getInt("note_task_id");
+                if (!resultSet.wasNull()) {
+                    Note note = NoteController.formNote(resultSet);
+                    TaskNote taskNote = new TaskNote(noteTaskId, note.getTitle(), note.getText(), note.getDate());
+
+                    modules.get(module).getAssessments()
+                            .get(assessment).getTasks().get(task)
+                            .addNote(taskNote);
+                }
+
+            }
+        }
+
+//        System.out.println(modules.get(2).getAssessments().size());
+//        //System.out.println(modules.get(2).getAssessments().get(1).getTasks().size());
+//        //System.out.println("modules : " + modules.size());
+//        for (Map.Entry<Integer, Module> entry : modules.entrySet()){
+//            System.out.println(entry.getValue().getTitle() + "'S ASSESSMENTS: ");
+//            for (Map.Entry<Integer, Assessment> assessmentEntry : entry.getValue().getAssessments().entrySet()){
+//                System.out.println("\t" + assessmentEntry.getValue().getTitle() + "'S TASKS: ");
+//                for (Map.Entry<Integer, Task> taskEntry : assessmentEntry.getValue().getTasks().entrySet()){
+//                    System.out.println("\t" + taskEntry.getValue().getNotes().size() + "<--- notes");
+//                    System.out.println("\t\t\t" + taskEntry.getValue().getDependencyTasks().size() + " <--- dependencies");
+//                    System.out.println("\t\t" + taskEntry.getValue().getId() + "'S ACTIVITIES: ");
+//                    for (Map.Entry<Integer, Activity> activityEntry : taskEntry.getValue().getActivities().entrySet()){
+//                        System.out.println("\t\t\t\t" + activityEntry.getValue().getNotes().size() + "<--- notes");
+//                        System.out.println("\t\t\t" + activityEntry.getValue().getTitle());
+//                    }
+//                }
+//
+//            }
+//
+//        }
+        return semesterProfile;
     }
     // Load semester file?
     // TODO : add file checking or rely on SQL checks

@@ -7,6 +7,8 @@ import Utils.ControlledScene;
 import Utils.StageHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -18,6 +20,10 @@ public class SemesterView extends SemesterController implements ControlledScene{
 
     @FXML
     private Menu userMenu;
+    @FXML
+    private MenuBar menuBar;
+    @FXML
+    private TabPane tabPane;
     @FXML
     private VBox semesterView;
 
@@ -54,12 +60,17 @@ public class SemesterView extends SemesterController implements ControlledScene{
         semesterView.prefWidthProperty().bind(stageHandler.getStage().widthProperty());
         semesterView.prefHeightProperty().bind(stageHandler.getStage().heightProperty());
 
-        dashboardController.scene.prefWidthProperty().bind(semesterView.widthProperty());
-        dashboardController.scene.prefHeightProperty().bind(semesterView.heightProperty());
+        dashboardController.dashboardGrid.prefWidthProperty().bind(
+                semesterView.widthProperty().subtract(30)
+        );
+
+        dashboardController.dashboardGrid.prefHeightProperty().bind(
+                semesterView.heightProperty().subtract(35)
+        );
 
         // POPULATE DASHBOARD TAB PANE •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
-        dashboardController.load();
+        dashboardController.load(stageHandler);
         //dashboardController.assignments.setText(assessments.get(0).getTitle());
 
         System.out.println(user.getEmail());

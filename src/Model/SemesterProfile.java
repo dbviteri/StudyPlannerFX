@@ -1,7 +1,9 @@
 package Model;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Didac on 02/05/2017.
  */
@@ -14,9 +16,12 @@ public class SemesterProfile {
     private Date endDate;
     //private Integer userId;
 
-    private ArrayList<Module> modules = new ArrayList<>();
-    private int semester_id;
+    private Map<Module, Module> modules = new HashMap<>();
+    //private ArrayList<Module> modules = new ArrayList<>();
+    //private int semester_id;
     // Maybe modules should be a hashmap to be able to retrieve by module name.
+
+    public SemesterProfile() {}
 
     public SemesterProfile(Integer semesterId, Date start, Date end) {
         this.semesterId = semesterId;
@@ -28,12 +33,6 @@ public class SemesterProfile {
     public SemesterProfile(Date start, Date end) {
         this.startDate = start;
         this.endDate = end;
-    }
-
-    public SemesterProfile(Date start, Date end,int semester_id) {
-        this.startDate = start;
-        this.endDate = end;
-        this.semester_id = semester_id;
     }
     // Getters and setters----------------------------------------------------------------------------------------------
     public Date getStartDate(){ return startDate; }
@@ -48,27 +47,29 @@ public class SemesterProfile {
         this.endDate = endDate;
     }
 
-    public int getSemester_id() { return semester_id;
-    }
+    public Map<Module, Module> getModules() { return modules; }
 
-    public void setSemester_id(int semester_id) { this.semester_id = semester_id;}
-
-    public ArrayList<Module> getModules(){ return modules; }
+    //public ArrayList<Module> getModules(){ return modules; }
 
 //    public Integer getUserId() { return userId; }
 //    public void setUserId(Integer userId) { this.userId = userId; }
 
-    public Module getModule() {
-        return modules.get(0);
-    }
+//    public Module getModule() {
+//        return modules.get(0);
+//    }
 
     public Integer getSemesterId() { return semesterId; }
 
     public void setSemesterId(Integer semesterId) { this.semesterId = semesterId; }
 
-    public void addModule(Module module) { modules.add(module); }
+    public void addModule(Module module) {
+        if (!modules.containsKey(module))
+            modules.put(module, module);
+//        if (!modules.contains(module))
+//            modules.add(module);
+    }
 
-    public void addModules(Module[] modules) { }
+    //public void addModules(Set<Module> modules) { this.modules = modules; }
 
 
 
@@ -79,9 +80,10 @@ public class SemesterProfile {
         //StringBuilder sb = new StringBuilder();
         //return modules.get(0).toString();
         String astring = "";
-        for (Module amodule : modules){
-            astring += amodule;
-        }
+//        for (Module amodule : modules){
+//            astring += amodule;
+//        }
         return "SemesterProfile: " + startDate + ", " + endDate + " \n" + astring;
     }
+
 }

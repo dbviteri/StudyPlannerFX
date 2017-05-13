@@ -1,6 +1,5 @@
 package Utils;
 
-import Controller.ModuleController;
 import Model.Assessment;
 import Model.Module;
 import Model.SemesterProfile;
@@ -9,11 +8,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.*;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by 100125468 on 06/05/2017.
@@ -45,10 +42,11 @@ public class FileParser {
                     int weight = (int) jsonAssessment.get("weight");
                     Date deadline = makeDate((String) jsonAssessment.get("deadline"));
                     // Create and add assessment to module
-                    Assessment assessment = new Assessment(title, type, weight, deadline, 0, module.getCode());
+                    Assessment assessment = new Assessment(title, type, weight, deadline, 0);
                     module.addAssessment(assessment);
                 }
             }
+            //semester.addModule(null, module);
             semester.addModule(module);
         }
         return semester;

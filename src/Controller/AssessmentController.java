@@ -17,7 +17,7 @@ public class AssessmentController {
 
     private static final String QUERY_FIND_ASSESSMENTS =
             //"SELECT * FROM Assessment LEFT JOIN Assessment ON (Assessment.module_code = Module.code) WHERE Module.code = ?";
-            "SELECT * FROM Assessment WHERE Assessment.module_code = ?";
+            "SELECT * FROM Assessment WHERE Assessment.module_id = ?";
     private static final String QUERY_INSERT_ASSESSMENT =
             "INSERT INTO Assessment (title, type, weight, deadline, module_code) VALUES (?,?,?,?,?)";
     private static final String QUERY_UPDATE_ASSESSMENT =
@@ -31,11 +31,11 @@ public class AssessmentController {
 
     // METHODS ---------------------------------------------------------------------------------------------------------
 
-    public static ArrayList<Assessment> findAll(String moduleCode) {
+    public static ArrayList<Assessment> findAll(int moduleId) {
         ArrayList<Assessment> assessments = new ArrayList<>();
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_ASSESSMENTS, moduleCode);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_ASSESSMENTS, moduleId);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
@@ -55,12 +55,12 @@ public class AssessmentController {
                 assessment.getWeight(),
                 assessment.getDeadLine(),
                 assessment.getCompletion(),
-                assessment.getModuleCode()
+                //assessment.getModuleCode()
         };
 
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_INSERT_ASSESSMENT,true, properties)
+                        dbhandler.prepareStatement(QUERY_INSERT_ASSESSMENT, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to add Assessmentsd. No rows affected");
@@ -71,21 +71,6 @@ public class AssessmentController {
         }
         return false;
     }
-
-    private static Assessment formAssessment(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt("assessment_id");
-        String title = resultSet.getString("title");
-        Assessment.Type eventType = Assessment.Type.valueOf(resultSet.getString("type"));
-        int weight = resultSet.getInt("weight");
-        Date deadline = resultSet.getDate("deadline");
-        int completion = resultSet.getInt("completion");
-        String moduleCode = resultSet.getString("module_code");
-
-
-        return new Assessment(id, title, eventType, weight, deadline, completion, moduleCode);
-    }
-
-    // HELPER FUNCTIONS ------------------------------------------------------------------------------------------------
 
     public boolean updateAssessment(Assessment assessment){
         Object[] properties = {
@@ -98,7 +83,7 @@ public class AssessmentController {
 
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_UPDATE_ASSESSMENT,true, properties)
+                        dbhandler.prepareStatement(QUERY_UPDATE_ASSESSMENT, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to update Assessments. No rows affected");
@@ -108,5 +93,18 @@ public class AssessmentController {
         }
 
         return false;
+    }
+
+    // HELPER FUNCTIONS ------------------------------------------------------------------------------------------------
+
+    public static Assessment formAssessment(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("assessment_id");
+        String title = resultSet.getString("assessment_title");
+        Assessment.Type eventType = Assessment.Type.valueOf(resultSet.getString("assessment_type"));
+        int weight = resultSet.getInt("weight");
+        Date deadline = resultSet.getDate("deadline");
+        int completion = resultSet.getInt("completion");
+
+        return new Assessment(id, title, eventType, weight, deadline, completion);
     }
 }

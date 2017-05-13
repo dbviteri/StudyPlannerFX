@@ -1,7 +1,8 @@
 package Model;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Didac on 02/05/2017.
@@ -11,40 +12,42 @@ public class Assessment {
     // Properties ------------------------------------------------------------------------------------------------------
 
     public enum Type {EXAM, ASSIGNMENT}
-    private int id;
+
+    private Integer id;
     private String title;
     private Type type;
     private int weight;
     private Date deadline;
     private int completion;
-    private ArrayList<Task> tasks;
+    private Map<Task, Task> tasks = new HashMap<>();
 
 
     // Foreign key code module
-    private String moduleCode;
+    //private String moduleCode;
 
     //TODO: Be able to define study milestones which must be attached to coursework or exams
     //TODO: Be able to define study tasks contributing towards specific coursework or exams
 
     // EMPTY CONSTRUCTOR FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!
-    public Assessment(int id, String title, Type type, int weight, Date deadline, int completion, String moduleCode){
+    public Assessment() {}
+
+    public Assessment(int id, String title, Type type, int weight, Date deadline, int completion) {
         this.id = id;
         this.title = title;
         this.type = type;
         this.weight = weight;
         this.deadline = deadline;
         this.completion = completion;
-        this.moduleCode = moduleCode;
-        tasks = new ArrayList<>();
     }
-    public Assessment(String title, Type type, int weight, Date deadline, int completion, String moduleCode) {
+
+    public Assessment(String title, Type type, int weight, Date deadline, int completion) {
+        this.id = null;
         this.title = title;
         this.type = type;
         this.weight = weight;
         this.deadline = deadline;
         this.completion = completion;
-        this.moduleCode = moduleCode;
-        tasks = new ArrayList<>();
+        //this.moduleCode = moduleCode;
     }
     // Getters and setters ---------------------------------------------------------------------------------------------
 
@@ -72,11 +75,16 @@ public class Assessment {
         return weight;
     }
 
-    public ArrayList<Task> getTasks() { return tasks; }
+    public Map<Task, Task> getTasks() { return tasks; }
+
+    //public void addTasks(Map<Integer, Task> tasks) { this.tasks = tasks; }
 
     //public void addAllTasks(ArrayList<Task> tasks) { this.tasks = tasks; }
 
-    public void addTask(Task task) { tasks.add(task); }
+    public void addTask(Task task) {
+        if (!tasks.containsKey(task))
+            tasks.put(task, task);
+    }
 
     public void setWeight(int weight) {
         this.weight = weight;
@@ -90,7 +98,7 @@ public class Assessment {
         return completion;
     }
 
-    public String getModuleCode() { return moduleCode; }
+    //public String getModuleCode() { return moduleCode; }
 
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
@@ -98,6 +106,12 @@ public class Assessment {
 
     public void setCompletion(int completion) {
         this.completion = completion;
+    }
+
+    // Methods ---------------------------------------------------------------------------------------------
+
+    public boolean tasksCompleted() {
+        return false;
     }
 
     // Overrides -------------------------------------------------------------------------------------------------------
@@ -110,4 +124,23 @@ public class Assessment {
         return str;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+
+        if (getClass() != obj.getClass())
+            return false;
+
+        if (id == null) return false;
+
+        Assessment assessment = (Assessment) obj;
+        return this.id.equals(assessment.id);
+    }
+
+    @Override
+    public int hashCode() {
+        if (id == null)
+            return title.hashCode();
+
+        return id.hashCode();
+    }
 }
