@@ -78,7 +78,7 @@ public class SemesterProfile {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("SemesterProfile: ").append(semester_id).append("\n ");
+        sb.append("SemesterProfile: ").append(semesterId).append("\n ");
         sb.append(startDate).append(" - ").append(endDate);
         for (HashMap.Entry module : modules.entrySet()) {
             sb.append(module.getValue());

@@ -33,7 +33,7 @@ public class NoteController {
     private static <T> ArrayList<T> findAll(String sql, Object... properties) {
         ArrayList<T> notes = new ArrayList<>();
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(sql, properties);
+                PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {

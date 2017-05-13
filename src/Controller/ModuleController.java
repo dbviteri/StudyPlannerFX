@@ -13,11 +13,11 @@ import java.util.ArrayList;
  */
 public class ModuleController {
     private static final String QUERY_INSERT_MODULE =
-            "INSERT INTO Module (title,code,Semester_ID) VALUES (?,?,?)";
+            "INSERT INTO Module (module_title, code, Semester_ID) VALUES (?, ?, ?)";
     private static final String QUERY_FIND_MODULES =
-            "SELECT * FROM Module WHERE Semester_ID = ?";
+            "SELECT * FROM Module WHERE semester_id = ?";
     private static final String QUERY_UPDATE_MODULE =
-            "UPDATE Module SET title = ?, code = ?, Semester_ID = ? WHERE code = ?";
+            "UPDATE Module SET title = ?, code = ?, semester_id = ? WHERE code = ?";
     //TODO : GOOD OR BAD STATIC ?
     private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
 
@@ -32,26 +32,33 @@ public class ModuleController {
      * @param module
      * @return true/false
      */
-    public static boolean insertModule(Module module){
+    public static void insertModule(Module module, int semesterId) {
 
         Object[] properties = {
                 module.getTitle(),
-                module.getCode()
+                module.getCode(),
+                semesterId
         };
         //int id = module.getSemesterID();
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_INSERT_MODULE, properties)
+                        dbhandler.prepareStatement(QUERY_INSERT_MODULE, true, properties)
 
         ) {
             int updatedRows = statement.executeUpdate();
-            if (updatedRows == 0) throw new SPException("Failed to add Modules. No rows affected");
-            return true;
+            if (updatedRows == 0) throw new SPException("Failed to create new module. No rows affected");
+
+            try (ResultSet set = statement.getGeneratedKeys()) {
+                if (set.next()) {
+                    module.setModuleId(set.getInt(1));
+                } else {
+                    throw new SPException("Failed to create new module. No key obtained");
+                }
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     /** Function used to return all modules
@@ -63,7 +70,7 @@ public class ModuleController {
     public static ArrayList<Module> findAll(int semesterID) {
         ArrayList<Module> modules = new ArrayList<>();
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_MODULES, semesterID);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_MODULES, false, semesterID);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
@@ -105,7 +112,7 @@ public class ModuleController {
         };
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_UPDATE_MODULE, properties)
+                        dbhandler.prepareStatement(QUERY_UPDATE_MODULE, false, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to update Modules. No rows affected");

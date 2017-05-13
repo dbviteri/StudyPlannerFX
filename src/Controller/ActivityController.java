@@ -26,7 +26,7 @@ public class ActivityController {
         ArrayList<Activity> activities = new ArrayList<>();
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_ACTIVITIES, taskId);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_ACTIVITIES, false, taskId);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {

@@ -6,7 +6,6 @@ import Utils.SPException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -51,7 +50,7 @@ public class SemesterController {
                     "LEFT JOIN Note ON (Note.activity_ID = Activity.activity_ID OR Note.task_ID = Task.task_id) " +
                     "WHERE user_id = ?";
     private static final String QUERY_INSERT_SEMESTER =
-            "INSERT INTO Semester_Profile (start_date,end_date,user_id) VALUES (?,?,?)";
+            "INSERT INTO Semester_Profile (start_date, end_date, user_id) VALUES (?,?,?)";
     private static final String QUERY_GET_SEMESTER_ID =
             "SELECT Semester_ID FROM SemesterProfile WHERE user_id = ? ";
 
@@ -70,14 +69,14 @@ public class SemesterController {
      * @return
      */
     public static SemesterProfile find(int userId) {
-        return find(QUERY_USER_SEMESTER, userId);
+        return find(QUERY_USER_SEMESTER, false, userId);
     }
 
     private static SemesterProfile find(String sql, Object... properties) {
         SemesterProfile semesterProfile = null;
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(sql, properties);
+                PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) semesterProfile = formSemester(resultSet);
@@ -87,23 +86,32 @@ public class SemesterController {
         return semesterProfile;
     }
 
-    public static boolean insertSemester(SemesterProfile semester) {
-        Date start = semester.getStartDate();
-        Date end = semester.getEndDate();
-        int userid = dbhandler.getUserSession().getId();
+    public static void insertSemester(SemesterProfile semester) {
+        Object[] properties = {
+                semester.getStartDate(),
+                semester.getEndDate(),
+                dbhandler.getUserSession().getId()
+        };
+
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_INSERT_SEMESTER, start, end,userid)
+                        dbhandler.prepareStatement(QUERY_INSERT_SEMESTER, true, properties)
 
         ) {
             int updatedRows = statement.executeUpdate();
-            if (updatedRows == 0) throw new SPException("Failed to add Semester. No rows affected");
-            return true;
+            if (updatedRows == 0) throw new SPException("Failed to create new Semester. No rows affected");
+
+            try (ResultSet set = statement.getGeneratedKeys()) {
+                if (set.next()) {
+                    semester.setSemesterId(set.getInt(1));
+                } else {
+                    throw new SPException("Failed to create new Semester. No key obtained");
+                }
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     private static SemesterProfile formSemester(ResultSet resultSet) throws SQLException {

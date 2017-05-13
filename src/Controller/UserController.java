@@ -47,13 +47,12 @@ public class UserController {
     // METHODS FOR QUERIES ---------------------------------------------------------------------------------------------
 
     @SuppressWarnings("ConstantConditions")
-    public static Integer create(User user) {
+    public static void create(User user) {
         /*
         if(user.getId() != null){
             throw new IllegalArgumentException("Already in db");
         }
         */
-        Integer UID = null;
         Object[] properties = {
                 user.getEmail(),
                 user.getUsername(),
@@ -62,21 +61,25 @@ public class UserController {
                 user.getLastname(),
                 user.isStaff(),
         };
+
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, properties)
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, true, properties)
         ) {
             int updatedRows = statement.executeUpdate();
-            ResultSet set = statement.getGeneratedKeys();
-            if(set.next()){
-                UID = set.getInt(1);
+            if (updatedRows == 0) throw new SPException("Failed to create new user. No rows affected");
+
+            try (ResultSet set = statement.getGeneratedKeys()) {
+                if (set.next()) {
+                    user.setId(set.getInt(1));
+                } else {
+                    throw new SPException("Failed to create new user. No key obtained");
+                }
             }
-            if (updatedRows == 0 || UID == null) throw new SPException("Failed to create new user. No rows affected");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        user.setId(UID);
         dbhandler.createSession(user);
-        return UID;
     }
     private SemesterProfile parseProfile(File file){
         SemesterProfile profile = FileParser.parseFile(file);
@@ -86,9 +89,9 @@ public class UserController {
         SemesterController.insertSemester(profile);
         for (HashMap.Entry entry : profile.getModules().entrySet()) {
             Module module = (Module)entry.getValue();
-            ModuleController.insertModule(module);
+            ModuleController.insertModule(module, profile.getSemesterId());
             for (HashMap.Entry aEntry : module.getAssessments().entrySet()) {
-                AssessmentController.insertAssessment((Assessment)aEntry.getValue());
+                AssessmentController.insertAssessment((Assessment) aEntry.getValue(), module.getId());
             }
         }
     }
@@ -116,7 +119,7 @@ public class UserController {
 
     protected final boolean userExists(String username) throws SPException {
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_USERNAME_EXISTS, username);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_USERNAME_EXISTS, false, username);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) return true;
@@ -133,7 +136,7 @@ public class UserController {
         User user = null;
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(sql, properties);
+                PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             if (resultSet.next()) user = formUser(resultSet);

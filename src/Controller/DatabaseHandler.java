@@ -6,10 +6,7 @@ import Utils.SPProperties;
 import View.AlertDialog;
 import javafx.scene.control.Alert;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Created by Didac on 29/04/2017.
@@ -110,14 +107,13 @@ public class DatabaseHandler {
 //
 //        return instance;
 //    }
-
-    public PreparedStatement prepareStatement (String sql, Object... values) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(sql);
+    public PreparedStatement prepareStatement(String sql, boolean returnGeneratedKeys, Object... values) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS);
 
         for (int i = 0; i < values.length; i++){
             statement.setObject(i + 1, values[i]);
         }
-
         return statement;
     }
 

@@ -39,7 +39,7 @@ public class TaskController {
         ArrayList<Task> tasks = new ArrayList<>();
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(sql, properties);
+                PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
@@ -71,7 +71,7 @@ public class TaskController {
 //        }
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT_TASK, properties)
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT_TASK, false, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to create new task. No rows affected");
@@ -86,7 +86,7 @@ public class TaskController {
         };
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_DELETE_TASK, properties)
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_DELETE_TASK, false, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) {

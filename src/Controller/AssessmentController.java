@@ -19,7 +19,7 @@ public class AssessmentController {
             //"SELECT * FROM Assessment LEFT JOIN Assessment ON (Assessment.module_code = Module.code) WHERE Module.code = ?";
             "SELECT * FROM Assessment WHERE Assessment.module_id = ?";
     private static final String QUERY_INSERT_ASSESSMENT =
-            "INSERT INTO Assessment (title, type, weight, deadline, completion,module_code) VALUES (?,?,?,?,?,?)";
+            "INSERT INTO Assessment (assessment_title, assessment_type, weight, deadline, completion, module_id) VALUES (?,?,?,?,?,?)";
     private static final String QUERY_UPDATE_ASSESSMENT =
             "UPDATE Assessment SET title = ?, type = ?, weight = ?, deadline = ?, completion = ? WHERE assessment_id = ?";
     private static final String QUERY_DELETE_ASSESSMENT =
@@ -35,7 +35,7 @@ public class AssessmentController {
         ArrayList<Assessment> assessments = new ArrayList<>();
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_ASSESSMENTS, moduleId);
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_ASSESSMENTS, false, moduleId);
                 ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
@@ -48,28 +48,34 @@ public class AssessmentController {
         return assessments;
     }
 
-    public static boolean insertAssessment(Assessment assessment){
+    public static void insertAssessment(Assessment assessment, int moduleId) {
         Object[] properties = {
                 assessment.getTitle(),
                 assessment.getType().toString(),
                 assessment.getWeight(),
                 assessment.getDeadLine(),
                 assessment.getCompletion(),
-                //assessment.getModuleCode()
+                moduleId
         };
 
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_INSERT_ASSESSMENT, properties)
+                        dbhandler.prepareStatement(QUERY_INSERT_ASSESSMENT, true, properties)
         ) {
             int updatedRows = statement.executeUpdate();
-            if (updatedRows == 0) throw new SPException("Failed to add Assessmentsd. No rows affected");
-            return true;
+            if (updatedRows == 0) throw new SPException("Failed to create new assessment. No rows affected");
+
+            try (ResultSet set = statement.getGeneratedKeys()) {
+                if (set.next()) {
+                    assessment.setId(set.getInt(1));
+                } else {
+                    throw new SPException("Failed to create new assessment. No key obtained");
+                }
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     public boolean updateAssessment(Assessment assessment){
@@ -83,7 +89,7 @@ public class AssessmentController {
 
         try (
                 PreparedStatement statement =
-                        dbhandler.prepareStatement(QUERY_UPDATE_ASSESSMENT, properties)
+                        dbhandler.prepareStatement(QUERY_UPDATE_ASSESSMENT, false, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to update Assessments. No rows affected");

@@ -1,6 +1,5 @@
 package View;
 
-import Controller.SemesterController;
 import Controller.UserController;
 import Model.SemesterProfile;
 import Model.User;
@@ -14,8 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * Created by Didac on 05/05/2017.
@@ -55,7 +52,7 @@ public class RegisterView extends UserController implements ControlledScene{
 
         User user = new User(email, username, password, firstname, lastname, isStaff);
 
-        Integer UID = UserController.create(user);
+        UserController.create(user);
         UserController.insertProfile(semesterProfile);
 
 
