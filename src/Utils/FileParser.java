@@ -42,7 +42,7 @@ public class FileParser {
                     int weight = (int)(long) jsonAssessment.get("weight");
                     Date deadline = makeDate((String) jsonAssessment.get("deadline"));
                     // Create and add assessment to module
-                    Assessment assessment = new Assessment(title, type, weight, deadline, 0);
+                    Assessment assessment = new Assessment(title, type, weight, deadline, 0.0);
                     module.addAssessment(assessment);
                 }
             }

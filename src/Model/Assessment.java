@@ -31,9 +31,16 @@ public class Assessment {
     // EMPTY CONSTRUCTOR FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!
     public Assessment() {}
 
+    public Assessment(int id, String title, Type type, int weight, Date deadline, int completion) {
+        this.id = id;
+        this.title = title;
+        this.type = type;
+        this.weight = weight;
+        this.deadline = deadline;
+        this.completion = completion;
+    }
 
-
-    public Assessment(String title, Type type, int weight, Date deadline, int completion) {
+    public Assessment(String title, Type type, int weight, Date deadline, Double completion) {
         this.id = null;
         this.title = title;
         this.type = type;
