@@ -21,9 +21,6 @@ public class TaskView {
     ComboBox<Task.TaskType> typeField;
 
     @FXML
-    ComboBox<Integer> timeField;
-
-    @FXML
     TextField criteriaField;
 
     @FXML
@@ -55,7 +52,6 @@ public class TaskView {
         if (titleField.getText().isEmpty()) return;
         if (criteriaField.getText().isEmpty()) return;
         if (typeField.getValue() == null) return;
-        if (timeField.getValue() == null) return;
         if (criteriaValue.getValue() == null) return;
 
         System.out.println("BEFORE ADDING: ");
@@ -64,7 +60,6 @@ public class TaskView {
         String taskTitle = titleField.getText();
         String criteria = criteriaField.getText();
         Task.TaskType taskType = typeField.getValue();
-        int time = timeField.getValue();
         int critValue = criteriaValue.getValue();
 
         if (dependencyList.getValue() != null) {

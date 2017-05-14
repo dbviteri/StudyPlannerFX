@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Model representation of an activity.
+ * It holds notes.
  * Created by Didac on 02/05/2017.
  */
 public class Activity {

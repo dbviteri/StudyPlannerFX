@@ -3,8 +3,11 @@ package View;
 import Controller.SemesterController;
 import Model.Assessment;
 import Model.Module;
+import Model.SemesterProfile;
 import Model.User;
 import Utils.StageHandler;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -38,7 +41,9 @@ public class DashBoardView extends SemesterController {
 
     //private DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
 
-    public void load(StageHandler stageHandler) {
+    private DoubleProperty doubleProperty = new SimpleDoubleProperty();
+
+    public void load() {
         User user = dbhandler.getUserSession();
         //SemesterProfile semesterProfile = MasterController.getSemester(user.getId());
         loadSemester(user.getId());
@@ -80,6 +85,10 @@ public class DashBoardView extends SemesterController {
                     progressBar.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                     System.out.println(assessment.getCompletion());
                     progressBar.setProgress(assessment.getCompletion() / 100);
+
+                    assessment.completionProperty().addListener((observable, oldValue, newValue) -> {
+                        progressBar.setProgress(assessment.getCompletion()/100);
+                    });
 //                    Bounds upcomingDeadlinesLblBounds = upcomingDeadlinesLbl.getBoundsInLocal();
 //                    Point2D labelLocation = upcomingDeadlinesLbl.localToScreen()
                     upcomingDeadlineGrid.addColumn(0, moduleInfo);

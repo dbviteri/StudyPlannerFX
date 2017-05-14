@@ -3,6 +3,7 @@ package View;
 import Controller.SemesterController;
 import Model.Assessment;
 import Model.Module;
+import Model.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,10 +36,16 @@ public class MainView extends SemesterController {
     Label assessmentDetails;
 
     @FXML
+    Label taskDetails;
+
+    @FXML
     ComboBox<Module> moduleSelect;
 
     @FXML
     ComboBox<Assessment> assessmentSelect;
+
+    @FXML
+    ComboBox<Task> taskSelect;
 
     /**
      * Loads the main view inside the semester view.
@@ -57,7 +64,6 @@ public class MainView extends SemesterController {
 
         moduleSelect.getItems().addAll(dbhandler.getSemesterSession().getModules().values());
 
-
         moduleSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
             assessmentSelect.getItems().clear();
             if (newValue != null) {
@@ -71,9 +77,19 @@ public class MainView extends SemesterController {
         });
 
         assessmentSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
+            taskSelect.getItems().clear();
             if (newValue != null) {
                 assessmentDetails.setText(assessmentSelect.getValue().toString());
                 moduleDetails.setText(moduleSelect.getValue().toString());
+
+                // Add tasks to combobox
+                taskSelect.getItems().addAll(assessmentSelect.getValue().getTasks().values());
+            }
+        });
+
+        taskSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null){
+                taskDetails.setText(newValue.toString());
             }
         });
 
@@ -97,6 +113,28 @@ public class MainView extends SemesterController {
             root = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Add task");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.setResizable(false);
+            stage.show();
+            stage.setOnCloseRequest(event -> parentStage.show());
+            parentStage.hide();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void displayAddActivity(ActionEvent actionEvent) {
+        if (taskSelect.getValue() == null) return;
+
+        Stage parentStage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ActivityView.fxml"));
+        fxmlLoader.setControllerFactory((Class<?> CreateActivityView) -> new ActivityView(taskSelect.getValue()));
+        Parent root;
+        try {
+            root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Add activity");
             stage.setScene(new Scene(root, 450, 450));
             stage.setResizable(false);
             stage.show();
