@@ -3,8 +3,10 @@ package View;
 import Controller.SemesterController;
 import Model.Assessment;
 import Model.Module;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
@@ -83,8 +85,10 @@ public class MainView extends SemesterController {
      * Handles the button event to add a task. Selects the current semester chosen in combo box and
      * passess it to TaskCreateView so it knows where the task should be created.
      */
-    public void displayAddTask() {
+    public void displayAddTask(ActionEvent actionEvent) {
         if (assessmentSelect.getValue() == null) return;
+
+        Stage parentStage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../View/CreateTaskView.fxml"));
         fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new CreateTaskView(assessmentSelect.getValue()));
@@ -94,8 +98,10 @@ public class MainView extends SemesterController {
             Stage stage = new Stage();
             stage.setTitle("Add task");
             stage.setScene(new Scene(root, 450, 450));
+            stage.setResizable(false);
             stage.show();
-            //((Node)(event.getSource())).getScene().getWindow().hide();
+            stage.setOnCloseRequest(event -> parentStage.show());
+            parentStage.hide();
         } catch (IOException e) {
             e.printStackTrace();
         }
