@@ -3,6 +3,7 @@ package Model;
 import java.util.Date;
 
 /**
+ * Model representation of a note
  * Created by Didac on 02/05/2017.
  */
 public class Note {
