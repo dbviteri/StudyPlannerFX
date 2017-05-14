@@ -20,7 +20,7 @@ public class Assessment {
     private Date deadline;
     private int completion;
     private Map<Task, Task> tasks = new HashMap<>();
-
+    private Map<Milestone, Milestone> milestones = new HashMap<>();
 
     // Foreign key code module
     //private String moduleCode;
