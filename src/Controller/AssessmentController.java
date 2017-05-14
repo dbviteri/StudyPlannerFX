@@ -103,7 +103,7 @@ public class AssessmentController {
 
     // HELPER FUNCTIONS ------------------------------------------------------------------------------------------------
 
-    public static Assessment formAssessment(ResultSet resultSet) throws SQLException {
+    static Assessment formAssessment(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("assessment_id");
         String title = resultSet.getString("assessment_title");
         Assessment.Type eventType = Assessment.Type.valueOf(resultSet.getString("assessment_type"));

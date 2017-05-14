@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" id="SemesterView" fx:id="semesterView" prefHeight="400" prefWidth="600"
-      xmlns="http://javafx.com/javafx/8" fx:controller="View.SemesterView">
+<VBox id="SemesterView" fx:id="semesterView" prefHeight="400" prefWidth="600" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.SemesterView">
    <children>
        <MenuBar fx:id="menuBar" maxHeight="25" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
          <menus>
             <Menu mnemonicParsing="false" text="Semesters...">
                <items>
                   <MenuItem mnemonicParsing="false" text="Add semesterProfile..." />
-                  <MenuItem mnemonicParsing="false" text="Change semesterProfile..." />
+                   <MenuItem mnemonicParsing="false" onAction="#updateSemesterProfile"
+                             text="Update semesterProfile..."/>
                </items>
             </Menu>
             <Menu fx:id="userMenu" mnemonicParsing="false" text="User">
@@ -29,14 +29,14 @@
        <TabPane fx:id="tabPane" prefHeight="400.0" prefWidth="600.0" side="LEFT" tabClosingPolicy="UNAVAILABLE"
                 VBox.vgrow="ALWAYS">
         <tabs>
-          <Tab text="Dashboard">
+            <Tab text="Main">
             <content>
-                <fx:include fx:id="dashboard" source="Dashboard.fxml"/>
+                <fx:include fx:id="mainView" source="MainView.fxml"/>
             </content>
           </Tab>
-          <Tab text="Modules">
+            <Tab text="Dashboard">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <fx:include fx:id="dashboard" source="Dashboard.fxml"/>
             </content>
           </Tab>
         </tabs>

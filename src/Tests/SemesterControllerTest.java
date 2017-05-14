@@ -1,5 +1,6 @@
 package Tests;
 
+import Controller.DatabaseHandler;
 import Controller.SemesterController;
 import Controller.UserController;
 import Model.SemesterProfile;
@@ -20,7 +21,9 @@ public class SemesterControllerTest {
 
     @Test
     public void find() throws Exception {
-        SemesterProfile semesterProfile = SemesterController.find(user.getId());
+        SemesterController.loadSemester(user.getId());
+        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+        SemesterProfile semesterProfile = databaseHandler.getSemesterSession();
         System.out.println("There are: " + semesterProfile.getModules().size() + " modules");
 
 //        for (Map.Entry<Module, Module> moduleEntry : semesterProfile.getModules().entrySet()) {

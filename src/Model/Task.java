@@ -157,8 +157,7 @@ public class Task {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append(id).append("\n")
-                .append(title).append("\n")
+        stringBuilder.append(title).append("\n")
                 .append(type.toString()).append("\n")
                 .append(time).append("\n")
                 .append(criterion).append("\n")
@@ -179,6 +178,8 @@ public class Task {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) return false;
+
         if (getClass() != obj.getClass())
             return false;
 
