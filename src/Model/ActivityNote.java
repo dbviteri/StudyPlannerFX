@@ -3,6 +3,8 @@ package Model;
 import java.util.Date;
 
 /**
+ * Implementation of an activity note.
+ * It extends Note.
  * Created by Didac on 09/05/2017.
  */
 public class ActivityNote extends Note {
