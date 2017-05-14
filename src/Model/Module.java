@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Model representation for a module
  * Created by Didac on 02/05/2017.
  */
 public class Module {

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Model representation for a task
+ * It holds dependencies, task notes and activities
  * Created by Didac on 02/05/2017.
  */
 public class Task {

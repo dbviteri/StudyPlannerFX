@@ -1,9 +1,9 @@
 package Model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
+ * Model representation for a milestone
  * Created by Tiberiu Voicu-100125468 on 07/05/2017.
  */
 public class Milestone {

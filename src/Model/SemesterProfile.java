@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Model representation for a semester profile
+ * It holds modules.
  * Created by Didac on 02/05/2017 .
  */
 public class SemesterProfile {
