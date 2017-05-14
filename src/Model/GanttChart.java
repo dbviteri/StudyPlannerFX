@@ -109,7 +109,7 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
                     if (frame instanceof StackPane) {
                         StackPane region = (StackPane)data.getNode();
                         if (region.getShape() == null) {
-                            //rectangle = new Rectangle(getLength(data.getExtraValue()).getFrameHeight());
+                            //rectangle = new Rectangle(getLength(data.getExtraValue()),getFrameHeight());
 
                         }
                     }
