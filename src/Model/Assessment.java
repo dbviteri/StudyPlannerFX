@@ -112,19 +112,16 @@ public class Assessment {
     public DoubleProperty completionProperty() {
         return completion;
     }
-
-    public boolean tasksCompleted() {
-        for(HashMap.Entry entry : tasks.entrySet()){
-            Task task = (Task) entry.getValue();
-            if(task.getProgress() != 100) {
-                return false;
-            }
-        }
-        return true;
-    }
     //
     public void calculateCompletion(){
-
+        double count = 0;
+        for(HashMap.Entry entry : tasks.entrySet()) {
+            Task task = (Task) entry.getValue();
+            task.isComplete();
+            count += task.getProgress();
+        }
+        count = count / tasks.entrySet().size();
+        completion.setValue(count);
     }
     // Overrides -------------------------------------------------------------------------------------------------------
 
