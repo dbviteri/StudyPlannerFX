@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<GridPane fx:id="dashboardGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+          prefHeight="400" prefWidth="600" stylesheets="@DashboardCSS.css" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.DashBoardView">
+    <columnConstraints>
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
+        <RowConstraints valignment="CENTER" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <children>
+        <Label disable="true" text="Upcoming deadlines" GridPane.columnIndex="0">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
+        <Label disable="true" text="Completed deadlines" GridPane.columnIndex="1">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
+        <Label alignment="TOP_CENTER" contentDisplay="CENTER" GridPane.columnIndex="2" disable="true"
+               text="Missed deadlines" textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+            <GridPane.margin>
+                <Insets/>
+            </GridPane.margin>
+        </Label>
+        <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <content>
+                <GridPane fx:id="upcomingDeadlineGrid">
+                    <!--<columnConstraints>-->
+                    <!--<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />-->
+                    <!--</columnConstraints>-->
+                    <!--<rowConstraints>-->
+                    <!--<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />-->
+                    <!--<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />-->
+                    <!--<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />-->
+                    <!--</rowConstraints>-->
+                </GridPane>
+            </content>
+        </ScrollPane>
+        <ScrollPane id="missedDeadline" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
+                    GridPane.rowIndex="1">
+            <content>
+                <GridPane fx:id="missedDeadlineGrid">
+                    <!--<columnConstraints>-->
+                    <!--<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="30.0" />-->
+                    <!--</columnConstraints>-->
+                    <!--<rowConstraints>-->
+                    <!--<RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />-->
+                    <!--</rowConstraints>-->
+                </GridPane>
+            </content>
+        </ScrollPane>
+
+        <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <content>
+                <GridPane fx:id="completedDeadlineGrid">
+                    <!--<columnConstraints>-->
+                    <!--<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />-->
+                    <!--</columnConstraints>-->
+                    <!--<rowConstraints>-->
+                    <!--<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />-->
+                    <!--<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />-->
+                    <!--<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />-->
+                    <!--</rowConstraints>-->
+                </GridPane>
+            </content>
+        </ScrollPane>
+    </children>
+</GridPane>

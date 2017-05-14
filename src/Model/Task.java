@@ -173,9 +173,8 @@ public class Task {
             stringBuilder.append(title).append( " has ").append(dependencies.size()).append(" dependencies: ");
 //            for (Task task : dependencies){
 //                stringBuilder.append(task.title + ", ");
-//            } 
+//            }
         }
-
         return stringBuilder.toString();
     }
 
