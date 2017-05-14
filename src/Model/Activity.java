@@ -20,19 +20,15 @@ public class Activity {
 
     public Activity() {}
 
-    // TODO: Decide whether we need constructors
-    public Activity(Integer activityId, String title, int quantity, int time) {
-        this.activityId = activityId;
+    public Activity(String title, int quantity, int time) {
         this.title = title;
         this.quantity = quantity;
         this.time = time;
     }
-
-    public Activity(String title, int quantity, int time) {
+    // TODO: Decide whether we need constructors
+    public Activity(Integer activityId, String title, int quantity, int time) {
+        this(title,quantity,time);
         this.activityId = activityId;
-        this.title = title;
-        this.quantity = quantity;
-        this.time = time;
     }
 
     // Methods ---------------------------------------------------------------------------------------------------------

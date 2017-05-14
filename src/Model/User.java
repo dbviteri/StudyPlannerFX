@@ -28,13 +28,8 @@ public class User {
     }
 
     public User(int id, String email, String username, String password, String firstname, String lastname, boolean isStaff){
+        this(email,username,password,firstname,lastname,isStaff);
         this.id = id;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.isStaff = isStaff;
     }
 
     // Getters and setters----------------------------------------------------------------------------------------------

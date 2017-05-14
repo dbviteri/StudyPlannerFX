@@ -30,17 +30,6 @@ public class Task {
 
     public Task() {}
 
-    public Task(Integer id, String title, TaskType type, int time, String criterion,
-                int criterionValue, int progress) {
-        this.id = id;
-        this.title = title;
-        this.type = type;
-        this.time = time;
-        this.criterion = criterion;
-        this.criterionValue = criterionValue;
-        this.progress = progress;
-    }
-
     // TODO: Decide whether we need constructors
     public Task(String title, TaskType type, int time, String criterion,
                 int criterionValue, int progress) {
@@ -50,6 +39,11 @@ public class Task {
         this.criterion = criterion;
         this.criterionValue = criterionValue;
         this.progress = progress;
+    }
+    public Task(Integer id, String title, TaskType type, int time, String criterion,
+                int criterionValue, int progress) {
+        this(title,type,time,criterion,criterionValue,progress);
+        this.id = id;
     }
 
     // Methods ---------------------------------------------------------------------------------------------------------
@@ -176,6 +170,11 @@ public class Task {
         return stringBuilder.toString();
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
