@@ -110,6 +110,7 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
                         StackPane region = (StackPane)data.getNode();
                         if (region.getShape() == null) {
                             rectangle = new Rectangle(getLength(data.getExtraValue()).getFrameHeight());
+                            //
                         }
                     }
 
