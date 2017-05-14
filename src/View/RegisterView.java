@@ -18,6 +18,7 @@ import java.io.File;
  * Created by Didac on 05/05/2017.
  */
 public class RegisterView extends UserController implements ControlledScene{
+    // Form Fields
     @FXML private TextField nameField;
     @FXML private TextField lastNameField;
     @FXML private TextField usernameField;
@@ -30,6 +31,10 @@ public class RegisterView extends UserController implements ControlledScene{
         super();
     }
 
+    /** Function used to register and add a new user
+     *  + the semester profile to the DB
+     *
+     */
     @FXML
     public void registerUser(){
         SemesterProfile semesterProfile = parseProfile();
@@ -54,9 +59,7 @@ public class RegisterView extends UserController implements ControlledScene{
 
         UserController.create(user);
         UserController.insertProfile(semesterProfile);
-
-
-
+        showLoginScreen();
     }
 
     // TODO: Change this so it doesn't query the database everytime
@@ -74,6 +77,12 @@ public class RegisterView extends UserController implements ControlledScene{
 //        return sb.toString();
 //    }
 
+    /** Function opens up a fileChooser, so the user can
+     *  select the json file then parses it and
+     *  returns a semesterprofile object
+     *
+     * @return semesterProfile
+     */
     @FXML
     private SemesterProfile parseProfile() {
         final FileChooser fileChooser = new FileChooser();
@@ -85,11 +94,17 @@ public class RegisterView extends UserController implements ControlledScene{
 
         return semesterProfile;
     }
+
     private File directRegistry(){
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog((stageHandler.getStage()));
         return file;
     }
+
+    /** Basic FXML function on button
+     *  press changes scene to login
+     *
+     */
     @FXML
     public void showLoginScreen() {
         stageHandler.setScene(StageHandler.SCENE.LOGIN, false);

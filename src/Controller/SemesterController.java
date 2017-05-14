@@ -69,7 +69,7 @@ public class SemesterController {
      * @return
      */
     public static SemesterProfile find(int userId) {
-        return find(QUERY_USER_SEMESTER, false, userId);
+        return find(QUERY_USER_SEMESTER, userId);
     }
 
     private static SemesterProfile find(String sql, Object... properties) {
@@ -114,6 +114,12 @@ public class SemesterController {
         }
     }
 
+    /**
+     * 
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     private static SemesterProfile formSemester(ResultSet resultSet) throws SQLException {
         SemesterProfile semesterProfile = new SemesterProfile();
         Map<Module, Module> modules = semesterProfile.getModules();

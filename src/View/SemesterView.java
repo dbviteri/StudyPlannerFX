@@ -75,6 +75,11 @@ public class SemesterView extends SemesterController implements ControlledScene{
 
         System.out.println(user.getEmail());
     }
+
+    /** Function used to log user out, delete
+     *  current session and change scene back to login
+     *
+     */
     @FXML
     public void logOut(){
         //dbhandler.closeConnection();
