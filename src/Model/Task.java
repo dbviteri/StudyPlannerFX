@@ -170,10 +170,10 @@ public class Task {
         if (dependencies.size() == 0) {
             stringBuilder.append("No dependencies!").append("\n");
         } else {
-            stringBuilder.append(title + " has " + dependencies.size() + " dependencies: ");
+            stringBuilder.append(title).append( " has ").append(dependencies.size()).append(" dependencies: ");
 //            for (Task task : dependencies){
 //                stringBuilder.append(task.title + ", ");
-//            }
+//            } 
         }
 
         return stringBuilder.toString();
