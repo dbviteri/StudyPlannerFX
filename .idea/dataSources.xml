@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="StudyPlannerDB" uuid="7ea0d169-2881-4560-95e0-8c9dd1eaafc0">
+    <data-source source="LOCAL" name="xdn15mcu_studyplanner@johnny.heliohost.org" uuid="486cb14c-e570-45ff-993c-b56b23143507">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://johnny.heliohost.org:3306/xdn15mcu_studyplanner</jdbc-url>
-      <default-dialect>MySQL</default-dialect>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />
