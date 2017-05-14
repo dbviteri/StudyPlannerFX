@@ -111,9 +111,9 @@ public class TaskController {
         // Find the dependencies for this task
         //ArrayList<Task> dependencies = findAllDependencies(id);
         //int assessmentId = resultSet.getInt("assessment_id");
-
-        //return new Task(id, title, taskType, time, criterion, criterionValue, progress, task, assessmentId);
-        return new Task(id, title, taskType, criterion, criterionValue, progress);
+        Task task = new Task(id, title, taskType, criterion, criterionValue, progress);
+        task.setTime(time);
+        return task;
     }
 
     static Task formDependency(ResultSet resultSet) throws SQLException {
@@ -125,6 +125,8 @@ public class TaskController {
         int criterionValue = resultSet.getInt("dep_crit_val");
         int progress = resultSet.getInt("dep_progress");
 
-        return new Task(id, title, taskType, criterion, criterionValue, progress);
+        Task task = new Task(id, title, taskType, criterion, criterionValue, progress);
+        task.setTime(time);
+        return task;
     }
 }

@@ -90,8 +90,8 @@ public class MainView extends SemesterController {
 
         Stage parentStage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../View/CreateTaskView.fxml"));
-        fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new CreateTaskView(assessmentSelect.getValue()));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TaskView.fxml"));
+        fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new TaskView(assessmentSelect.getValue()));
         Parent root;
         try {
             root = fxmlLoader.load();

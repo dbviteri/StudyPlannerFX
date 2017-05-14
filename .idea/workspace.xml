@@ -2,15 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/View/CreateTaskView.fxml" afterPath="$PROJECT_DIR$/src/View/TaskView.fxml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/View/CreateTaskView.java" afterPath="$PROJECT_DIR$/src/View/TaskView.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StudyPlannerFX/Controller/DatabaseHandler.class" afterPath="$PROJECT_DIR$/out/production/StudyPlannerFX/Controller/DatabaseHandler.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StudyPlannerFX/Controller/SemesterController.class" afterPath="$PROJECT_DIR$/out/production/StudyPlannerFX/Controller/SemesterController.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StudyPlannerFX/Controller/UserController.class" afterPath="$PROJECT_DIR$/out/production/StudyPlannerFX/Controller/UserController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StudyPlannerFX/Model/User.class" afterPath="$PROJECT_DIR$/out/production/StudyPlannerFX/Model/User.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StudyPlannerFX/Tests/LoginTest.class" afterPath="$PROJECT_DIR$/out/production/StudyPlannerFX/Tests/LoginTest.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StudyPlannerFX/Utils/StageHandler$SCENE.class" afterPath="$PROJECT_DIR$/out/production/StudyPlannerFX/Utils/StageHandler$SCENE.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StudyPlannerFX/Utils/StageHandler.class" afterPath="$PROJECT_DIR$/out/production/StudyPlannerFX/Utils/StageHandler.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StudyPlannerFX/View/LoginView.class" afterPath="$PROJECT_DIR$/out/production/StudyPlannerFX/View/LoginView.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StudyPlannerFX/View/SemesterView.class" afterPath="$PROJECT_DIR$/out/production/StudyPlannerFX/View/SemesterView.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/StudyPlannerFX/View/SemesterView.fxml" afterPath="$PROJECT_DIR$/out/production/StudyPlannerFX/View/SemesterView.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/TaskController.java" afterPath="$PROJECT_DIR$/src/Controller/TaskController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/Task.java" afterPath="$PROJECT_DIR$/src/Model/Task.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/View/CreateTaskView.java" afterPath="$PROJECT_DIR$/src/View/CreateTaskView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/View/MainView.java" afterPath="$PROJECT_DIR$/src/View/MainView.java" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -174,7 +180,7 @@
       <file leaf-file-name="Activity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Model/Activity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
+            <state relative-caret-position="210">
               <caret line="15" column="21" lean-forward="true" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
               <folding />
             </state>
@@ -191,11 +197,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CreateTaskView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/View/CreateTaskView.java">
+      <file leaf-file-name="TaskView.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/View/TaskView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="70" column="52" lean-forward="false" selection-start-line="70" selection-start-column="52" selection-end-line="70" selection-end-column="52" />
+            <state relative-caret-position="105">
+              <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -204,8 +210,8 @@
       <file leaf-file-name="TaskController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Controller/TaskController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="566">
-              <caret line="127" column="43" lean-forward="false" selection-start-line="127" selection-start-column="43" selection-end-line="127" selection-end-column="43" />
+            <state relative-caret-position="460">
+              <caret line="114" column="27" lean-forward="false" selection-start-line="114" selection-start-column="27" selection-end-line="114" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -253,7 +259,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/View/Login.java" />
         <option value="$PROJECT_DIR$/src/StudyPlanner/Main.java" />
         <option value="$PROJECT_DIR$/src/Controller/LoginTest.java" />
         <option value="$PROJECT_DIR$/src/Tests/RegisterTest.java" />
@@ -303,6 +308,7 @@
         <option value="$PROJECT_DIR$/src/Model/Assessment.java" />
         <option value="$PROJECT_DIR$/src/Model/Task.java" />
         <option value="$PROJECT_DIR$/src/View/CreateTaskView.java" />
+        <option value="$PROJECT_DIR$/src/View/TaskView.java" />
         <option value="$PROJECT_DIR$/src/Controller/TaskController.java" />
       </list>
     </option>
@@ -1203,7 +1209,7 @@
       <workItem from="1494601758334" duration="7936000" />
       <workItem from="1494718226620" duration="2990000" />
       <workItem from="1494757742136" duration="1672000" />
-      <workItem from="1494765103024" duration="11255000" />
+      <workItem from="1494765103024" duration="12020000" />
     </task>
     <task id="LOCAL-00001" summary="Changed schemas and added file parser">
       <created>1493815433147</created>
@@ -1359,7 +1365,14 @@
       <option name="project" value="LOCAL" />
       <updated>1494777395320</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Fixed logic in Task&#10;time value variable starts 0 when constructed&#10;and gets incremented every time an activity is added">
+      <created>1494778812785</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1494778812785</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1395,7 +1408,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="216460000" />
+    <option name="totallyTimeSpent" value="217225000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1494,7 +1507,8 @@
     <MESSAGE value="Updated Constructors for readability + milestone class &amp; schema" />
     <MESSAGE value="more updates to Constructors in Model" />
     <MESSAGE value="Fixed difference in code" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed difference in code" />
+    <MESSAGE value="Fixed logic in Task&#10;time value variable starts 0 when constructed&#10;and gets incremented every time an activity is added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed logic in Task&#10;time value variable starts 0 when constructed&#10;and gets incremented every time an activity is added" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2043,14 +2057,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Model/Activity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="15" column="21" lean-forward="true" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Model/Task.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -2059,18 +2065,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/View/CreateTaskView.java">
+    <entry file="file://$PROJECT_DIR$/src/Model/Activity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="70" column="52" lean-forward="false" selection-start-line="70" selection-start-column="52" selection-end-line="70" selection-end-column="52" />
+        <state relative-caret-position="210">
+          <caret line="15" column="21" lean-forward="true" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/View/TaskView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/TaskController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="566">
-          <caret line="127" column="43" lean-forward="false" selection-start-line="127" selection-start-column="43" selection-end-line="127" selection-end-column="43" />
+        <state relative-caret-position="460">
+          <caret line="114" column="27" lean-forward="false" selection-start-line="114" selection-start-column="27" selection-end-line="114" selection-end-column="27" />
           <folding />
         </state>
       </provider>

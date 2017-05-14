@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 /**
  * Created by Didac on 14/05/2017.
  */
-public class CreateTaskView {
+public class TaskView {
 
     @FXML
     TextField titleField;
@@ -40,7 +40,7 @@ public class CreateTaskView {
 
     private Assessment assessment;
 
-    CreateTaskView(Assessment assessment) {
+    TaskView(Assessment assessment) {
         this.assessment = assessment;
     }
 
