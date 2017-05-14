@@ -104,9 +104,10 @@ public class SemesterView extends SemesterController implements ControlledScene{
     public void setParentScene(StageHandler stageHandler) {
         this.stageHandler = stageHandler;
     }
-
+    @FXML
     public void updateSemesterProfile() {
         // TODO: CALL UPLOAD A FILE HERE, UPDATE USING THIS USER's ID
+
     }
 
 }
