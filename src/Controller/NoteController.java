@@ -30,6 +30,14 @@ public class NoteController {
         return findAll(QUERY_FIND_ACTIVITY_NOTES, activityId);
     }
 
+    /** Function used to retrieve all
+     *  notes of some given properties
+     *
+     * @param sql
+     * @param properties
+     * @param <T>
+     * @return
+     */
     private static <T> ArrayList<T> findAll(String sql, Object... properties) {
         ArrayList<T> notes = new ArrayList<>();
         try (
