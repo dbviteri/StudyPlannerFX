@@ -13,7 +13,6 @@ public class Task {
     // Properties ------------------------------------------------------------------------------------------------------
 
     public enum TaskType {PROGRAMMING, READING}
-
     private Integer id;
     private String title;
     private TaskType type;
@@ -129,6 +128,20 @@ public class Task {
     public void addDependency(Task dependency) {
         if (!dependencies.containsKey(dependency))
             dependencies.put(dependency, dependency);
+    }
+    public boolean isComplete(){
+        int completion = 0;
+        for(HashMap.Entry entry : activities.entrySet()){
+            Activity activity = (Activity)entry.getValue();
+            completion+= activity.getQuantity();
+        }
+        if(completion == criterionValue) {
+            progress = 100;
+            return true;
+        }
+        else 
+            progress = criterionValue / completion * 100;
+            return false;
     }
 
 //    public Map<TaskNote, TaskNote> getNotes() {

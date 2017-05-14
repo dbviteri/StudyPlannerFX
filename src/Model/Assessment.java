@@ -111,7 +111,13 @@ public class Assessment {
     // Methods ---------------------------------------------------------------------------------------------
 
     public boolean tasksCompleted() {
-        return false;
+        for(HashMap.Entry entry : tasks.entrySet()){
+            Task task = (Task)entry.getValue();
+            if(task.getProgress() != 100) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // Overrides -------------------------------------------------------------------------------------------------------
