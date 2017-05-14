@@ -8,6 +8,7 @@ import Utils.StageHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 
 import java.util.Date;
@@ -52,6 +53,7 @@ public class DashBoardView extends SemesterController {
         // For each module
         for (Map.Entry<Module, Module> moduleEntry : modules.entrySet()) {
             // Find the related assessments for that module
+            Label moduleInfo = new Label("MODULE: " + moduleEntry.getValue().getTitle() + ": \n\n");
             Map<Assessment, Assessment> assessments = moduleEntry.getValue().getAssessments();
             for (Map.Entry<Assessment, Assessment> assessmentEntry : assessments.entrySet()) {
                 // For each module create a label with the module name
@@ -63,10 +65,10 @@ public class DashBoardView extends SemesterController {
 
                 // If compareTo is less than 0, date is before the deadline
                 // Should go to upcoming deadlines
-                Label assessmentInfo = new Label();
-                assessmentInfo.setText(
-                        "MODULE: " + moduleEntry.getValue().getTitle() + "\n" +
-                                "ASSESSMENT: " + assessment.toString() + "\n"
+                moduleInfo.setText(
+                        moduleInfo.getText() +
+                                "ASSESSMENT: " + assessment.toString() + "\n" +
+                                "Progress for this assessment: \n"
                 );
 
                 if (date.compareTo(assessment.getDeadLine()) < 0) {
@@ -74,18 +76,24 @@ public class DashBoardView extends SemesterController {
                     button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                     button.setWrapText(true);
 
+                    ProgressBar progressBar = new ProgressBar(0);
+                    progressBar.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                    System.out.println(assessment.getCompletion());
+                    progressBar.setProgress(assessment.getCompletion() / 100);
 //                    Bounds upcomingDeadlinesLblBounds = upcomingDeadlinesLbl.getBoundsInLocal();
 //                    Point2D labelLocation = upcomingDeadlinesLbl.localToScreen()
-                    upcomingDeadlineGrid.add(assessmentInfo, 0, ROW_INDEX_UPCOMING);
+                    upcomingDeadlineGrid.addColumn(0, moduleInfo);
                     //upcomingDeadlineGrid.addColumn(UPCOMING_COLUMN, assessmentInfo);
-                    upcomingDeadlineGrid.add(button, 1, ROW_INDEX_UPCOMING);
+                    upcomingDeadlineGrid.addColumn(0, progressBar);
+
+                    upcomingDeadlineGrid.addRow(ROW_INDEX_UPCOMING, button);
                     //upcomingDeadlineGrid.getChildren().get(ROW_INDEX_UPCOMING).setStyle("-fx-background-color: cornsilk; -fx-alignment: center;");
                     //upcomingDeadlineGrid.setVgap(20);
                     //upcomingDeadlinesLbl.setText(assessment.getTitle());
 
-                    ROW_INDEX_UPCOMING++;
+                    ROW_INDEX_UPCOMING += upcomingDeadlineGrid.impl_getColumnCount();
                 } else if (date.compareTo(assessment.getDeadLine()) > 0) {
-                    missedDeadlineGrid.add(assessmentInfo, MISSED_COLUMN, ROW_INDEX_MISSED);
+                    missedDeadlineGrid.add(moduleInfo, MISSED_COLUMN, ROW_INDEX_MISSED);
                     //missedDeadlineGrid.setVgap(20);
                     //missedDeadlinesLbl.setText(assessment.getTitle());
                     ROW_INDEX_MISSED++;

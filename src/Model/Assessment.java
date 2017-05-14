@@ -18,7 +18,7 @@ public class Assessment {
     private Type type;
     private int weight;
     private Date deadline;
-    private int completion;
+    private Double completion; // Percentage
     private Map<Task, Task> tasks = new HashMap<>();
     private Map<Milestone, Milestone> milestones = new HashMap<>();
 
@@ -31,7 +31,7 @@ public class Assessment {
     // EMPTY CONSTRUCTOR FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!
     public Assessment() {}
 
-    public Assessment(int id, String title, Type type, int weight, Date deadline, int completion) {
+    public Assessment(int id, String title, Type type, int weight, Date deadline, Double completion) {
         this.id = id;
         this.title = title;
         this.type = type;
@@ -40,7 +40,7 @@ public class Assessment {
         this.completion = completion;
     }
 
-    public Assessment(String title, Type type, int weight, Date deadline, int completion) {
+    public Assessment(String title, Type type, int weight, Date deadline, Double completion) {
         this.id = null;
         this.title = title;
         this.type = type;
@@ -94,7 +94,7 @@ public class Assessment {
         return deadline;
     }
 
-    public int getCompletion() {
+    public Double getCompletion() {
         return completion;
     }
 
@@ -104,7 +104,7 @@ public class Assessment {
         this.deadline = deadline;
     }
 
-    public void setCompletion(int completion) {
+    public void setCompletion(Double completion) {
         this.completion = completion;
     }
 

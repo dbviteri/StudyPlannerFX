@@ -109,7 +109,7 @@ public class AssessmentController {
         Assessment.Type eventType = Assessment.Type.valueOf(resultSet.getString("assessment_type"));
         int weight = resultSet.getInt("weight");
         Date deadline = resultSet.getDate("deadline");
-        int completion = resultSet.getInt("completion");
+        Double completion = resultSet.getDouble("completion");
 
         return new Assessment(id, title, eventType, weight, deadline, completion);
     }

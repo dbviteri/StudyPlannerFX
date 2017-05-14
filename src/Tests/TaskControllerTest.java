@@ -22,7 +22,7 @@ public class TaskControllerTest {
     @Before
     public void setUp() throws Exception {
         taskController = new TaskController();
-        assessment = new Assessment(1, "test", Assessment.Type.ASSIGNMENT, 0, date, 2);
+        assessment = new Assessment(1, "test", Assessment.Type.ASSIGNMENT, 0, date, 2.0);
     }
 
     @After
