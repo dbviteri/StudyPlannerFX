@@ -68,11 +68,11 @@ public class CreateTaskView {
         int critValue = criteriaValue.getValue();
 
         if (dependencyList.getValue() != null) {
-            Task task = new Task(taskTitle, taskType, time, criteria, critValue, 0);
+            Task task = new Task(taskTitle, taskType, criteria, critValue, 0);
             task.addDependency(dependencyList.getValue());
             assessment.addTask(task);
         } else {
-            assessment.addTask(new Task(taskTitle, taskType, time, criteria, critValue, 0));
+            assessment.addTask(new Task(taskTitle, taskType, criteria, critValue, 0));
         }
 
         System.out.println("AFTER ADDING: ");

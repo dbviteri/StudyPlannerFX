@@ -113,7 +113,7 @@ public class TaskController {
         //int assessmentId = resultSet.getInt("assessment_id");
 
         //return new Task(id, title, taskType, time, criterion, criterionValue, progress, task, assessmentId);
-        return new Task(id, title, taskType, time, criterion, criterionValue, progress);
+        return new Task(id, title, taskType, criterion, criterionValue, progress);
     }
 
     static Task formDependency(ResultSet resultSet) throws SQLException {
@@ -125,6 +125,6 @@ public class TaskController {
         int criterionValue = resultSet.getInt("dep_crit_val");
         int progress = resultSet.getInt("dep_progress");
 
-        return new Task(id, title, taskType, time, criterion, criterionValue, progress);
+        return new Task(id, title, taskType, criterion, criterionValue, progress);
     }
 }

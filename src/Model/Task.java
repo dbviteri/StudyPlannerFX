@@ -31,18 +31,18 @@ public class Task {
     public Task() {}
 
     // TODO: Decide whether we need constructors
-    public Task(String title, TaskType type, int time, String criterion,
+    public Task(String title, TaskType type, String criterion,
                 int criterionValue, int progress) {
         this.title = title;
         this.type = type;
-        this.time = time;
         this.criterion = criterion;
         this.criterionValue = criterionValue;
         this.progress = progress;
+        this.time = 0;
     }
-    public Task(Integer id, String title, TaskType type, int time, String criterion,
+    public Task(Integer id, String title, TaskType type, String criterion,
                 int criterionValue, int progress) {
-        this(title,type,time,criterion,criterionValue,progress);
+        this(title,type,criterion,criterionValue,progress);
         this.id = id;
     }
 
@@ -112,8 +112,10 @@ public class Task {
     public Map<Task, Task> getDependencies() { return new HashMap<>(dependencies); }
 
     public void addActivity(Activity activity) {
-        if (!activities.containsKey(activity))
+        if(!activities.containsKey(activity)) {
             activities.put(activity, activity);
+            this.time += activity.getTime();
+        }
     }
 
     //public Map<Activity, Activity> getActivities() { return activities; }
@@ -123,6 +125,13 @@ public class Task {
         if (!dependencies.containsKey(dependency))
             dependencies.put(dependency, dependency);
     }
+
+    /** Function checks if task is completed based on all the related activities
+     *  if complete , it returns true
+     *  if not , it sets progress to the
+     *
+     * @return
+     */
     public boolean isComplete(){
         int completion = 0;
         for(HashMap.Entry entry : activities.entrySet()){
