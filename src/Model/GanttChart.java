@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.Iterator;
 
 /**
- * Gantt chart representation for a module
+ * Gantt chart representation for a module. 
  * Created by 100125468 on 14/05/2017.
  */
 public class GanttChart<X,Y> extends XYChart<X,Y> {
