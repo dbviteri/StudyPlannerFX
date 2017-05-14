@@ -121,7 +121,10 @@ public class Assessment {
         }
         return true;
     }
+    //
+    public void calculateCompletion(){
 
+    }
     // Overrides -------------------------------------------------------------------------------------------------------
 
     // TODO: Rewrite the tostring
