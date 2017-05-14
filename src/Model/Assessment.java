@@ -31,14 +31,7 @@ public class Assessment {
     // EMPTY CONSTRUCTOR FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!
     public Assessment() {}
 
-    public Assessment(int id, String title, Type type, int weight, Date deadline, int completion) {
-        this.id = id;
-        this.title = title;
-        this.type = type;
-        this.weight = weight;
-        this.deadline = deadline;
-        this.completion = completion;
-    }
+
 
     public Assessment(String title, Type type, int weight, Date deadline, int completion) {
         this.id = null;
@@ -48,6 +41,10 @@ public class Assessment {
         this.deadline = deadline;
         this.completion = completion;
         //this.moduleCode = moduleCode;
+    }
+    public Assessment(int id, String title, Type type, int weight, Date deadline, int completion) {
+        this(title,type,weight,deadline,completion);
+        this.id = id;
     }
     // Getters and setters ---------------------------------------------------------------------------------------------
 

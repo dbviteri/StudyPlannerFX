@@ -23,15 +23,14 @@ public class Module {
     // Might be optional if we set everything by the setters
     public Module() {}
 
-    public Module(int moduleId, String title, String code) {
-        this.moduleId = moduleId;
-        this.title = title;
-        this.code = code;
-    }
     public Module(String title, String code) {
         this.moduleId = null;
         this.title = title;
         this.code = code;
+    }
+    public Module(int moduleId, String title, String code) {
+        this(title,code);
+        this.moduleId = moduleId;
     }
 
     // Getters and setters ---------------------------------------------------------------------------------------------
