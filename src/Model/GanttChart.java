@@ -8,6 +8,9 @@ import javafx.scene.chart.Axis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
 
+import java.awt.*;
+import java.util.Iterator;
+
 /**
  * Created by 100125468 on 14/05/2017.
  */
@@ -91,6 +94,26 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
     protected void layoutPlotChildren() {
         for(int index=0; index < getData().size(); index++){
             Series<X,Y> series = getData().get(index);
+            Iterator<Data<X,Y>> it = getDisplayedDataIterator(series);
+            while(it.hasNext()){
+                Data<X,Y> data = it.next();
+                double y = getYAxis().getDisplayPosition(data.getYValue());
+                double x = getXAxis().getDisplayPosition(data.getXValue());
+                if( Double.isNaN(x) || Double.isNaN(y)){ // CHECK THIS AND CHANGE
+                    continue;
+                }
+                Node frame = data.getNode();
+                Rectangle rectangle;
+                if (frame != null) {
+                    if (frame instanceof StackPane) {
+                        StackPane region = (StackPane)data.getNode();
+                        if (region.getShape() == null) {
+                            rectangle = new Rectangle(getLength(data.getExtraValue()),getFrameHeight());
+                        }
+                    }
+
+                }
+            }
 
         }
     }
