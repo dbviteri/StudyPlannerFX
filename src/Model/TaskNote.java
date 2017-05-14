@@ -3,6 +3,8 @@ package Model;
 import java.util.Date;
 
 /**
+ * Model representation of a task note.
+ * It extends from note, allowing for the id to be set.
  * Created by Didac on 09/05/2017.
  */
 public class TaskNote extends Note {
