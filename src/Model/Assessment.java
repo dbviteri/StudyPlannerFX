@@ -1,5 +1,8 @@
 package Model;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +21,7 @@ public class Assessment {
     private Type type;
     private int weight;
     private Date deadline;
-    private Double completion; // Percentage
+    private DoubleProperty completion = new SimpleDoubleProperty(); // Percentage
     private Map<Task, Task> tasks = new HashMap<>();
     private Map<Milestone, Milestone> milestones = new HashMap<>();
 
@@ -31,22 +34,22 @@ public class Assessment {
     // EMPTY CONSTRUCTOR FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!
     public Assessment() {}
 
-    public Assessment(int id, String title, Type type, int weight, Date deadline, Double completion) {
+    public Assessment(int id, String title, Type type, int weight, Date deadline, double completion) {
         this.id = id;
         this.title = title;
         this.type = type;
         this.weight = weight;
         this.deadline = deadline;
-        this.completion = completion;
+        this.completion.set(completion);
     }
 
-    public Assessment(String title, Type type, int weight, Date deadline, Double completion) {
+    public Assessment(String title, Type type, int weight, Date deadline, double completion) {
         this.id = null;
         this.title = title;
         this.type = type;
         this.weight = weight;
         this.deadline = deadline;
-        this.completion = completion;
+        this.completion.set(completion);
         //this.moduleCode = moduleCode;
     }
     // Getters and setters ---------------------------------------------------------------------------------------------
@@ -94,8 +97,8 @@ public class Assessment {
         return deadline;
     }
 
-    public Double getCompletion() {
-        return completion;
+    public double getCompletion() {
+        return completion.get();
     }
 
     //public String getModuleCode() { return moduleCode; }
@@ -104,15 +107,19 @@ public class Assessment {
         this.deadline = deadline;
     }
 
-    public void setCompletion(Double completion) {
-        this.completion = completion;
+    public void setCompletion(double completion) {
+        this.completion.set(completion);
     }
 
     // Methods ---------------------------------------------------------------------------------------------
 
+    public DoubleProperty completionProperty() {
+        return completion;
+    }
+
     public boolean tasksCompleted() {
         for(HashMap.Entry entry : tasks.entrySet()){
-            Task task = (Task)entry.getValue();
+            Task task = (Task) entry.getValue();
             if(task.getProgress() != 100) {
                 return false;
             }
