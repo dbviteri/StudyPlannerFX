@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.SemesterProfile;
 import Model.User;
 import Utils.SPException;
 import Utils.SPProperties;
@@ -139,7 +140,11 @@ public class DatabaseHandler {
 
     public User getUserSession(){ return Session.getSession().getUser(); }
 
+    public SemesterProfile getSemesterSession() { return Session.getSession().getSemester(); }
+
     public void createSession(User user) { Session.createSession(user); }
+
+    public void addSemesterToUser(SemesterProfile semesterProfile) {Session.addSemesterToUser(semesterProfile);}
 
     public void deleteSession() {Session.deleteSession();}
     //----------------------------------------------- ADD MORE CONTROLLERS HERE ----------------------------------------
@@ -148,21 +153,31 @@ public class DatabaseHandler {
 
 }
 
-// Default implementation ----------------------------------------------------------------------------------------------
+// Session Class ----------------------------------------------------------------------------------------------
 
 
 class Session {
     private static final Session SESSION = new Session();
     private User user;
+    private SemesterProfile semesterProfile;
 
     public static void createSession(User user){
         SESSION.user = user;
     }
 
-    public static void deleteSession(){ SESSION.user = null; }
+    public static void addSemesterToUser(SemesterProfile semesterProfile) { SESSION.semesterProfile = semesterProfile; }
+
+    public static void deleteSession() {
+        SESSION.semesterProfile = null;
+        SESSION.user = null;
+    }
 
     public static Session getSession(){
         return SESSION;
+    }
+
+    public SemesterProfile getSemester() {
+        return semesterProfile;
     }
 
     public User getUser(){

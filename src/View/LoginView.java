@@ -39,7 +39,7 @@ public class LoginView extends UserController implements ControlledScene{
 
         // Reload scene after creating a session
         stageHandler.reloadScene(StageHandler.SCENE.SEMESTER);
-        stageHandler.setScene(StageHandler.SCENE.SEMESTER, true);
+        stageHandler.setScene(StageHandler.SCENE.SEMESTER, true, 1024, 768);
 
     }
 

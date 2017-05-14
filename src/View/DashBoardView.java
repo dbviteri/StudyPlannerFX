@@ -1,17 +1,13 @@
 package View;
 
-import Controller.DatabaseHandler;
 import Controller.SemesterController;
 import Model.Assessment;
 import Model.Module;
-import Model.SemesterProfile;
 import Model.User;
 import Utils.StageHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
 import java.util.Date;
@@ -20,15 +16,15 @@ import java.util.Map;
 /**
  * Created by Didac on 08/05/2017.
  */
-public class DashBoardView {
+public class DashBoardView extends SemesterController {
 
     private static final int COMPLETED_COLUMN = 2;
     private static final int UPCOMING_COLUMN = 1;
     private static final int MISSED_COLUMN = 0;
 
-    private static int ROW_INDEX_COMPLETED = 1;
-    private static int ROW_INDEX_UPCOMING = 1;
-    private static int ROW_INDEX_MISSED = 1;
+    private static int ROW_INDEX_COMPLETED = 0;
+    private static int ROW_INDEX_UPCOMING = 0;
+    private static int ROW_INDEX_MISSED = 0;
 
     @FXML
     GridPane dashboardGrid;
@@ -39,13 +35,17 @@ public class DashBoardView {
     @FXML
     GridPane missedDeadlineGrid;
 
-    private DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+    //private DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
 
     public void load(StageHandler stageHandler) {
-        User user = databaseHandler.getUserSession();
+        User user = dbhandler.getUserSession();
         //SemesterProfile semesterProfile = MasterController.getSemester(user.getId());
-        SemesterProfile semesterProfile = SemesterController.find(user.getId());
-        Map<Module, Module> modules = semesterProfile.getModules();
+        loadSemester(user.getId());
+
+        Map<Module, Module> modules = dbhandler.getSemesterSession().getModules();
+
+        dashboardGrid.setId("dashboardGrid");
+        upcomingDeadlineGrid.setId("upcomingGrid");
 
         // Decide what pane should the assignments go based on deadline
         Date date = new Date();
@@ -63,18 +63,26 @@ public class DashBoardView {
 
                 // If compareTo is less than 0, date is before the deadline
                 // Should go to upcoming deadlines
-                Label assessmentInfo = new Label(assessment.toString());
-
+                Label assessmentInfo = new Label();
+                assessmentInfo.setText(
+                        "MODULE: " + moduleEntry.getValue().getTitle() + "\n" +
+                                "ASSESSMENT: " + assessment.toString() + "\n"
+                );
 
                 if (date.compareTo(assessment.getDeadLine()) < 0) {
-                    Button button = new Button();
+                    Button button = new Button(moduleEntry.getValue().getTitle() + "'s \n ganttchart");
+                    button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                    button.setWrapText(true);
+
 //                    Bounds upcomingDeadlinesLblBounds = upcomingDeadlinesLbl.getBoundsInLocal();
 //                    Point2D labelLocation = upcomingDeadlinesLbl.localToScreen()
-                    upcomingDeadlineGrid.add(assessmentInfo, UPCOMING_COLUMN, ROW_INDEX_UPCOMING);
+                    upcomingDeadlineGrid.add(assessmentInfo, 0, ROW_INDEX_UPCOMING);
                     //upcomingDeadlineGrid.addColumn(UPCOMING_COLUMN, assessmentInfo);
-                    upcomingDeadlineGrid.addRow(ROW_INDEX_UPCOMING, button);
+                    upcomingDeadlineGrid.add(button, 1, ROW_INDEX_UPCOMING);
+                    //upcomingDeadlineGrid.getChildren().get(ROW_INDEX_UPCOMING).setStyle("-fx-background-color: cornsilk; -fx-alignment: center;");
                     //upcomingDeadlineGrid.setVgap(20);
                     //upcomingDeadlinesLbl.setText(assessment.getTitle());
+
                     ROW_INDEX_UPCOMING++;
                 } else if (date.compareTo(assessment.getDeadLine()) > 0) {
                     missedDeadlineGrid.add(assessmentInfo, MISSED_COLUMN, ROW_INDEX_MISSED);
@@ -94,14 +102,14 @@ public class DashBoardView {
         int rowsAdded = (ROW_INDEX_COMPLETED > ROW_INDEX_MISSED) ? ROW_INDEX_COMPLETED : ROW_INDEX_MISSED;
         rowsAdded = (rowsAdded > ROW_INDEX_UPCOMING) ? rowsAdded : ROW_INDEX_UPCOMING;
 
-        ColumnConstraints columnConstraints = new ColumnConstraints();
-        columnConstraints.setHalignment(HPos.RIGHT);
-        upcomingDeadlineGrid.getColumnConstraints().add(columnConstraints);
-
+//        ColumnConstraints columnConstraints = new ColumnConstraints();
+//        columnConstraints.setHalignment(HPos.RIGHT);
+//        upcomingDeadlineGrid.getColumnConstraints().add(columnConstraints);
+//
         completedDeadlineGrid.setVgap(20);
         upcomingDeadlineGrid.setVgap(20);
         missedDeadlineGrid.setVgap(20);
-
+//
         completedDeadlineGrid.setHgap(20);
         upcomingDeadlineGrid.setHgap(20);
         missedDeadlineGrid.setHgap(20);
@@ -110,5 +118,9 @@ public class DashBoardView {
 
         //System.out.println(SemesterController.find(user.getId()).getEndDate());
         //System.out.println("can call");
+        ROW_INDEX_COMPLETED = 0;
+        ROW_INDEX_UPCOMING = 0;
+        ROW_INDEX_MISSED = 0;
+
     }
 }

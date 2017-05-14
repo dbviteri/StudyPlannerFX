@@ -45,7 +45,7 @@ public class NoteController {
         return notes;
     }
 
-    public static Note formNote(ResultSet resultSet) throws SQLException {
+    static Note formNote(ResultSet resultSet) throws SQLException {
         String title = resultSet.getString("note_title");
         String text = resultSet.getString("text");
         //Integer taskId = resultSet.getInt("task_ID");

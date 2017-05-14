@@ -91,7 +91,7 @@ public class ModuleController {
      * @return Module
      * @throws SQLException
      */
-    public static Module formModule(ResultSet resultSet) throws SQLException {
+    static Module formModule(ResultSet resultSet) throws SQLException {
         int moduleId = resultSet.getInt("module_id");
         String title = resultSet.getString("module_title");
         String code = resultSet.getString("code");

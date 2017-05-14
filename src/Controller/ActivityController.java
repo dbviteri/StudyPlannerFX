@@ -39,7 +39,7 @@ public class ActivityController {
         return activities;
     }
 
-    public static Activity formActivity(ResultSet resultSet) throws SQLException {
+    static Activity formActivity(ResultSet resultSet) throws SQLException {
         Integer activityId = resultSet.getInt("activity_ID");
         int quantity = resultSet.getInt("quantity");
         int time = resultSet.getInt("time");

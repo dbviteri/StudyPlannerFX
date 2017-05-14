@@ -1,6 +1,5 @@
 package View;
 
-import Controller.DatabaseHandler;
 import Controller.SemesterController;
 import Model.User;
 import Utils.ControlledScene;
@@ -27,11 +26,14 @@ public class SemesterView extends SemesterController implements ControlledScene{
     @FXML
     private VBox semesterView;
 
+
     // Inherits the FXML from DashboardView, needs to have Controller as suffix.
     // No need to assign it, since FXMLLoader assigns it when SemesterView is loaded.
     @FXML
     private DashBoardView dashboardController;
 
+    @FXML
+    private MainView mainViewController;
 
     /**
      * Constructs a SemesterProfile controller.
@@ -49,7 +51,7 @@ public class SemesterView extends SemesterController implements ControlledScene{
         //semesterLabel.setText("test");
         if (dbhandler.getUserSession() == null) return;
 
-        User user = DatabaseHandler.getInstance().getUserSession();
+        User user = dbhandler.getUserSession();
         // DECORATE STAGE ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
         userMenu.setText(user.getFirstname());
@@ -60,18 +62,28 @@ public class SemesterView extends SemesterController implements ControlledScene{
         semesterView.prefWidthProperty().bind(stageHandler.getStage().widthProperty());
         semesterView.prefHeightProperty().bind(stageHandler.getStage().heightProperty());
 
+        mainViewController.mainViewBox.prefHeightProperty().bind(
+                semesterView.heightProperty()
+        );
+
+        mainViewController.mainViewBox.prefWidthProperty().bind(
+                semesterView.widthProperty()
+        );
+
         dashboardController.dashboardGrid.prefWidthProperty().bind(
-                semesterView.widthProperty().subtract(30)
+                semesterView.widthProperty()
         );
 
         dashboardController.dashboardGrid.prefHeightProperty().bind(
-                semesterView.heightProperty().subtract(35)
+                semesterView.heightProperty()
         );
 
         // POPULATE DASHBOARD TAB PANE •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
         dashboardController.load(stageHandler);
         //dashboardController.assignments.setText(assessments.get(0).getTitle());
+
+        mainViewController.load();
 
         System.out.println(user.getEmail());
     }
@@ -87,4 +99,9 @@ public class SemesterView extends SemesterController implements ControlledScene{
     public void setParentScene(StageHandler stageHandler) {
         this.stageHandler = stageHandler;
     }
+
+    public void updateSemesterProfile() {
+        // TODO: CALL UPLOAD A FILE HERE, UPDATE USING THIS USER's ID
+    }
+
 }

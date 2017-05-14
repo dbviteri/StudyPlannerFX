@@ -68,8 +68,11 @@ public class SemesterController {
      * @param
      * @return
      */
-    public static SemesterProfile find(int userId) {
-        return find(QUERY_USER_SEMESTER, false, userId);
+//    public static SemesterProfile find(int userId) {
+//        return find(QUERY_USER_SEMESTER, userId);
+//    }
+    public static void loadSemester(int userId) {
+        Session.addSemesterToUser(find(QUERY_USER_SEMESTER, userId));
     }
 
     private static SemesterProfile find(String sql, Object... properties) {
@@ -137,7 +140,7 @@ public class SemesterController {
             modules.get(module).addAssessment(assessment);
 
             /** IF SEMESTER HAS TASK BUILD TASKS AND ADD IT TO MODULES **/
-            int task_id = resultSet.getInt("task_id");
+            resultSet.getInt("task_id");
             if (!resultSet.wasNull()) {
                 Task task = TaskController.formTask(resultSet);
 
@@ -145,7 +148,7 @@ public class SemesterController {
                         .get(assessment).addTask(task);
 
                 /** IF TASK HAS DEPENDENCIES BUILD DEPENDENCY AND ADD IT TO MODULES **/
-                int depId = resultSet.getInt("dep_id");
+                resultSet.getInt("dep_id");
                 if (!resultSet.wasNull()) { // Add the dependency
                     Task dependency = TaskController.formDependency(resultSet);
 
@@ -157,7 +160,7 @@ public class SemesterController {
                 }
 
                 /** IF TASK HAS ACTIVITIES BUILD IT AND ADD IT TO MODULES **/
-                int activityId = resultSet.getInt("activity_ID");
+                resultSet.getInt("activity_ID");
                 if (!resultSet.wasNull()) {
                     Activity activity = ActivityController.formActivity(resultSet);
 
@@ -188,29 +191,10 @@ public class SemesterController {
 
             }
         }
-
-//        System.out.println(modules.get(2).getAssessments().size());
-//        //System.out.println(modules.get(2).getAssessments().get(1).getTasks().size());
-//        //System.out.println("modules : " + modules.size());
-//        for (Map.Entry<Integer, Module> entry : modules.entrySet()){
-//            System.out.println(entry.getValue().getTitle() + "'S ASSESSMENTS: ");
-//            for (Map.Entry<Integer, Assessment> assessmentEntry : entry.getValue().getAssessments().entrySet()){
-//                System.out.println("\t" + assessmentEntry.getValue().getTitle() + "'S TASKS: ");
-//                for (Map.Entry<Integer, Task> taskEntry : assessmentEntry.getValue().getTasks().entrySet()){
-//                    System.out.println("\t" + taskEntry.getValue().getNotes().size() + "<--- notes");
-//                    System.out.println("\t\t\t" + taskEntry.getValue().getDependencyTasks().size() + " <--- dependencies");
-//                    System.out.println("\t\t" + taskEntry.getValue().getId() + "'S ACTIVITIES: ");
-//                    for (Map.Entry<Integer, Activity> activityEntry : taskEntry.getValue().getActivities().entrySet()){
-//                        System.out.println("\t\t\t\t" + activityEntry.getValue().getNotes().size() + "<--- notes");
-//                        System.out.println("\t\t\t" + activityEntry.getValue().getTitle());
-//                    }
-//                }
-//
-//            }
-//
-//        }
         return semesterProfile;
     }
+
+
     // Load semester file?
     // TODO : add file checking or rely on SQL checks
     // TODO : One function for checking and parsing or TWO separate ones ?

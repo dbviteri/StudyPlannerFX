@@ -99,7 +99,7 @@ public class TaskController {
         }
     }
 
-    public static Task formTask(ResultSet resultSet) throws SQLException {
+    static Task formTask(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("task_id");
         String title = resultSet.getString("task_title");
         Task.TaskType taskType = Task.TaskType.valueOf(resultSet.getString("task_type"));
@@ -116,7 +116,7 @@ public class TaskController {
         return new Task(id, title, taskType, time, criterion, criterionValue, progress);
     }
 
-    public static Task formDependency(ResultSet resultSet) throws SQLException {
+    static Task formDependency(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("dep_id");
         String title = resultSet.getString("dep_title");
         Task.TaskType taskType = Task.TaskType.valueOf(resultSet.getString("dep_type"));

@@ -67,13 +67,15 @@ public class Module {
     @Override
     public String toString() {
         String str = "";
-        str += "MODULE\n" + title + "\n";
+        str += title + "\n";
         str += code + "\n";
         return str;
     }
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) return false;
+
         if (getClass() != obj.getClass())
             return false;
 

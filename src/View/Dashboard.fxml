@@ -38,7 +38,7 @@
         </Label>
         <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
             <content>
-                <GridPane fx:id="upcomingDeadlineGrid" prefHeight="400" prefWidth="196.0">
+                <GridPane fx:id="upcomingDeadlineGrid">
                     <!--<columnConstraints>-->
                     <!--<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />-->
                     <!--</columnConstraints>-->
@@ -53,7 +53,7 @@
         <ScrollPane id="missedDeadline" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
                     GridPane.rowIndex="1">
             <content>
-                <GridPane fx:id="missedDeadlineGrid" prefHeight="400" prefWidth="200.0">
+                <GridPane fx:id="missedDeadlineGrid">
                     <!--<columnConstraints>-->
                     <!--<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="30.0" />-->
                     <!--</columnConstraints>-->
@@ -66,7 +66,7 @@
 
         <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
             <content>
-                <GridPane fx:id="completedDeadlineGrid" prefHeight="437.0" prefWidth="200.0">
+                <GridPane fx:id="completedDeadlineGrid">
                     <!--<columnConstraints>-->
                     <!--<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />-->
                     <!--</columnConstraints>-->
