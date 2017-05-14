@@ -5,11 +5,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
-<VBox fx:id="createTaskView" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
       minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.TaskView">
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ActivityView">
     <children>
-        <Label fx:id="taskLbl" alignment="CENTER" contentDisplay="CENTER" text="Add a new task">
+        <Label fx:id="activityLbl" alignment="CENTER" contentDisplay="CENTER" text="Add a new activity">
             <VBox.margin>
                 <Insets bottom="20.0"/>
             </VBox.margin>
@@ -20,20 +20,14 @@
                 <Insets bottom="20.0"/>
             </VBox.margin>
         </TextField>
-        <ComboBox fx:id="typeField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                  minWidth="-Infinity" prefWidth="250.0" promptText="Type">
+        <ComboBox fx:id="quantitySelect" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                  minWidth="-Infinity" prefWidth="250.0" promptText="Quantity">
             <VBox.margin>
                 <Insets bottom="20.0"/>
             </VBox.margin>
         </ComboBox>
-        <TextField fx:id="criteriaField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                   minWidth="-Infinity" prefWidth="250.0" promptText="Criteria E.g: Reading ">
-            <VBox.margin>
-                <Insets bottom="20.0"/>
-            </VBox.margin>
-        </TextField>
-        <ComboBox fx:id="criteriaValue" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                  minWidth="-Infinity" prefWidth="250.0" promptText="Amount of criteria">
+        <ComboBox fx:id="timeSelect" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                  minWidth="-Infinity" prefWidth="250.0" promptText="Time to spend">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <Integer fx:value="1"/>
@@ -47,12 +41,6 @@
                 <Insets bottom="20.0"/>
             </VBox.margin>
         </ComboBox>
-        <ComboBox fx:id="dependencyList" prefHeight="30.0" prefWidth="250.0"
-                  promptText="Depends on:">
-            <VBox.margin>
-                <Insets bottom="20.0"/>
-            </VBox.margin>
-        </ComboBox>
-        <Button mnemonicParsing="false" onAction="#addTask" text="Add task"/>
+        <Button mnemonicParsing="false" onAction="#addActivity" text="Add activity"/>
     </children>
 </VBox>

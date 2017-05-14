@@ -80,7 +80,7 @@ public class SemesterView extends SemesterController implements ControlledScene{
 
         // POPULATE DASHBOARD TAB PANE •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
-        dashboardController.load(stageHandler);
+        dashboardController.load();
         //dashboardController.assignments.setText(assessments.get(0).getTitle());
 
         mainViewController.load();
