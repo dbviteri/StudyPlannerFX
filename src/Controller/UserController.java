@@ -61,7 +61,6 @@ public class UserController {
                 user.getLastname(),
                 user.isStaff(),
         };
-
         try (
                 PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT, true, properties)
         ) {

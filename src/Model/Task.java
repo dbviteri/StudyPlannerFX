@@ -139,7 +139,7 @@ public class Task {
             progress = 100;
             return true;
         }
-        else 
+        else
             progress = criterionValue / completion * 100;
             return false;
     }

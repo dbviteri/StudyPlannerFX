@@ -19,6 +19,12 @@ public class LoginView extends UserController implements ControlledScene{
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
 
+    /** Function used to log a user in
+     *  on button press, if credentials are valid.
+     *  it also creates a new session based on the user
+     *  and sets the scene to semester
+     *
+     */
     @FXML
     public void loginUser() {
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
@@ -43,11 +49,14 @@ public class LoginView extends UserController implements ControlledScene{
 
     }
 
+    /** Basic FXML function, on button press
+     *  sets scene to register
+     *
+     */
     @FXML
     private void showRegister() {
         stageHandler.setScene(StageHandler.SCENE.REGISTER, false);
     }
-
     @Override
     public void setParentScene(StageHandler stageHandler) {
         this.stageHandler = stageHandler;
