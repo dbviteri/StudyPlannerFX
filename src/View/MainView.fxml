@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox fx:id="mainViewBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="View.MainView">
+    <children>
+        <HBox fx:id="upperLeftBox" prefHeight="201.0" prefWidth="600.0">
+            <children>
+                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="300.0">
+                    <children>
+                        <ComboBox fx:id="moduleSelect" prefWidth="200.0" promptText="Module">
+                            <VBox.margin>
+                                <Insets left="10.0" top="10.0"/>
+                            </VBox.margin>
+                        </ComboBox>
+                        <ComboBox fx:id="assessmentSelect" prefWidth="200.0" promptText="Assessment">
+                            <VBox.margin>
+                                <Insets left="10.0" top="10.0"/>
+                            </VBox.margin>
+                        </ComboBox>
+                    </children>
+                </VBox>
+                <VBox alignment="TOP_CENTER" prefHeight="76.0" prefWidth="301.0">
+                    <children>
+                        <Label fx:id="moduleDetails" text="Module details"/>
+                        <Label fx:id="assessmentDetails" text="Semester details"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <children>
+                <Button onAction="#displayAddTask" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                        minWidth="-Infinity" mnemonicParsing="false" prefWidth="200.0" text="Add task"/>
+                <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                        mnemonicParsing="false" prefWidth="200.0" text="Add milestone">
+                    <VBox.margin>
+                        <Insets top="20.0"/>
+                    </VBox.margin>
+                </Button>
+            </children>
+        </VBox>
+    </children>
+</VBox>
