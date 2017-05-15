@@ -18,7 +18,7 @@ import java.util.Iterator;
 public class GanttChart<X,Y> extends XYChart<X,Y> {
     private double frameHeight = 10;
 
-    private static class MetaData {
+    public static class MetaData {
         protected long length;
         protected String style;
 

@@ -23,8 +23,8 @@ public class Assessment {
     private int weight;
     private Date deadline;
     private DoubleProperty completion = new SimpleDoubleProperty(); // Percentage
-    private Map<Task, Task> tasks = new HashMap<>();
-    private Map<Milestone, Milestone> milestones = new HashMap<>();
+    private HashMap<Task, Task> tasks = new HashMap<>();
+    private HashMap<Milestone,Milestone> milestones = new HashMap<>();
 
     // Foreign key code module
     //private String moduleCode;
@@ -52,41 +52,14 @@ public class Assessment {
 
     public int getId() { return id; }
 
-    public void setId(int id) { this.id = id;}
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
+    public Type getType() { return type; }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getWeight() {
         return weight;
-    }
-
-    public Map<Task, Task> getTasks() { return tasks; }
-
-    //public void addTasks(Map<Integer, Task> tasks) { this.tasks = tasks; }
-
-    //public void addAllTasks(ArrayList<Task> tasks) { this.tasks = tasks; }
-
-    public void addTask(Task task) {
-        if (!tasks.containsKey(task))
-            tasks.put(task, task);
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
     }
 
     public Date getDeadLine() {
@@ -97,7 +70,18 @@ public class Assessment {
         return completion.get();
     }
 
-    //public String getModuleCode() { return moduleCode; }
+    public HashMap<Milestone,Milestone> getMilestones() { return new HashMap<>(milestones);}
+
+
+    public void setId(int id) { this.id = id;}
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
@@ -107,12 +91,19 @@ public class Assessment {
         this.completion.set(completion);
     }
 
+    public Map<Task, Task> getTasks() { return new HashMap<>(tasks); }
+
+    //public void addTasks(Map<Integer, Task> tasks) { this.tasks = tasks; }
+
+    //public void addAllTasks(ArrayList<Task> tasks) { this.tasks = tasks; }
+
+
     // Methods ---------------------------------------------------------------------------------------------
 
     public DoubleProperty completionProperty() {
         return completion;
     }
-    //
+
     public void calculateCompletion(){
         double count = 0;
         for(HashMap.Entry entry : tasks.entrySet()) {
@@ -122,6 +113,11 @@ public class Assessment {
         }
         count = count / tasks.entrySet().size();
         completion.setValue(count);
+    }
+
+    public void addTask(Task task) {
+        if (!tasks.containsKey(task))
+            tasks.put(task, task);
     }
     // Overrides -------------------------------------------------------------------------------------------------------
 

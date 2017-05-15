@@ -1,21 +1,22 @@
 package View;
 
 import Controller.SemesterController;
-import Model.Assessment;
-import Model.Module;
-import Model.SemesterProfile;
-import Model.User;
+import Model.*;
 import Utils.StageHandler;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Didac on 08/05/2017.
@@ -80,6 +81,7 @@ public class DashBoardView extends SemesterController {
                     Button button = new Button(moduleEntry.getValue().getTitle() + "'s \n ganttchart");
                     button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                     button.setWrapText(true);
+                    button.setOnAction(event -> openChart(moduleEntry.getValue()));
 
                     ProgressBar progressBar = new ProgressBar(0);
                     progressBar.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -139,5 +141,43 @@ public class DashBoardView extends SemesterController {
         ROW_INDEX_UPCOMING = 0;
         ROW_INDEX_MISSED = 0;
 
+    }
+    public void openChart(Module module){
+
+        HashMap<Assessment,Assessment> assessments = module.getAssessments();
+        HashMap<Task,Task> tasks = new HashMap<>();
+        HashMap<Activity, Activity> activities = new HashMap<>();
+        HashMap<Milestone,Milestone> milestones = new HashMap<>();
+
+        ArrayList<String> assessmentTitles = new ArrayList<>();
+
+        for(HashMap.Entry entryAssessment : assessments.entrySet()){
+            Assessment assessment = (Assessment)entryAssessment.getValue();
+            //milestones.put(assessment.getMilestone(),assessment.getMilestone());
+            tasks.putAll(assessment.getTasks());
+            assessmentTitles.add(assessment.getTitle());
+        }
+        for(HashMap.Entry entryTask : tasks.entrySet()){
+            activities.putAll(((Task)entryTask.getValue()).getActivities());
+        }
+        NumberAxis xAxis = new NumberAxis();
+        CategoryAxis yAxis = new CategoryAxis();
+        GanttChart ganttChart = new GanttChart<>(xAxis,yAxis);
+
+        ganttChart.setTitle(module.getTitle()+" chart");
+        ganttChart.setFrameHeight(40);
+
+
+        xAxis.setLabel("");
+        xAxis.setTickLabelFill(Color.CHOCOLATE);
+        xAxis.setMinorTickCount(4);
+
+        yAxis.setLabel("");
+        yAxis.setTickLabelFill(Color.CHOCOLATE);
+        yAxis.setTickLabelGap(10);
+        yAxis.setCategories(FXCollections.observableArrayList(assessmentTitles));
+
+        XYChart.Series series = new XYChart.Series();
+        //series.getData().add(new XYChart.Data(tasks.get, assessmentTitles.get(0), new GanttChart.MetaData( 1, "status-red")));
     }
 }

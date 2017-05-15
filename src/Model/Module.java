@@ -14,8 +14,7 @@ public class Module {
     private Integer moduleId;
     private String title;
     private String code;
-    private Map<Assessment, Assessment> assessments = new HashMap<>();
-    private Map<Activity, Activity> activities = new HashMap<>();
+    private HashMap<Assessment, Assessment> assessments = new HashMap<>();
     //private int semesterID;
 
     // Constructors ----------------------------------------------------------------------------------------------------
@@ -60,8 +59,7 @@ public class Module {
 //        this.assessments = assessments;
 //    }
 
-    public Map<Assessment, Assessment> getAssessments() {return assessments;}
-
+    public HashMap<Assessment, Assessment> getAssessments() {return assessments;}
     // Overrides -------------------------------------------------------------------------------------------------------
 
     @Override
