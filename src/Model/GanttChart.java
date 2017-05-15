@@ -5,15 +5,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.chart.Axis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
-
-import java.awt.*;
+import javafx.scene.shape.*;
 import java.util.Iterator;
 
 /**
  * Gantt chart representation for a module. 
- * Created by 100125468 on 14/05/2017.
+ * Created by Dinara Adilova on 14/05/2017.
  */
 public class GanttChart<X,Y> extends XYChart<X,Y> {
     private double frameHeight = 10;
@@ -55,7 +55,7 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
 
     // Helper functions to retrieve metadata from data items
     private static String getStyle(Object obj) { return ((MetaData)obj).getStyle(); }
-    private static String getLength(Object obj) { return ((MetaData)obj).getStyle(); }
+    private static double getLength(Object obj) { return ((MetaData)obj).getLength(); }
     // Overrides--------------------------------------------------------------------------------------------------------
     @Override
     protected void dataItemAdded(Series<X,Y> series, int dataIndex, Data<X,Y> dataItem) {
@@ -65,7 +65,9 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
 
     @Override
     protected void dataItemRemoved(Data item, Series series) {
-
+        Node frame = item.getNode();
+        getPlotChildren().remove(frame);
+        removeDataItemFromDisplay(series,item);
     }
 
     @Override
@@ -74,13 +76,22 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
     }
 
     @Override
-    protected void seriesAdded(Series series, int seriesIndex) {
-
+    protected void seriesAdded(Series<X,Y> series, int seriesIndex) {
+        for(int c=0; c< series.getData().size();c++){
+            Data<X,Y> xyData = series.getData().get(c);
+            Node frameHolder = createFrameHolder(series,seriesIndex,xyData,c);
+            getPlotChildren().add(frameHolder);
+        }
     }
 
-    @Override
-    protected void seriesRemoved(Series series) {
 
+    @Override
+    protected void seriesRemoved(Series<X,Y> series) {
+        for(XYChart.Data<X,Y> xydata : series.getData() ){
+            Node holder = xydata.getNode();
+            getPlotChildren().remove(holder);
+        }
+        removeSeriesFromDisplay(series);
     }
     private Node createFrameHolder(Series<X,Y> series, int seriesIndex, Data<X,Y> dataItem, int dataIndex){
         Node frameHolder = dataItem.getNode();
@@ -104,14 +115,30 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
                     continue;
                 }
                 Node frame = data.getNode();
-                Rectangle rectangle;
+                javafx.scene.shape.Rectangle rectangle;
                 if (frame != null) {
                     if (frame instanceof StackPane) {
                         StackPane region = (StackPane)data.getNode();
                         if (region.getShape() == null) {
-                            //rectangle = new Rectangle(getLength(data.getExtraValue()),getFrameHeight());
+                            double width = getLength(data.getExtraValue());
+                            rectangle = new javafx.scene.shape.Rectangle(width,getFrameHeight());
+                        } else if( region.getShape() instanceof Rectangle) {
+                            rectangle = (Rectangle)region.getShape();
+                        } else  return;
+                        rectangle.setWidth(getLength(data.getExtraValue()) * ((getXAxis() instanceof NumberAxis)
+                                ? Math.abs(((NumberAxis)getXAxis()).getScale()) : 1));
+                        rectangle.setHeight(getFrameHeight() * ((getYAxis() instanceof NumberAxis)
+                                ? Math.abs(((NumberAxis)getYAxis()).getScale()) : 1));
+                        y -= getFrameHeight() / 2;
 
-                        }
+                        region.setShape(null);
+                        region.setShape(rectangle);
+                        region.setScaleShape(false);
+                        region.setCenterShape(false);
+                        region.setCacheShape(false);
+
+                        frame.setLayoutX(x);
+                        frame.setLayoutY(y);
                     }
 
                 }
@@ -119,4 +146,5 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
 
         }
     }
+
 }
