@@ -62,14 +62,6 @@ public class SemesterView extends SemesterController implements ControlledScene{
         semesterView.prefWidthProperty().bind(stageHandler.getStage().widthProperty());
         semesterView.prefHeightProperty().bind(stageHandler.getStage().heightProperty());
 
-        mainViewController.mainViewBox.prefHeightProperty().bind(
-                semesterView.heightProperty()
-        );
-
-        mainViewController.mainViewBox.prefWidthProperty().bind(
-                semesterView.widthProperty()
-        );
-
         dashboardController.dashboardGrid.prefWidthProperty().bind(
                 semesterView.widthProperty()
         );
@@ -77,6 +69,16 @@ public class SemesterView extends SemesterController implements ControlledScene{
         dashboardController.dashboardGrid.prefHeightProperty().bind(
                 semesterView.heightProperty()
         );
+
+        mainViewController.mainViewPane.prefHeightProperty().bind(
+                semesterView.heightProperty()
+        );
+
+        mainViewController.mainViewPane.prefWidthProperty().bind(
+                semesterView.widthProperty()
+        );
+
+
 
         // POPULATE DASHBOARD TAB PANE •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 

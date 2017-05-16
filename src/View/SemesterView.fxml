@@ -31,7 +31,7 @@
         <tabs>
             <Tab text="Main">
             <content>
-                <fx:include fx:id="mainView" source="MainView.fxml"/>
+                <fx:include fx:id="mainView" source="NewMain.fxml"/>
             </content>
           </Tab>
             <Tab text="Dashboard">

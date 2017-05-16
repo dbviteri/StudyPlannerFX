@@ -107,6 +107,19 @@ public class Assessment {
         this.completion.set(completion);
     }
 
+    public boolean deleteTask(Task task) {
+        for (HashMap.Entry entry : tasks.entrySet()) {
+            if (!(entry.getValue()).equals(task)) {
+                for (HashMap.Entry dependency : ((Task) entry.getValue()).getDependencies().entrySet()) {
+                    if (dependency.getValue().equals(task)) { return false; }
+                }
+            }
+        }
+        //if (!task.getDependencies().isEmpty()) return false;
+        tasks.remove(task);
+        return true;
+    }
+
     // Methods ---------------------------------------------------------------------------------------------
 
     public DoubleProperty completionProperty() {

@@ -1,69 +1,149 @@
 package View;
 
 import Controller.SemesterController;
+import Model.Activity;
 import Model.Assessment;
 import Model.Module;
 import Model.Task;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * Created by Didac on 14/05/2017.
- */
 public class MainView extends SemesterController {
 
     @FXML
-    VBox mainViewBox;
-
+    GridPane mainViewPane;
     @FXML
-    HBox upperLeftBox;
-
-    @FXML
-    Label moduleDetails;
-
-    @FXML
-    Label assessmentDetails;
-
-    @FXML
-    Label taskDetails;
-
+    ProgressBar taskProgressBar;
     @FXML
     ComboBox<Module> moduleSelect;
-
     @FXML
     ComboBox<Assessment> assessmentSelect;
-
     @FXML
     ComboBox<Task> taskSelect;
+    @FXML
+    TextArea moduleDetails;
+    @FXML
+    TextArea taskDetails;
+    @FXML
+    TableView<Task> taskTable;
+    @FXML
+    TableView<Activity> activitiesTable;
+
+    private ObservableList<Task> taskObservableList; // All the tasks inside an assessment
+    private ObservableList<Activity> activityObservableList; // All the activities inside an activity
 
     /**
-     * Loads the main view inside the semester view.
-     * Populates the module details and semester details.
-     * It also opulates the combo boxes and handles the buttons for
-     * adding a new task and milestone.
+     * Adds the modules from semester profile to the combo box
      */
     public void load() {
-        upperLeftBox.prefHeightProperty().bind(
-                upperLeftBox.heightProperty()
-        );
-
-        upperLeftBox.prefWidthProperty().bind(
-                upperLeftBox.widthProperty()
-        );
-
         moduleSelect.getItems().addAll(dbhandler.getSemesterSession().getModules().values());
+        addListeners();
+    }
 
+    /**
+     * Deletes a task from the observable list
+     * If unsuccessful, it will show an alert.
+     */
+    public void deleteTask() {
+        Task selectedTask = taskTable.getSelectionModel().getSelectedItem();
+        System.out.println("BEFORE: " + assessmentSelect.getValue().getTasks().size());
+        if (!assessmentSelect.getValue().deleteTask(selectedTask)) {
+            new AlertDialog(Alert.AlertType.ERROR, "Can't delete task, it has dependencies");
+            return;
+        }
+        //assessmentSelect.getValue().deleteTask(selectedTask);
+        taskObservableList.remove(selectedTask);
+        System.out.println("AFTER: " + assessmentSelect.getValue().getTasks().size());
+    }
+
+    /**
+     * Displays the view to add a task.
+     * @param actionEvent Action event needed to hide parent window
+     */
+    public void addTask(ActionEvent actionEvent) {
+        if (assessmentSelect.getValue() == null) return;
+
+        Stage parentStage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TaskView.fxml"));
+        fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new TaskView(taskObservableList));
+        Parent root;
+        try {
+            root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Add task");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.setResizable(false);
+            stage.show();
+            stage.setOnCloseRequest(event ->
+                    parentStage.show()
+            );
+            parentStage.hide();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Adds columns to the table view. It essentially populates the table with tasks.
+     */
+    private void addTaskColumns() {
+        // Add tasks to table
+        TableColumn<Task, String> titleCol = new TableColumn<>("Title");
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+
+        TableColumn<Task, Task.TaskType> typeCol = new TableColumn<>("Type");
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        TableColumn<Task, Integer> timeCol = new TableColumn<>("Time");
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
+
+        TableColumn<Task, Integer> criterionCol = new TableColumn<>("Criterion");
+        criterionCol.setCellValueFactory(new PropertyValueFactory<>("criterion"));
+
+        TableColumn<Task, Integer> progressCol = new TableColumn<>("Progress");
+        progressCol.setCellValueFactory(new PropertyValueFactory<>("progress"));
+
+        taskTable.getColumns().addAll(titleCol, typeCol, timeCol, criterionCol, progressCol);
+    }
+
+    /**
+     * Adds columns to the table view. It essentially populates the table with activities.
+     */
+    private void addActivityColumns() {
+        TableColumn<Activity, String> titleCol = new TableColumn<>("Title");
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+
+        TableColumn<Activity, String> quantityCol = new TableColumn<>("Quantity");
+        quantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+        TableColumn<Activity, String> timeCol = new TableColumn<>("Time Spent");
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
+
+        activitiesTable.getColumns().addAll(titleCol, quantityCol, timeCol);
+    }
+
+    /**
+     * Function to handle all listeners in main view. Communicates table views between them.
+     * It also updates them and combo boxes based on the observable lists listeners.
+     */
+    private void addListeners() {
+
+        // Combo box listener:
+        // It populates the assessment combo box with the selected module.
         moduleSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
             assessmentSelect.getItems().clear();
             if (newValue != null) {
@@ -76,60 +156,106 @@ public class MainView extends SemesterController {
             }
         });
 
+        // Assessment combo box listener:
+        // Inside there's a observable list listener, which gets updated whenever there's a
+        // change with the combo box
         assessmentSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
+            taskTable.getItems().clear();
+            if (newValue == null) return;
+
+            moduleDetails.setText(moduleSelect.getValue().toString() + "\n" + assessmentSelect.getValue().toString());
+
             taskSelect.getItems().clear();
-            if (newValue != null) {
-                assessmentDetails.setText(assessmentSelect.getValue().toString());
-                moduleDetails.setText(moduleSelect.getValue().toString());
+            taskTable.getColumns().clear();
 
-                // Add tasks to combobox
-                taskSelect.getItems().addAll(assessmentSelect.getValue().getTasks().values());
-            }
+            taskObservableList = FXCollections.observableArrayList(assessmentSelect.getValue().getTasks().values());
+            taskSelect.getItems().addAll(taskObservableList);
+
+            // Updates the task combo box and adds or removes from the
+            // actual reference (SemesterProfile) in session.
+            taskObservableList.addListener((ListChangeListener<Task>) pChange -> {
+                pChange.next();
+                System.out.println("ASDF");
+                if (pChange.wasRemoved()) {
+                    taskSelect.getItems().clear();
+                    if (assessmentSelect.getValue() == null) return;
+                    assessmentSelect.getValue().deleteTask(pChange.getRemoved().get(0));
+                    taskSelect.getItems().clear();
+                    taskSelect.getItems().addAll(taskObservableList);
+                } else if (pChange.wasAdded()) {
+                    System.out.println("BEFORE: " + assessmentSelect.getValue().getTasks().size());
+                    //int index = pChange.getTo() - pChange.getFrom();
+                    assessmentSelect.getValue().addTask(pChange.getAddedSubList().get(pChange.getAddedSubList().size() - 1));
+                    taskSelect.getItems().clear();
+                    taskSelect.getItems().addAll(taskObservableList);
+                    System.out.println("AFTER: " + assessmentSelect.getValue().getTasks().size());
+                }
+            });
+
+            addTaskColumns();
+            taskTable.setItems(taskObservableList);
         });
 
+        // Task combo box listener:
         taskSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null){
-                taskDetails.setText(newValue.toString());
+            if (newValue == null) {
+                taskProgressBar.setProgress(0);
+                taskDetails.clear();
+                activitiesTable.getColumns().clear();
+                return;
             }
+
+            taskProgressBar.setProgress(taskSelect.getValue().getProgress() / 100);
+
+            taskDetails.setText(taskSelect.getValue().toString());
+
+            activitiesTable.getColumns().clear();
+
+            activityObservableList = FXCollections.observableArrayList(taskSelect.getValue().getActivities().values());
+
+            // Updates the task combo box and adds or removes from the
+            // actual reference (SemesterProfile) in session.
+            activityObservableList.addListener((ListChangeListener<Activity>) pChange -> {
+                pChange.next();
+                System.out.println("ASDF");
+                if (pChange.wasRemoved()) {
+                    if (taskSelect.getValue() == null) return;
+                    taskSelect.getValue().deleteActivity(pChange.getRemoved().get(0));
+                    taskProgressBar.setProgress(taskSelect.getValue().getProgress() / 100);
+                } else if (pChange.wasAdded()) {
+                    System.out.println("BEFORE: " + taskSelect.getValue().getActivities().size());
+                    //int index = pChange.getTo() - pChange.getFrom();
+                    taskSelect.getValue().addActivity(pChange.getAddedSubList().get(pChange.getAddedSubList().size() - 1));
+                    taskProgressBar.setProgress(taskSelect.getValue().getProgress() / 100);
+                    System.out.println("AFTER: " + taskSelect.getValue().getActivities().size());
+                }
+            });
+
+
+            addActivityColumns();
+
+            activitiesTable.setItems(activityObservableList);
         });
-
-//        moduleSelect.getItems().addAll(dbhandler.getSemesterSession().getModules().values());
-
     }
 
     /**
-     * Handles the button event to add a task. Selects the current semester chosen in combo box and
-     * passess it to TaskCreateView so it knows where the task should be created.
+     * Displays the activity view to be added to the activity observable list.
+     * The list is passed as a parameter to the add activity view so it can be changed.
+     *
+     * @param actionEvent Used to hide the parent stage
      */
-    public void displayAddTask(ActionEvent actionEvent) {
-        if (assessmentSelect.getValue() == null) return;
-
-        Stage parentStage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TaskView.fxml"));
-        fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new TaskView(assessmentSelect.getValue()));
-        Parent root;
-        try {
-            root = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Add task");
-            stage.setScene(new Scene(root, 450, 450));
-            stage.setResizable(false);
-            stage.show();
-            stage.setOnCloseRequest(event -> parentStage.show());
-            parentStage.hide();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void displayAddActivity(ActionEvent actionEvent) {
+    public void addActivity(ActionEvent actionEvent) {
         if (taskSelect.getValue() == null) return;
+
+        if (taskSelect.getValue().getProgress() == 100) {
+            new AlertDialog(Alert.AlertType.INFORMATION, "You can't add more activities. The task is completed.");
+            return;
+        }
 
         Stage parentStage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ActivityView.fxml"));
-        fxmlLoader.setControllerFactory((Class<?> CreateActivityView) -> new ActivityView(taskSelect.getValue()));
+        fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new ActivityView(activityObservableList));
         Parent root;
         try {
             root = fxmlLoader.load();
@@ -138,10 +264,27 @@ public class MainView extends SemesterController {
             stage.setScene(new Scene(root, 450, 450));
             stage.setResizable(false);
             stage.show();
-            stage.setOnCloseRequest(event -> parentStage.show());
+            stage.setOnCloseRequest(event ->
+                    parentStage.show()
+            );
             parentStage.hide();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Deletes an activity from the observable activity list
+     */
+    public void deleteActivity() {
+        Activity selectedActivity = activitiesTable.getSelectionModel().getSelectedItem();
+        System.out.println("BEFORE: " + taskSelect.getValue().getActivities().size());
+        if (!taskSelect.getValue().deleteActivity(selectedActivity)) {
+            new AlertDialog(Alert.AlertType.ERROR, "Can't delete activity");
+            return;
+        }
+        //assessmentSelect.getValue().deleteTask(selectedTask);
+        activityObservableList.remove(selectedActivity);
+        System.out.println("AFTER: " + taskSelect.getValue().getActivities().size());
     }
 }

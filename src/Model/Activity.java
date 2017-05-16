@@ -2,6 +2,7 @@ package Model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Model representation of an activity.
@@ -14,7 +15,7 @@ public class Activity {
 
     private Integer activityId;
     private String title;
-    private int quantity;
+    private int quantity; // Contributes to criterion in task
     private int time;
     private Map<ActivityNote, ActivityNote> notes = new HashMap<>();
 
@@ -23,6 +24,9 @@ public class Activity {
     public Activity() {}
 
     public Activity(String title, int quantity, int time) {
+        if (activityId == null) {
+            this.activityId = UUID.randomUUID().hashCode();
+        }
         this.title = title;
         this.quantity = quantity;
         this.time = time;
@@ -91,6 +95,8 @@ public class Activity {
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) return false;
+
         if (getClass() != obj.getClass())
             return false;
 

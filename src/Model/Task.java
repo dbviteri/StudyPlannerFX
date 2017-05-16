@@ -1,9 +1,6 @@
 package Model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Model representation for a task
@@ -21,7 +18,8 @@ public class Task {
     private int time;
     private String criterion;
     private int criterionValue;
-    private int progress; // related to criterion value
+    private double criterionSoFar;
+    private double progress; // related to criterion value
     // TODO :'a task cannot be started before another has been completed'
 
     private Map<Task, Task> dependencies = new HashMap<>();
@@ -35,6 +33,9 @@ public class Task {
     // TODO: Decide whether we need constructors
     public Task(String title, TaskType type, String criterion,
                 int criterionValue, int progress) {
+        if (id == null) {
+            this.id = UUID.randomUUID().hashCode();
+        }
         this.title = title;
         this.type = type;
         this.criterion = criterion;
@@ -102,12 +103,21 @@ public class Task {
         this.criterionValue = criterionValue;
     }
 
-    public int getProgress() {
+    public double getProgress() {
         return progress;
     }
 
     public void setProgress(int progress) {
         this.progress = progress;
+    }
+
+    public boolean deleteActivity(Activity activity) {
+        if (!activities.containsKey(activity)) return false;
+        this.criterionSoFar -= activity.getQuantity();
+        this.time -= activity.getTime();
+        this.progress = (criterionSoFar / criterionValue) * 100;
+        activities.remove(activity);
+        return true;
     }
 
     //public Map<Task, Task> getDependencyTasks() {return dependencies;}
@@ -116,6 +126,9 @@ public class Task {
     public void addActivity(Activity activity) {
         if(!activities.containsKey(activity)) {
             activities.put(activity, activity);
+            criterionSoFar += activity.getQuantity();
+            progress = (criterionSoFar / criterionValue) * 100;
+            System.out.println(progress);
             this.time += activity.getTime();
         }
     }
@@ -145,7 +158,7 @@ public class Task {
             return true;
         }
         else
-            progress = criterionValue / completion * 100;
+            progress = (criterionValue / completion) * 100;
             return false;
     }
 

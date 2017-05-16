@@ -1,7 +1,7 @@
 package View;
 
-import Model.Assessment;
 import Model.Task;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -35,17 +35,16 @@ public class TaskView {
     @FXML
     ComboBox<Integer> criteriaValue;
 
-    private Assessment assessment;
+    private ObservableList<Task> tasks;
 
-    TaskView(Assessment assessment) {
-        this.assessment = assessment;
+    TaskView(ObservableList<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public void initialize() {
-        taskLbl.setText("Adding a task to: " + assessment.getTitle());
-        dependencyList.getItems().addAll(assessment.getTasks().values());
+        taskLbl.setText("Adding a task");
+        dependencyList.getItems().addAll(tasks);
         typeField.getItems().addAll(Task.TaskType.values());
-
     }
 
     public void addTask(ActionEvent actionEvent) {
@@ -53,9 +52,6 @@ public class TaskView {
         if (criteriaField.getText().isEmpty()) return;
         if (typeField.getValue() == null) return;
         if (criteriaValue.getValue() == null) return;
-
-        System.out.println("BEFORE ADDING: ");
-        System.out.println(assessment.getTasks().size());
 
         String taskTitle = titleField.getText();
         String criteria = criteriaField.getText();
@@ -65,13 +61,9 @@ public class TaskView {
         if (dependencyList.getValue() != null) {
             Task task = new Task(taskTitle, taskType, criteria, critValue, 0);
             task.addDependency(dependencyList.getValue());
-            assessment.addTask(task);
+            tasks.add(task);
         } else {
-            assessment.addTask(new Task(taskTitle, taskType, criteria, critValue, 0));
+            tasks.add(new Task(taskTitle, taskType, criteria, critValue, 0));
         }
-
-        System.out.println("AFTER ADDING: ");
-        System.out.println(assessment.getTasks().size());
-        //((Node)(actionEvent.getSource())).getScene().getWindow();
     }
 }

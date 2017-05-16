@@ -46,7 +46,7 @@ public class SemesterController {
                     "LEFT JOIN Assessment ON (Module.module_id = Assessment.module_id) " +
                     "LEFT JOIN Task ON (Assessment.assessment_id = Task.assessment_id) " +
                     "LEFT JOIN Task dep_task ON (Task.task_id = dep_task.dependency) " +
-                    "LEFT JOIN Activity ON (Activity.task_id = Task.task_id) " +
+                    "LEFT JOIN Activity ON (Activity.activity_ID = Task.activity_ID) " +
                     "LEFT JOIN Note ON (Note.activity_ID = Activity.activity_ID OR Note.task_ID = Task.task_id) " +
                     "WHERE user_id = ?";
     private static final String QUERY_INSERT_SEMESTER =
