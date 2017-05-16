@@ -4,9 +4,7 @@ import com.sun.jdi.StackFrame;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.chart.Axis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.*;
 
@@ -21,8 +19,8 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
     private double frameHeight = 10;
 
     public static class MetaData {
-        protected long length;
-        protected String style;
+        public long length;
+        public String style;
 
         public MetaData(long length, String style){
             //super();
@@ -49,6 +47,9 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
     }
     public GanttChart(Axis<X>X, Axis<Y> Y, ObservableList<Series<X,Y>> data) {
         super(X,Y);
+        if (!(X instanceof NumberAxis && Y instanceof CategoryAxis)) {
+            throw new IllegalArgumentException("Axis type incorrect, X and Y should both be NumberAxis");
+        }
         setData(data);
 
     }
@@ -56,7 +57,7 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
     public void setFrameHeight(double frameHeight){ this.frameHeight = frameHeight;}
 
     // Helper functions to retrieve metadata from data items
-    private static String getStyle(Object obj) { return ((MetaData)obj).getStyle(); }
+    private static String getStyleClass(Object obj) { return ((MetaData)obj).getStyle(); }
     private static double getLength(Object obj) { return ((MetaData)obj).getLength(); }
     // Overrides--------------------------------------------------------------------------------------------------------
     @Override
@@ -70,11 +71,6 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
         Node frame = item.getNode();
         getPlotChildren().remove(frame);
         removeDataItemFromDisplay(series,item);
-    }
-
-    @Override
-    protected void dataItemChanged(Data item) {
-
     }
 
     @Override
@@ -123,11 +119,11 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
     }
     private Node createFrameHolder(Series<X,Y> series, int seriesIndex, Data<X,Y> dataItem, int dataIndex){
         Node frameHolder = dataItem.getNode();
-        if (frameHolder != null){
+        if (frameHolder == null){
             frameHolder = new StackPane();
             dataItem.setNode(frameHolder);
         }
-        frameHolder.getStyleClass().add(getStyle(dataItem.getExtraValue()));
+        frameHolder.getStyleClass().add(getStyleClass(dataItem.getExtraValue()));
         return frameHolder;
     }
     @Override
@@ -175,4 +171,6 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
         }
     }
 
+    @Override
+    protected void dataItemChanged(Data item) { }
 }

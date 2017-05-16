@@ -37,7 +37,8 @@ public class RegisterView extends UserController implements ControlledScene{
      */
     @FXML
     public void registerUser(){
-        SemesterProfile semesterProfile = parseProfile();
+        SemesterProfile semesterProfile = null;
+        semesterProfile = parseProfile();
         if (semesterProfile == null) {
             new AlertDialog(Alert.AlertType.ERROR, "Wrong file.");
             return;
@@ -85,14 +86,16 @@ public class RegisterView extends UserController implements ControlledScene{
      */
     @FXML
     private SemesterProfile parseProfile() {
+        File file = null;
         final FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(stageHandler.getStage());
+        file = fileChooser.showOpenDialog(stageHandler.getStage());
 
         SemesterProfile semesterProfile = null;
-
-        semesterProfile = FileParser.parseFile(file);
-
-        return semesterProfile;
+        if(file != null){
+            semesterProfile = FileParser.parseFile(file);
+            return semesterProfile;
+        }
+        return null;
     }
 
     private File directRegistry(){
