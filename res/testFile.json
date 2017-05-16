@@ -18,7 +18,12 @@
 						{"title": "BigIntAdd",
 						"type" : "assignment",
 						"weight": 30,
-						"deadline": "25/09/2017"}
+						"deadline": "25/09/2017"},
+
+						{"title" : "Exam Architectures",
+						 "type" : "exam",
+						 "weight" : 70,
+						 "deadline": "05/10/2017" }
 						]
 			},
 			{"title": "Data structures",

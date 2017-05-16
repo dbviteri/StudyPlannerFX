@@ -1,8 +1,8 @@
 .status-red {
-    -fx-background-color:rgba(128,0,0,0.7);
+    -fx-background-color: rgba(149, 14, 15, 0.7);
 }
 .status-green {
-    -fx-background-color:rgba(0,128,0,0.7);
+    -fx-background-color: rgba(59, 129, 112, 0.7);
 }
 .status-purple {
     -fx-background-color: rgba(128, 28, 121, 0.7);
