@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -9,6 +10,7 @@ import java.util.HashMap;
 public class Milestone {
     private String title;
     private boolean isComplete;
+    private Date deadline;
     private HashMap<Task,Task> tasks;
 
     public Milestone(String title){
@@ -25,6 +27,7 @@ public class Milestone {
     public boolean getIsComplete(){
         return isComplete;
     }
+    public Date getDeadline() { return deadline; }
     public HashMap<Task,Task> getTasks() { return new HashMap<>(tasks); }
 
     public void setTitle(String title){
@@ -33,6 +36,7 @@ public class Milestone {
     public void setComplete(boolean isComplete){
         this.isComplete = isComplete;
     }
+    public void setDeadline(Date deadline) { this.deadline = deadline; }
 
     /** Function used to check if milestone is complete
      *  by checking if every depending task is complete
