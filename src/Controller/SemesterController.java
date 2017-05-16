@@ -9,6 +9,7 @@ import View.SemesterView;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -30,7 +31,7 @@ public class SemesterController implements  DBQuerry {
             "SELECT start_date, end_date FROM SemesterProfile WHERE semester_id = ?";
     private static final String QUERY_USER_SEMESTER =
             //"SELECT * FROM Semester_Profile WHERE Semester_Profile.user_id = ?";
-            "SELECT Semester_Profile.*, Module.*, Assessment.*, Task.*," +
+            "SELECT Semester_Profile.*, Module.*, Assessment.*, Milestone.*, Task.*," +
                     "dep_task.task_id AS 'dep_id'," +
                     "dep_task.task_title AS 'dep_title'," +
                     "dep_task.task_type AS 'dep_type'," +
@@ -47,6 +48,7 @@ public class SemesterController implements  DBQuerry {
                     "FROM Semester_Profile " +
                     "JOIN Module ON (Semester_Profile.semester_id = Module.Semester_ID) " +
                     "LEFT JOIN Assessment ON (Module.module_id = Assessment.module_id) " +
+                    "LEFT JOIN Milestone ON (Assessment.milestone_id = Milestone.Milestone_id) " +
                     "LEFT JOIN Task ON (Assessment.assessment_id = Task.assessment_id) " +
                     "LEFT JOIN Task dep_task ON (Task.task_id = dep_task.dependency) " +
                     "LEFT JOIN Activity ON (Activity.activity_ID = Task.activity_ID) " +
@@ -128,7 +130,6 @@ public class SemesterController implements  DBQuerry {
         Map<Module, Module> modules = semesterProfile.getModules();
         //ArrayList<Module> modules = semesterProfile.getModules();
         do {
-
             /** BUILD SEMESTER **/
             semesterProfile.setSemesterId(resultSet.getInt("semester_id"));
             semesterProfile.setStartDate(resultSet.getDate("start_date"));
@@ -145,10 +146,30 @@ public class SemesterController implements  DBQuerry {
 
             modules.get(module).addAssessment(assessment);
 
+            Milestone milestone = null;
+            /** BUILD MILESTONES IF ASSESSMENT HAS THEM **/
+            int milestone_id = resultSet.getInt("milestone_id");
+            if (!resultSet.wasNull()) {
+                String title = resultSet.getString("milestone_title");
+                double progress = resultSet.getDouble("milestone_progress");
+                Date mDate = resultSet.getDate("milestone_start");
+                Date deadline = resultSet.getDate("milestone_deadline");
+                milestone = new Milestone(milestone_id, title, progress, mDate, deadline);
+
+                modules.get(module).getAssessments().get(assessment).addMilestone(milestone);
+            }
+
+
             /** IF SEMESTER HAS TASK BUILD TASKS AND ADD IT TO MODULES **/
             resultSet.getInt("task_id");
             if (!resultSet.wasNull()) {
                 Task task = taskController.formTask(resultSet);
+
+                // If task milestone id is not null, belongs to a milestone as well
+                resultSet.getInt("task_milestone_id");
+                if (!resultSet.wasNull()) {
+                    milestone.addTask(task);
+                }
 
                 modules.get(module).getAssessments()
                         .get(assessment).addTask(task);

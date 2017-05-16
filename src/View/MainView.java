@@ -1,10 +1,7 @@
 package View;
 
 import Controller.SemesterController;
-import Model.Activity;
-import Model.Assessment;
-import Model.Module;
-import Model.Task;
+import Model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -40,10 +37,15 @@ public class MainView extends SemesterController {
     @FXML
     TableView<Task> taskTable;
     @FXML
+    TableView<Milestone> milestoneActivitiesTable;
+    @FXML
     TableView<Activity> activitiesTable;
+    @FXML
+    ComboBox<Milestone> milestoneSelect;
 
     private ObservableList<Task> taskObservableList; // All the tasks inside an assessment
     private ObservableList<Activity> activityObservableList; // All the activities inside an activity
+    private ObservableList<Milestone> milestoneObservableList; // All the activities inside an activity
 
     /**
      * Adds the modules from semester profile to the combo box
@@ -113,10 +115,7 @@ public class MainView extends SemesterController {
         TableColumn<Task, Integer> criterionCol = new TableColumn<>("Criterion");
         criterionCol.setCellValueFactory(new PropertyValueFactory<>("criterion"));
 
-        TableColumn<Task, Integer> progressCol = new TableColumn<>("Progress");
-        progressCol.setCellValueFactory(new PropertyValueFactory<>("progress"));
-
-        taskTable.getColumns().addAll(titleCol, typeCol, timeCol, criterionCol, progressCol);
+        taskTable.getColumns().addAll(titleCol, typeCol, timeCol, criterionCol);
     }
 
     /**
@@ -133,6 +132,16 @@ public class MainView extends SemesterController {
         timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
 
         activitiesTable.getColumns().addAll(titleCol, quantityCol, timeCol);
+    }
+
+    private void addMilestoneColumns() {
+        TableColumn<Milestone, String> titleCol = new TableColumn<>("Title");
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+
+        TableColumn<Milestone, String> deadlineCol = new TableColumn<>("Deadline");
+        deadlineCol.setCellValueFactory(new PropertyValueFactory<>("deadline"));
+
+        milestoneActivitiesTable.getColumns().addAll(titleCol, deadlineCol);
     }
 
     /**
@@ -161,7 +170,11 @@ public class MainView extends SemesterController {
         assessmentSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
             taskTable.getItems().clear();
             if (newValue == null) return;
+
             moduleDetails.setText(moduleSelect.getValue().toString() + "\n" + assessmentSelect.getValue().toString());
+
+            milestoneActivitiesTable.getItems().clear();
+            milestoneActivitiesTable.getColumns().clear();
 
             taskSelect.getItems().clear();
             taskTable.getColumns().clear();
@@ -192,6 +205,12 @@ public class MainView extends SemesterController {
 
             addTaskColumns();
             taskTable.setItems(taskObservableList);
+
+            milestoneObservableList = FXCollections.observableArrayList(assessmentSelect.getValue().getMilestones().values());
+
+            addMilestoneColumns();
+            milestoneSelect.getItems().addAll(milestoneObservableList);
+            milestoneActivitiesTable.setItems(milestoneObservableList);
         });
 
         // Task combo box listener:
@@ -233,8 +252,8 @@ public class MainView extends SemesterController {
                     taskProgressBar.setProgress(taskSelect.getValue().getProgress() / 100);
                     // Update assessment completion based on the task
                     assessmentSelect.getValue().calculateCompletion();
-                    taskDetails.setText(taskSelect.getValue().toString());
 
+                    taskDetails.setText(taskSelect.getValue().toString());
                     System.out.println("AFTER: " + taskSelect.getValue().getActivities().size());
                 }
             });

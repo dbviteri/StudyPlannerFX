@@ -1,28 +1,36 @@
 package Model;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Model representation for a milestone
  * Created by Tiberiu Voicu-100125468 on 07/05/2017.
  */
 public class Milestone {
+    private Integer id;
     private String title;
-    private DoubleProperty progress;
-    private Date date;
+    private DoubleProperty progress = new SimpleDoubleProperty();
+    private Date start;
+    private Date deadline;
     private HashMap<Task,Task> tasks;
 
-    public Milestone(String title,Date date){
+    public Milestone(String title, Date start, Date deadline) {
         // IF FIRST TIME MILESTONE IS ADDED DATE = CURRENT DATE
+        id = UUID.randomUUID().hashCode();
         this.title = title;
-        this.date = date;
+        this.start = start;
+        this.deadline = deadline;
     }
-    public Milestone(String title, HashMap<Task,Task> tasks, Date date){
-        this(title,date);
-        this.tasks = tasks;
+
+    public Milestone(Integer id, String title, double progress, Date start, Date deadline) {
+        this(title, start, deadline);
+        this.progress.setValue(progress);
+        this.id = id;
     }
 
     public String getTitle(){
@@ -30,7 +38,8 @@ public class Milestone {
     }
 
     public double getProgress() { return progress.get(); }
-    public Date getDeadline() { return date; }
+
+    public Date getDeadline() { return deadline; }
     public HashMap<Task,Task> getTasks() { return new HashMap<>(tasks); }
 
     public void setTitle(String title){
@@ -38,7 +47,8 @@ public class Milestone {
     }
 
     public void setProgress(double progress) {this.progress.set(progress);}
-    public void setDeadline(Date deadline) { this.date = deadline; }
+
+    public void setDeadline(Date deadline) { this.deadline = deadline; }
 
     /** Function used to check if milestone is complete
      *  by checking if every depending task is complete
