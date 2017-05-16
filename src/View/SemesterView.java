@@ -1,5 +1,6 @@
 package View;
 
+import Controller.DatabaseHandler;
 import Controller.SemesterController;
 import Model.SemesterProfile;
 import Model.User;
@@ -18,9 +19,10 @@ import java.io.File;
 /**
  * Created by Didac on 07/05/2017.
  */
-public class SemesterView extends SemesterController implements ControlledScene{
+public class SemesterView implements ControlledScene{
 
     private StageHandler stageHandler;
+    private SemesterController semesterController;
 
     @FXML
     private Menu userMenu;
@@ -44,6 +46,7 @@ public class SemesterView extends SemesterController implements ControlledScene{
      * Constructs a SemesterProfile controller.
      */
     public SemesterView(StageHandler stageHandler){
+        this.semesterController = new SemesterController();
         this.stageHandler = stageHandler;
     }
 
@@ -54,9 +57,9 @@ public class SemesterView extends SemesterController implements ControlledScene{
      */
     public void initialize() {
         //semesterLabel.setText("test");
-        if (dbhandler.getUserSession() == null) return;
+        if (DatabaseHandler.getInstance().getUserSession() == null) return;
 
-        User user = dbhandler.getUserSession();
+        User user = DatabaseHandler.getInstance().getUserSession();
         // DECORATE STAGE ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
         userMenu.setText(user.getFirstname());
@@ -100,11 +103,8 @@ public class SemesterView extends SemesterController implements ControlledScene{
      *
      */
     @FXML
-    public void logOut(){
-        //dbhandler.closeConnection();
-        dbhandler.deleteSession();
-        stageHandler.reloadScene(StageHandler.SCENE.LOGIN);
-        stageHandler.setScene(StageHandler.SCENE.LOGIN, false);
+    public void directLogOut(){
+        semesterController.logOut(stageHandler);
     }
 
     @Override
@@ -122,7 +122,8 @@ public class SemesterView extends SemesterController implements ControlledScene{
         if(file != null){
             semesterProfile = FileParser.parseFile(file);
         }
-       // SemesterController.();
+        semesterController.updateSemester(semesterProfile);
+        directLogOut();
     }
 
 }

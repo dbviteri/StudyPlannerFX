@@ -103,10 +103,10 @@ public class ModuleController {
      * @param module
      * @return
      */
-    public boolean updateModule(Module module){
+    public static boolean updateModule(Module module){
 
         Object[] properties = {
-                module.getId(),
+                //module.getId(),
                 module.getTitle(),
                 module.getCode()
         };

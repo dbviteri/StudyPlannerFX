@@ -13,7 +13,7 @@ public class LoginTest {
     @Test
     public void loginUser() throws Exception {
         LoginView testLoginView = new LoginView();
-        testLoginView.loginUser();
+        testLoginView.directLogIn();
     }
     @Test
     public void addUserToDB(){

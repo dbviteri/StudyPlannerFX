@@ -2,6 +2,9 @@ package Controller;
 
 import Model.*;
 import Utils.SPException;
+import Utils.StageHandler;
+import View.DashBoardView;
+import View.SemesterView;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -73,12 +76,12 @@ public class SemesterController {
 //    public static SemesterProfile find(int userId) {
 //        return find(QUERY_USER_SEMESTER, userId);
 //    }
-    public static void loadSemester(int userId) {
+    public void loadSemester(int userId) {
         Session.addSemesterToUser(find(QUERY_USER_SEMESTER, userId));
     }
 
 
-    private static SemesterProfile find(String sql, Object... properties) {
+    private SemesterProfile find(String sql, Object... properties) {
         SemesterProfile semesterProfile = null;
 
         try (
@@ -92,7 +95,7 @@ public class SemesterController {
         return semesterProfile;
     }
 
-    public static void insertSemester(SemesterProfile semester) {
+    public void insertSemester(SemesterProfile semester) {
         Object[] properties = {
                 semester.getStartDate(),
                 semester.getEndDate(),
@@ -120,7 +123,8 @@ public class SemesterController {
         }
     }
 
-    private static SemesterProfile formSemester(ResultSet resultSet) throws SQLException {
+    private SemesterProfile formSemester(ResultSet resultSet) throws SQLException {
+        TaskController taskController = new TaskController();
         SemesterProfile semesterProfile = new SemesterProfile();
         Map<Module, Module> modules = semesterProfile.getModules();
         //ArrayList<Module> modules = semesterProfile.getModules();
@@ -158,7 +162,7 @@ public class SemesterController {
             /** IF SEMESTER HAS TASK BUILD TASKS AND ADD IT TO MODULES **/
             resultSet.getInt("task_id");
             if (!resultSet.wasNull()) {
-                Task task = TaskController.formTask(resultSet);
+                Task task = taskController.formTask(resultSet);
 
                 // If task milestone id is not null, belongs to a milestone as well
                 resultSet.getInt("task_milestone_id");
@@ -172,7 +176,7 @@ public class SemesterController {
                 /** IF TASK HAS DEPENDENCIES BUILD DEPENDENCY AND ADD IT TO MODULES **/
                 resultSet.getInt("dep_id");
                 if (!resultSet.wasNull()) { // Add the dependency
-                    Task dependency = TaskController.formDependency(resultSet);
+                    Task dependency = taskController.formDependency(resultSet);
 
                     modules.get(module).getAssessments()
                             .get(assessment).getTasks().get(task)
@@ -215,8 +219,17 @@ public class SemesterController {
         return semesterProfile;
     }
 
-    public static void updateSemester(){
-
+    public void updateSemester(SemesterProfile semesterProfile){
+        for(Module module : semesterProfile.getModules().values()) {
+            for(Assessment assessment : module.getAssessments().values()){
+                AssessmentController.updateDeadline(assessment);
+            }
+        }
+    }
+    public void logOut(StageHandler stageHandler){
+        dbhandler.deleteSession();
+        stageHandler.reloadScene(StageHandler.SCENE.LOGIN);
+        stageHandler.setScene(StageHandler.SCENE.LOGIN,false);
     }
 
 

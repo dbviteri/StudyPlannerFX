@@ -77,7 +77,8 @@ public class DashBoardView extends SemesterController {
                 // Should go to upcoming deadlines
                 moduleInfo.setText(
                         moduleInfo.getText() +
-                                "ASSESSMENT: " + assessment.toString() + "\n" +
+                                "ASSESSMENT: " + assessment.toString() + "\n" + "Deadline : "
+                                + assessment.getDeadLine() + "\n" +
                                 "Progress for this assessment: \n"
                 );
 

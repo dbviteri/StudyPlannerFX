@@ -11,12 +11,12 @@ import org.junit.Test;
  * Created by Didac on 09/05/2017.
  */
 public class MasterControllerTest {
-    User user;
-
-    @Before
-    public void setUp() throws Exception {
-        user = UserController.find("xdn15mcu", "test");
-    }
+//    User user;
+//
+//    @Before
+//    public void setUp() throws Exception {
+//        user = UserController.find("xdn15mcu", "test");
+//    }
 
     @Test
     public void getSemester() throws Exception {

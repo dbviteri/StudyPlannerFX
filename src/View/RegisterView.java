@@ -17,7 +17,7 @@ import java.io.File;
 /**
  * Created by Didac on 05/05/2017.
  */
-public class RegisterView extends UserController implements ControlledScene{
+public class RegisterView implements ControlledScene{
     // Form Fields
     @FXML private TextField nameField;
     @FXML private TextField lastNameField;
@@ -26,9 +26,9 @@ public class RegisterView extends UserController implements ControlledScene{
     @FXML private PasswordField passwordField;
 
     private StageHandler stageHandler;
-
+    private UserController userController;
     public RegisterView(){
-        super();
+        userController = new UserController();
     }
 
     /** Function used to register and add a new user
@@ -44,7 +44,7 @@ public class RegisterView extends UserController implements ControlledScene{
             return;
         }
 
-        if (userExists(usernameField.getText())) {
+        if (userController.userExists(usernameField.getText())) {
             new AlertDialog(Alert.AlertType.INFORMATION, "Username is taken!");
             return;
         }
@@ -58,8 +58,8 @@ public class RegisterView extends UserController implements ControlledScene{
 
         User user = new User(email, username, password, firstname, lastname, isStaff);
 
-        UserController.create(user);
-        UserController.insertProfile(semesterProfile);
+        userController.create(user);
+        userController.insertProfile(semesterProfile);
         showLoginScreen();
     }
 

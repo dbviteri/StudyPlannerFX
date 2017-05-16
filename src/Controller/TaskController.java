@@ -28,17 +28,17 @@ public class TaskController {
     private static final String QUERY_DELETE_TASK =
             "DELETE FROM Task WHERE task_id = ?";
 
-    private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
+    private DatabaseHandler dbhandler = DatabaseHandler.getInstance();
 
-    public static ArrayList<Task> findAll(int assessmentId) {
+    public ArrayList<Task> findAll(int assessmentId) {
         return findAll(QUERY_FIND_TASKS, assessmentId);
     }
 
-    public static ArrayList<Task> findAllDependencies(int taskId) {
+    public ArrayList<Task> findAllDependencies(int taskId) {
         return findAll(QUERY_FIND_DEPENDENCIES, taskId);
     }
 
-    private static ArrayList<Task> findAll(String sql, Object... properties) {
+    private ArrayList<Task> findAll(String sql, Object... properties) {
         ArrayList<Task> tasks = new ArrayList<>();
 
         try (
@@ -105,7 +105,7 @@ public class TaskController {
         }
     }
 
-    static Task formTask(ResultSet resultSet) throws SQLException {
+    public Task formTask(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("task_id");
         String title = resultSet.getString("task_title");
         Task.TaskType taskType = Task.TaskType.valueOf(resultSet.getString("task_type"));
@@ -122,7 +122,7 @@ public class TaskController {
         return task;
     }
 
-    static Task formDependency(ResultSet resultSet) throws SQLException {
+    public Task formDependency(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("dep_id");
         String title = resultSet.getString("dep_title");
         Task.TaskType taskType = Task.TaskType.valueOf(resultSet.getString("dep_type"));
