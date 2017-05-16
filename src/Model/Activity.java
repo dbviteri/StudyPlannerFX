@@ -25,18 +25,18 @@ public class Activity {
 
     public Activity() {}
 
-    public Activity(String title, int quantity, int time) {
+    public Activity(String title, int quantity, int time, Date date) {
+        // IF FIRST ADDED TO PROFILE DATE = CURRENT DATE
         if (activityId == null) {
             this.activityId = UUID.randomUUID().hashCode();
         }
         this.title = title;
         this.quantity = quantity;
         this.time = time;
-        this.date = new Date(); // current date
     }
     // TODO: Decide whether we need constructors
-    public Activity(Integer activityId, String title, int quantity, int time) {
-        this(title,quantity,time);
+    public Activity(Integer activityId, String title, int quantity, int time, Date date) {
+        this(title,quantity,time,date);
         this.activityId = activityId;
     }
 
