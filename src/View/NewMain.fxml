@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane fx:id="mainViewPane" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+          minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MainView">
+    <!--<columnConstraints>-->
+    <!--<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />-->
+    <!--<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />-->
+    <!--</columnConstraints>-->
+    <!--<rowConstraints>-->
+    <!--<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />-->
+    <!--<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />-->
+    <!--</rowConstraints>-->
+    <children>
+        <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <children>
+                <TableView fx:id="activitiesTable">
+                    <columns>
+                        <TableColumn prefWidth="259.0" text="Activities"/>
+                    </columns>
+                </TableView>
+                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="37.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#addActivity" text="+">
+                            <VBox.margin>
+                                <Insets bottom="5.0"/>
+                            </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#deleteActivity" text="-"/>
+                    </children>
+                </VBox>
+            </children>
+            <GridPane.margin>
+                <Insets left="5.0"/>
+            </GridPane.margin>
+        </HBox>
+        <VBox alignment="TOP_CENTER" GridPane.rowIndex="1">
+            <children>
+                <ComboBox fx:id="taskSelect" maxHeight="30" promptText="Choose a task">
+                    <VBox.margin>
+                        <Insets bottom="2.0"/>
+                    </VBox.margin>
+                </ComboBox>
+                <ProgressBar fx:id="taskProgressBar" maxWidth="1.7976931348623157E308" progress="0.0">
+                    <padding>
+                        <Insets left="20.0" right="20.0"/>
+                    </padding>
+                </ProgressBar>
+                <TextArea fx:id="taskDetails" editable="false"
+                          promptText="To select a task, you first must select a module and assessment from above"/>
+            </children>
+        </VBox>
+        <VBox>
+            <children>
+                <HBox prefHeight="39.0" prefWidth="288.0">
+                    <children>
+                        <ComboBox fx:id="moduleSelect" maxHeight="30" prefWidth="150.0" promptText="Module"/>
+                        <ComboBox fx:id="assessmentSelect" maxHeight="30" prefWidth="150.0" promptText="Assessment"/>
+                    </children>
+                </HBox>
+                <TextArea fx:id="moduleDetails" editable="false" prefHeight="186.0" prefWidth="288.0"
+                          promptText="Module and assessment details. Select them from the dropdown box above.">
+                    <VBox.margin>
+                        <Insets bottom="3.0"/>
+                    </VBox.margin>
+                </TextArea>
+            </children>
+        </VBox>
+        <VBox GridPane.columnIndex="1">
+            <children>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <TableView fx:id="taskTable" prefHeight="116.0" prefWidth="278.0"/>
+                        <VBox alignment="TOP_CENTER" prefHeight="90.0" prefWidth="54.0">
+                            <children>
+                                <Button mnemonicParsing="false" onAction="#addTask" text="+">
+                                    <VBox.margin>
+                                        <Insets bottom="5.0"/>
+                                    </VBox.margin>
+                                </Button>
+                                <Button mnemonicParsing="false" onAction="#deleteTask" text="-">
+                                    <VBox.margin>
+                                        <Insets bottom="5.0"/>
+                                    </VBox.margin>
+                                </Button>
+                            </children>
+                        </VBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="5.0"/>
+                    </VBox.margin>
+                </HBox>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <TableView prefHeight="120.0" prefWidth="278.0">
+                            <columns>
+                                <TableColumn prefWidth="256.0" text="Milestones"/>
+                            </columns>
+                        </TableView>
+                        <VBox alignment="TOP_CENTER" prefHeight="90.0" prefWidth="54.0">
+                            <children>
+                                <Button mnemonicParsing="false" text="+">
+                                    <VBox.margin>
+                                        <Insets bottom="5.0"/>
+                                    </VBox.margin>
+                                </Button>
+                                <Button mnemonicParsing="false" text="-"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+            <GridPane.margin>
+                <Insets bottom="3.0" left="5.0"/>
+            </GridPane.margin>
+        </VBox>
+    </children>
+    <columnConstraints>
+        <ColumnConstraints/>
+        <ColumnConstraints/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints/>
+        <RowConstraints/>
+    </rowConstraints>
+</GridPane>
