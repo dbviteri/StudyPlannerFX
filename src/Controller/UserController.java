@@ -6,6 +6,9 @@ import Model.SemesterProfile;
 import Model.User;
 import Utils.FileParser;
 import Utils.SPException;
+import Utils.StageHandler;
+import View.AlertDialog;
+import javafx.scene.control.Alert;
 
 import java.io.File;
 import java.sql.PreparedStatement;
@@ -47,7 +50,7 @@ public class UserController {
     // METHODS FOR QUERIES ---------------------------------------------------------------------------------------------
 
     @SuppressWarnings("ConstantConditions")
-    public static void create(User user) {
+    public void create(User user) {
         /*
         if(user.getId() != null){
             throw new IllegalArgumentException("Already in db");
@@ -84,8 +87,9 @@ public class UserController {
         SemesterProfile profile = FileParser.parseFile(file);
         return profile;
     }
-    public static void insertProfile(SemesterProfile profile){
-        SemesterController.insertSemester(profile);
+    public void insertProfile(SemesterProfile profile){
+        SemesterController semesterController = new SemesterController();
+        semesterController.insertSemester(profile);
         for (HashMap.Entry entry : profile.getModules().entrySet()) {
             Module module = (Module)entry.getValue();
             ModuleController.insertModule(module, profile.getSemesterId());
@@ -100,7 +104,7 @@ public class UserController {
      * @return
      * @throws SQLException
      */
-    private static User formUser(ResultSet resultSet) throws SQLException{
+    private User formUser(ResultSet resultSet) throws SQLException{
         int id = resultSet.getInt("user_id");
         String email = resultSet.getString("email");
         String username = resultSet.getString("username");
@@ -112,11 +116,11 @@ public class UserController {
         return new User(id, email, username, password, firstname, lastname, isStaff);
     }
 
-    public static User find(String username, String password) {
+    public User find(String username, String password) {
         return find(QUERY_FIND_BY_USERNAME_PASSWORD, username, password);
     }
 
-    protected final boolean userExists(String username) throws SPException {
+    public final boolean userExists(String username) throws SPException {
         try (
                 PreparedStatement statement = dbhandler.prepareStatement(QUERY_USERNAME_EXISTS, false, username);
                 ResultSet resultSet = statement.executeQuery()
@@ -128,10 +132,27 @@ public class UserController {
 
         return false;
     }
+    public boolean logIn(StageHandler stageHandler, String username, String password){
 
+        User user = find(username, password);
+
+        // If user is not null, show the main panel
+        if(user == null) {
+            new AlertDialog(Alert.AlertType.INFORMATION, "User doesn't exist. Try again.");
+            return false;
+        }
+        //databaseHandler.createSession(user);
+        DatabaseHandler.getInstance().createSession(user);
+
+        // Reload scene after creating a session
+        stageHandler.reloadScene(StageHandler.SCENE.SEMESTER);
+        stageHandler.setScene(StageHandler.SCENE.SEMESTER, true, 1024, 768);
+
+        return true;
+    }
     // Helper functions ------------------------------------------------------------------------------------------------
 
-    private static User find(String sql, Object... properties) throws SPException {
+    private User find(String sql, Object... properties) throws SPException {
         User user = null;
 
         try (

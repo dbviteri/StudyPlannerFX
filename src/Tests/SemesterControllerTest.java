@@ -16,12 +16,14 @@ public class SemesterControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        user = UserController.find("xdn15mcu", "test");
+        UserController userController = new UserController();
+        user = userController.find("xdn15mcu", "test");
     }
 
     @Test
     public void find() throws Exception {
-        SemesterController.loadSemester(user.getId());
+        SemesterController semesterController = new SemesterController();
+        semesterController.loadSemester(user.getId());
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
         SemesterProfile semesterProfile = databaseHandler.getSemesterSession();
         System.out.println("There are: " + semesterProfile.getModules().size() + " modules");

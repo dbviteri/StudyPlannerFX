@@ -31,7 +31,8 @@ public class TaskControllerTest {
 
     @Test
     public void find() throws Exception {
-        ArrayList<Task> tasks = TaskController.findAll(assessment.getId());
+        TaskController taskController = new TaskController();
+        ArrayList<Task> tasks = taskController.findAll(assessment.getId());
 
         for (Task task : tasks) {
             //assessment.addTask(task);
@@ -51,11 +52,12 @@ public class TaskControllerTest {
 
     @Test
     public void deleteTask() throws Exception {
-        ArrayList<Task> allTasks = TaskController.findAll(assessment.getId());
+        TaskController taskController = new TaskController();
+        ArrayList<Task> allTasks = taskController.findAll(assessment.getId());
         Task toBeDeleted = allTasks.get(0);
         taskController.deleteTask(toBeDeleted);
 
-        ArrayList<Task> oneLessTask = TaskController.findAll(assessment.getId());
+        ArrayList<Task> oneLessTask = taskController.findAll(assessment.getId());
         Task differentTask = oneLessTask.get(0);
 
         assert (!toBeDeleted.equals(differentTask));

@@ -15,10 +15,13 @@ import javafx.scene.control.TextField;
  */
 public class LoginView extends UserController implements ControlledScene{
     private StageHandler stageHandler;
-
+    private UserController userController;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
 
+    public LoginView(){
+        userController = new UserController();
+    }
     /** Function used to log a user in
      *  on button press, if credentials are valid.
      *  it also creates a new session based on the user
@@ -26,27 +29,10 @@ public class LoginView extends UserController implements ControlledScene{
      *
      */
     @FXML
-    public void loginUser() {
-        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
-
+    public void directLogIn() {
         String username = usernameField.getText();//"xdn15mcu";
         String password = passwordField.getText();//"test";
-
-        User user = find(username, password);
-
-        // If user is not null, show the main panel
-        if(user == null) {
-            new AlertDialog(Alert.AlertType.INFORMATION, "User doesn't exist. Try again.");
-            return;
-        }
-
-        //databaseHandler.createSession(user);
-        DatabaseHandler.getInstance().createSession(user);
-
-        // Reload scene after creating a session
-        stageHandler.reloadScene(StageHandler.SCENE.SEMESTER);
-        stageHandler.setScene(StageHandler.SCENE.SEMESTER, true, 1024, 768);
-
+        userController.logIn(stageHandler,username,password);
     }
 
     /** Basic FXML function, on button press

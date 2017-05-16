@@ -24,6 +24,8 @@ public class AssessmentController {
             "UPDATE Assessment SET title = ?, type = ?, weight = ?, deadline = ?, completion = ? WHERE assessment_id = ?";
     private static final String QUERY_DELETE_ASSESSMENT =
             "";
+    private static final String QUERY_UPDATE_DEADLINE =
+            "UPDATE Assessment SET deadline = ? WHERE assessment_title = ? and weight = ?";
 
     // DATABASE INSTANCE -----------------------------------------------------------------------------------------------
 
@@ -78,7 +80,7 @@ public class AssessmentController {
         }
     }
 
-    public boolean updateAssessment(Assessment assessment){
+    public static boolean updateAssessment(Assessment assessment){
         Object[] properties = {
                 assessment.getTitle(),
                 assessment.getType().toString(),
@@ -98,6 +100,24 @@ public class AssessmentController {
             e.printStackTrace();
         }
 
+        return false;
+    }
+    public static boolean updateDeadline(Assessment assessment){
+        Object[] properties = {
+                assessment.getDeadLine(),
+                assessment.getTitle(),
+                assessment.getWeight()
+        };
+        try (
+                PreparedStatement statement =
+                        dbhandler.prepareStatement(QUERY_UPDATE_DEADLINE, false, properties)
+        ) {
+            int updatedRows = statement.executeUpdate();
+            if (updatedRows == 0) throw new SPException("Failed to update Assessments. No rows affected");
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
