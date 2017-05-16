@@ -71,11 +71,11 @@ public class SemesterView extends SemesterController implements ControlledScene{
         );
 
         mainViewController.mainViewPane.prefHeightProperty().bind(
-                semesterView.heightProperty()
+                semesterView.widthProperty()
         );
 
         mainViewController.mainViewPane.prefWidthProperty().bind(
-                semesterView.widthProperty()
+                semesterView.heightProperty()
         );
 
 

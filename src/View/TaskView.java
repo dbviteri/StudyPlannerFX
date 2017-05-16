@@ -4,10 +4,12 @@ import Model.Task;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * Created by Didac on 14/05/2017.
@@ -42,7 +44,7 @@ public class TaskView {
     }
 
     public void initialize() {
-        taskLbl.setText("Adding a task");
+        taskLbl.setText("Adding a task ");
         dependencyList.getItems().addAll(tasks);
         typeField.getItems().addAll(Task.TaskType.values());
     }
@@ -65,5 +67,9 @@ public class TaskView {
         } else {
             tasks.add(new Task(taskTitle, taskType, criteria, critValue, 0));
         }
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+        stage.hide();
     }
 }
