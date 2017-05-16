@@ -2,7 +2,6 @@ package Controller;
 
 import Model.*;
 import Utils.SPException;
-import javafx.event.ActionEvent;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -123,7 +122,7 @@ public class SemesterController {
         SemesterProfile semesterProfile = new SemesterProfile();
         Map<Module, Module> modules = semesterProfile.getModules();
         //ArrayList<Module> modules = semesterProfile.getModules();
-        while (resultSet.next()) {
+        do {
 
             /** BUILD SEMESTER **/
             semesterProfile.setSemesterId(resultSet.getInt("semester_id"));
@@ -191,7 +190,7 @@ public class SemesterController {
                             .addNote(taskNote);
                 }
             }
-        }
+        } while (resultSet.next());
         return semesterProfile;
     }
 
