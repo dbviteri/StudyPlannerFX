@@ -14,7 +14,8 @@ public class ActivityControllerTest {
 
     @Test
     public void findAll() throws Exception {
-        ArrayList<Activity> activities = ActivityController.findAll(2);
+        ActivityController controller = new ActivityController();
+        ArrayList<Activity> activities = controller.findAll(2);
         System.out.println(activities.get(0).toString());
     }
 

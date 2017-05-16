@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * Created by Didac on 07/05/2017.
  */
-public class ActivityController {
+public class ActivityController implements DBQuerry {
 
     // QUERIES ---------------------------------------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ public class ActivityController {
 
     // METHODS ---------------------------------------------------------------------------------------------------------
 
-    public static ArrayList<Activity> findAll(int taskId) {
+    public ArrayList<Activity> findAll(int taskId) {
         ArrayList<Activity> activities = new ArrayList<>();
 
         try (
@@ -40,7 +40,7 @@ public class ActivityController {
         return activities;
     }
 
-    static Activity formActivity(ResultSet resultSet) throws SQLException {
+    public Activity formActivity(ResultSet resultSet) throws SQLException {
         Integer activityId = resultSet.getInt("activity_ID");
         int quantity = resultSet.getInt("quantity");
         int time = resultSet.getInt("time");

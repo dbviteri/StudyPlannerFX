@@ -13,7 +13,7 @@ import java.util.Date;
  *
  * Created by Didac on 04/05/2017.
  */
-public class TaskController {
+public class TaskController implements DBQuerry {
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
@@ -27,6 +27,9 @@ public class TaskController {
                     "criterion_value, progress, assessment_id, dependency, date) VALUES (?,?,?,?,?,?,?,?,?)";
     private static final String QUERY_DELETE_TASK =
             "DELETE FROM Task WHERE task_id = ?";
+    private static final String QUERY_UPDATE_TASK =
+            "UPDATE Task SET task_title = ?, task_type = ?, time = ?, criterion = ?," +
+                    " criterion_value = ?, progress = ?, date = ?, assessment_id = ?, dependency =?, activity_ID = ?, task_milestone_id = ? WHERE task_id = ?";
 
     private DatabaseHandler dbhandler = DatabaseHandler.getInstance();
 
@@ -103,6 +106,20 @@ public class TaskController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public boolean updateTask(String sql, Object... properties){
+
+        try (
+                PreparedStatement statement =
+                        dbhandler.prepareStatement(QUERY_UPDATE_TASK, false, properties)
+        ) {
+            int updates = statement.executeUpdate();
+            if (updates == 0) throw new SPException("Failed to update Modules. No rows affected");
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public Task formTask(ResultSet resultSet) throws SQLException {

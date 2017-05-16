@@ -1,6 +1,12 @@
 package StudyPlanner;
 
+import Controller.ActivityController;
 import Controller.DatabaseHandler;
+import Controller.TaskController;
+import Model.Assessment;
+import Model.Module;
+import Model.SemesterProfile;
+import Model.Task;
 import Utils.StageHandler;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -54,7 +60,16 @@ public class StudyPlanner extends Application {
         //TODO: SAVE STUFF HERE
         //TODO: This method handles when window closes
         //DatabaseHandler.getInstance().closeConnection();
-
+        TaskController taskController = new TaskController();
+        ActivityController activityController = new ActivityController();
+        SemesterProfile semester = DatabaseHandler.getInstance().getSemesterSession();
+        for(Module module : semester.getModules().values()) {
+            for(Assessment assessment : module.getAssessments().values()) {
+                for(Task task : assessment.getTasks().values()) {
+                    //taskController.
+                }
+            }
+        }
         System.out.println("Window closing");
     }
 }

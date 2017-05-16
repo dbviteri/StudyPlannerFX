@@ -20,7 +20,7 @@ import java.util.HashMap;
  *
  * Created by Didac on 30/04/2017.
  */
-public class UserController {
+public class UserController implements DBQuerry {
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
@@ -89,10 +89,11 @@ public class UserController {
     }
     public void insertProfile(SemesterProfile profile){
         SemesterController semesterController = new SemesterController();
+        ModuleController moduleController = new ModuleController();
         semesterController.insertSemester(profile);
         for (HashMap.Entry entry : profile.getModules().entrySet()) {
             Module module = (Module)entry.getValue();
-            ModuleController.insertModule(module, profile.getSemesterId());
+            moduleController.insertModule(module, profile.getSemesterId());
             for (HashMap.Entry aEntry : module.getAssessments().entrySet()) {
                 AssessmentController.insertAssessment((Assessment) aEntry.getValue(), module.getId());
             }

@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * Created by Didac on 01/05/2017.
  */
-public class SemesterController {
+public class SemesterController implements  DBQuerry {
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
@@ -123,6 +123,7 @@ public class SemesterController {
 
     private SemesterProfile formSemester(ResultSet resultSet) throws SQLException {
         TaskController taskController = new TaskController();
+        ActivityController activityController = new ActivityController();
         SemesterProfile semesterProfile = new SemesterProfile();
         Map<Module, Module> modules = semesterProfile.getModules();
         //ArrayList<Module> modules = semesterProfile.getModules();
@@ -167,7 +168,7 @@ public class SemesterController {
                 /** IF TASK HAS ACTIVITIES BUILD IT AND ADD IT TO MODULES **/
                 resultSet.getInt("activity_ID");
                 if (!resultSet.wasNull()) {
-                    Activity activity = ActivityController.formActivity(resultSet);
+                    Activity activity = activityController.formActivity(resultSet);
 
                     modules.get(module).getAssessments()
                             .get(assessment).getTasks().get(task)
@@ -209,6 +210,10 @@ public class SemesterController {
         dbhandler.deleteSession();
         stageHandler.reloadScene(StageHandler.SCENE.LOGIN);
         stageHandler.setScene(StageHandler.SCENE.LOGIN,false);
+    }
+    public boolean savaSemester(SemesterProfile semester){
+
+        return false;
     }
 
 

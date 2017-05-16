@@ -17,7 +17,8 @@ public class NoteControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        activities = ActivityController.findAll(2);
+        ActivityController controller = new ActivityController();
+        activities = controller.findAll(2);
     }
 
     @Test

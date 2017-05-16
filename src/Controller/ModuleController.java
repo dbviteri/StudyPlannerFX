@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by 100125468 on 04/05/2017.
  */
-public class ModuleController {
+public class ModuleController implements  DBQuerry{
     private static final String QUERY_INSERT_MODULE =
             "INSERT INTO Module (module_title, code, Semester_ID) VALUES (?, ?, ?)";
     private static final String QUERY_FIND_MODULES =
@@ -32,7 +32,7 @@ public class ModuleController {
      * @param module
      * @return true/false
      */
-    public static void insertModule(Module module, int semesterId) {
+    public void insertModule(Module module, int semesterId) {
 
         Object[] properties = {
                 module.getTitle(),
@@ -67,7 +67,7 @@ public class ModuleController {
      * @param semesterID
      * @return ArrayList
      */
-    public static ArrayList<Module> findAll(int semesterID) {
+    public ArrayList<Module> findAll(int semesterID) {
         ArrayList<Module> modules = new ArrayList<>();
         try (
                 PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_MODULES, false, semesterID);
