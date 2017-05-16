@@ -20,7 +20,6 @@ public class Task {
     private int criterionValue;
     private double criterionSoFar;
     private double progress; // related to criterion value
-    private int progress; // related to criterion value
     private Date date;
     // TODO :'a task cannot be started before another has been completed'
 
