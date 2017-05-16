@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<GridPane fx:id="mainViewPane" alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0"
+<GridPane fx:id="mainViewPane" alignment="TOP_CENTER" prefHeight="600.0" prefWidth="800.0"
           xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MainView">
     <columnConstraints>
         <ColumnConstraints halignment="CENTER" prefWidth="400"/>
@@ -12,21 +12,26 @@
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="129.0" minHeight="0.0" prefHeight="27.0" valignment="CENTER"/>
-        <RowConstraints maxHeight="129.0" minHeight="0.0" prefHeight="16.0" valignment="CENTER"/>
-        <RowConstraints maxHeight="241.0" minHeight="71.0" prefHeight="175.0" valignment="CENTER"/>
-        <RowConstraints maxHeight="248.0" minHeight="8.0" prefHeight="28.0" valignment="CENTER"/>
-        <RowConstraints maxHeight="248.0" minHeight="8.0" prefHeight="10.0" valignment="CENTER"/>
-        <RowConstraints maxHeight="248.0" minHeight="146.0" prefHeight="160.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="129.0" minHeight="0.0" prefHeight="8.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="241.0" minHeight="66.0" prefHeight="150.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="30.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="5.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="248.0" minHeight="111.0" prefHeight="172.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="24.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="0.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="31.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="276.0" minHeight="146.0" prefHeight="160.0" valignment="CENTER"/>
     </rowConstraints>
     <children>
-        <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <HBox alignment="CENTER" prefHeight="183.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
             <children>
-                <TableView fx:id="activitiesTable" maxHeight="250.0">
+                <TableView fx:id="activitiesTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                           prefHeight="183.0" prefWidth="405.0">
                     <columns>
-                        <TableColumn prefWidth="259.0" text="Activities"/>
+                        <TableColumn prefWidth="367.0" text="Activities"/>
                     </columns>
                 </TableView>
-                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="37.0">
+                <VBox alignment="TOP_CENTER" maxWidth="0.0" prefHeight="183.0" prefWidth="0.0">
                     <children>
                         <Button mnemonicParsing="false" onAction="#addActivity" text="+">
                             <VBox.margin>
@@ -41,7 +46,7 @@
                 <Insets left="5.0"/>
             </GridPane.margin>
         </HBox>
-        <VBox alignment="TOP_CENTER" GridPane.rowIndex="5">
+        <VBox alignment="CENTER" GridPane.rowIndex="5">
             <children>
                 <ComboBox fx:id="taskSelect" maxHeight="30" promptText="Choose a task">
                     <VBox.margin>
@@ -57,9 +62,9 @@
                           promptText="To select a task, you first must select a module and assessment from above"/>
             </children>
         </VBox>
-        <VBox GridPane.rowIndex="2">
+        <VBox alignment="CENTER" GridPane.rowIndex="2">
             <children>
-                <HBox prefHeight="39.0" prefWidth="288.0">
+                <HBox alignment="CENTER" prefHeight="39.0" prefWidth="288.0">
                     <children>
                         <ComboBox fx:id="moduleSelect" maxHeight="30" prefWidth="150.0" promptText="Module"/>
                         <ComboBox fx:id="assessmentSelect" maxHeight="30" prefWidth="150.0" promptText="Assessment"/>
@@ -73,12 +78,18 @@
                 </TextArea>
             </children>
         </VBox>
-        <VBox GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+        <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2"
+              GridPane.vgrow="ALWAYS">
             <children>
-                <HBox prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="CENTER" prefHeight="183.0" prefWidth="395.0">
                     <children>
-                        <TableView fx:id="taskTable" maxHeight="250.0"/>
-                        <VBox alignment="TOP_CENTER" prefHeight="90.0" prefWidth="54.0">
+                        <TableView fx:id="taskTable" maxHeight="1.7976931348623157E308"
+                                   maxWidth="1.7976931348623157E308" prefHeight="176.0" prefWidth="368.0">
+                            <columns>
+                                <TableColumn prefWidth="367.0" text="Tasks"/>
+                            </columns>
+                        </TableView>
+                        <VBox alignment="TOP_CENTER" maxWidth="0.0" prefHeight="154.0" prefWidth="9.0">
                             <children>
                                 <Button mnemonicParsing="false" onAction="#addTask" text="+">
                                     <VBox.margin>
@@ -97,31 +108,12 @@
                         <Insets bottom="5.0"/>
                     </VBox.margin>
                 </HBox>
-                <HBox prefHeight="100.0" prefWidth="200.0">
-                    <children>
-                        <TableView>
-                            <columns>
-                                <TableColumn prefWidth="256.0" text="Milestones"/>
-                            </columns>
-                        </TableView>
-                        <VBox alignment="TOP_CENTER" prefHeight="90.0" prefWidth="54.0">
-                            <children>
-                                <Button mnemonicParsing="false" text="+">
-                                    <VBox.margin>
-                                        <Insets bottom="5.0"/>
-                                    </VBox.margin>
-                                </Button>
-                                <Button mnemonicParsing="false" text="-"/>
-                            </children>
-                        </VBox>
-                    </children>
-                </HBox>
             </children>
             <GridPane.margin>
                 <Insets bottom="3.0" left="5.0"/>
             </GridPane.margin>
         </VBox>
-        <Label text="Add Tasks &amp; Milestones">
+        <Label text="Add Tasks">
             <font>
                 <Font name="System Bold Italic" size="25.0"/>
             </font>
@@ -135,5 +127,34 @@
         </Label>
         <Separator prefWidth="200.0" GridPane.rowIndex="4"/>
         <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        <Label text="Add Milestones" GridPane.rowIndex="6">
+            <font>
+                <Font size="25.0"/>
+            </font>
+        </Label>
+        <Separator prefHeight="7.0" prefWidth="400.0" GridPane.rowIndex="7"/>
+        <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+            <children>
+                <TableView fx:id="milestoneActivitiesTable" maxHeight="1.7976931348623157E308"
+                           maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="479.0">
+                    <columns>
+                        <TableColumn prefWidth="372.0" text="Tasks"/>
+                    </columns>
+                </TableView>
+                <VBox alignment="TOP_CENTER" maxWidth="0.0" prefHeight="90.0" prefWidth="0.0">
+                    <children>
+                        <Button mnemonicParsing="false" text="+">
+                            <VBox.margin>
+                                <Insets bottom="5.0"/>
+                            </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" text="-"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <TextArea prefHeight="135.0" prefWidth="400.0" promptText="Milestone information" GridPane.rowIndex="9"/>
+        <ComboBox fx:id="milestoneSelect" prefWidth="150.0" promptText="Choose a milestone" GridPane.rowIndex="8"/>
     </children>
 </GridPane>

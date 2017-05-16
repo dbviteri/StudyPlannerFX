@@ -72,7 +72,6 @@ public class Assessment {
 
     public HashMap<Milestone,Milestone> getMilestones() { return new HashMap<>(milestones);}
 
-
     public void setId(int id) { this.id = id;}
 
     public void setType(Type type) {
@@ -93,6 +92,8 @@ public class Assessment {
 
     public Map<Task, Task> getTasks() { return new HashMap<>(tasks); }
 
+    public void addMilestone(Milestone milestone) { milestones.put(milestone, milestone);}
+
     //public void addTasks(Map<Integer, Task> tasks) { this.tasks = tasks; }
 
     //public void addAllTasks(ArrayList<Task> tasks) { this.tasks = tasks; }
@@ -108,6 +109,7 @@ public class Assessment {
         }
         //if (!task.getDependencies().isEmpty()) return false;
         tasks.remove(task);
+        calculateCompletion();
         return true;
     }
 
@@ -119,6 +121,7 @@ public class Assessment {
 
     public void calculateCompletion(){
         double count = 0;
+        if (tasks.isEmpty()) completion.setValue(0);
         for(HashMap.Entry entry : tasks.entrySet()) {
             Task task = (Task) entry.getValue();
             //task.isComplete();
