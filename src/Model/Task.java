@@ -33,7 +33,8 @@ public class Task {
 
     // TODO: Decide whether we need constructors
     public Task(String title, TaskType type, String criterion,
-                int criterionValue, int progress) {
+                int criterionValue, int progress, Date date) {
+        // IF FIRST ADDED TO PROFILE DATE = CURRENT DATE
         if (id == null) {
             this.id = UUID.randomUUID().hashCode();
         }
@@ -43,11 +44,10 @@ public class Task {
         this.criterionValue = criterionValue;
         this.progress = progress;
         this.time = 0;
-        this.date = new Date(); // current date
     }
     public Task(Integer id, String title, TaskType type, String criterion,
-                int criterionValue, int progress) {
-        this(title,type,criterion,criterionValue,progress);
+                int criterionValue, int progress, Date date) {
+        this(title,type,criterion,criterionValue,progress,date);
         this.id = id;
     }
 

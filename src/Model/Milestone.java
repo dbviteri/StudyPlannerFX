@@ -15,11 +15,13 @@ public class Milestone {
     private Date date;
     private HashMap<Task,Task> tasks;
 
-    public Milestone(String title){
+    public Milestone(String title,Date date){
+        // IF FIRST TIME MILESTONE IS ADDED DATE = CURRENT DATE
         this.title = title;
+        this.date = date;
     }
-    public Milestone(String title, HashMap<Task,Task> tasks){
-        this(title);
+    public Milestone(String title, HashMap<Task,Task> tasks, Date date){
+        this(title,date);
         this.tasks = tasks;
     }
 
