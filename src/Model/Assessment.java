@@ -121,7 +121,7 @@ public class Assessment {
         double count = 0;
         for(HashMap.Entry entry : tasks.entrySet()) {
             Task task = (Task) entry.getValue();
-            task.isComplete();
+            //task.isComplete();
             count += task.getProgress();
         }
         count = count / tasks.entrySet().size();
@@ -131,6 +131,7 @@ public class Assessment {
     public void addTask(Task task) {
         if (!tasks.containsKey(task))
             tasks.put(task, task);
+        calculateCompletion();
     }
     // Overrides -------------------------------------------------------------------------------------------------------
 

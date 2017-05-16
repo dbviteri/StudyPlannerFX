@@ -1,5 +1,7 @@
 package Model;
 
+import javafx.beans.property.DoubleProperty;
+
 import java.util.Date;
 import java.util.HashMap;
 
@@ -9,7 +11,7 @@ import java.util.HashMap;
  */
 public class Milestone {
     private String title;
-    private boolean isComplete;
+    private DoubleProperty progress;
     private Date date;
     private HashMap<Task,Task> tasks;
 
@@ -24,18 +26,16 @@ public class Milestone {
     public String getTitle(){
         return title;
     }
-    public boolean getIsComplete(){
-        return isComplete;
-    }
+
+    public double getProgress() { return progress.get(); }
     public Date getDeadline() { return date; }
     public HashMap<Task,Task> getTasks() { return new HashMap<>(tasks); }
 
     public void setTitle(String title){
         this.title = title;
     }
-    public void setComplete(boolean isComplete){
-        this.isComplete = isComplete;
-    }
+
+    public void setProgress(double progress) {this.progress.set(progress);}
     public void setDeadline(Date deadline) { this.date = deadline; }
 
     /** Function used to check if milestone is complete
@@ -50,7 +50,6 @@ public class Milestone {
                 return false;
             }
         }
-        isComplete = true;
         return true;
     }
 
@@ -80,7 +79,7 @@ public class Milestone {
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append(title).append("\n").append("Completion : ").append(isComplete);
+        sb.append(title).append("\n").append("Completion : ").append(progress.get());
         sb.append("\n Unfinished Tasks : ");
         for(HashMap.Entry entry : tasks.entrySet()){
             sb.append(entry.getValue());

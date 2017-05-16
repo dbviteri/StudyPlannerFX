@@ -103,6 +103,10 @@ public class Task {
         return criterionValue;
     }
 
+    public double getCriterionSoFar() {
+        return criterionSoFar;
+    }
+
     public void setCriterionValue(int criterionValue) {
         this.criterionValue = criterionValue;
     }

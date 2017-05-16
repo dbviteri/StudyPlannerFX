@@ -88,9 +88,8 @@ public class MainView extends SemesterController {
             stage.setScene(new Scene(root, 450, 450));
             stage.setResizable(false);
             stage.show();
-            stage.setOnCloseRequest(event ->
-                    parentStage.show()
-            );
+            stage.setOnCloseRequest(event -> parentStage.show());
+            stage.setOnHidden(event -> parentStage.show());
             parentStage.hide();
         } catch (IOException e) {
             e.printStackTrace();
@@ -162,7 +161,6 @@ public class MainView extends SemesterController {
         assessmentSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
             taskTable.getItems().clear();
             if (newValue == null) return;
-
             moduleDetails.setText(moduleSelect.getValue().toString() + "\n" + assessmentSelect.getValue().toString());
 
             taskSelect.getItems().clear();
@@ -183,12 +181,12 @@ public class MainView extends SemesterController {
                     taskSelect.getItems().clear();
                     taskSelect.getItems().addAll(taskObservableList);
                 } else if (pChange.wasAdded()) {
-                    System.out.println("BEFORE: " + assessmentSelect.getValue().getTasks().size());
+                    System.out.println("BEFORE: " + dbhandler.getSemesterSession().getModules().get(moduleSelect.getValue()).getAssessments().get(assessmentSelect.getValue()).getTasks().size());
                     //int index = pChange.getTo() - pChange.getFrom();
                     assessmentSelect.getValue().addTask(pChange.getAddedSubList().get(pChange.getAddedSubList().size() - 1));
                     taskSelect.getItems().clear();
                     taskSelect.getItems().addAll(taskObservableList);
-                    System.out.println("AFTER: " + assessmentSelect.getValue().getTasks().size());
+                    System.out.println("AFTER: " + dbhandler.getSemesterSession().getModules().get(moduleSelect.getValue()).getAssessments().get(assessmentSelect.getValue()).getTasks().size());
                 }
             });
 
@@ -220,13 +218,21 @@ public class MainView extends SemesterController {
                 System.out.println("ASDF");
                 if (pChange.wasRemoved()) {
                     if (taskSelect.getValue() == null) return;
+                    // Delete activity
                     taskSelect.getValue().deleteActivity(pChange.getRemoved().get(0));
+                    // Update progress bar
                     taskProgressBar.setProgress(taskSelect.getValue().getProgress() / 100);
+                    // Update completion for assessment
+                    assessmentSelect.getValue().calculateCompletion();
                 } else if (pChange.wasAdded()) {
                     System.out.println("BEFORE: " + taskSelect.getValue().getActivities().size());
                     //int index = pChange.getTo() - pChange.getFrom();
+                    // Add activity to task
                     taskSelect.getValue().addActivity(pChange.getAddedSubList().get(pChange.getAddedSubList().size() - 1));
+                    // Update progress bar for task
                     taskProgressBar.setProgress(taskSelect.getValue().getProgress() / 100);
+                    // Update assessment completion based on the task
+                    assessmentSelect.getValue().calculateCompletion();
                     System.out.println("AFTER: " + taskSelect.getValue().getActivities().size());
                 }
             });
@@ -255,7 +261,7 @@ public class MainView extends SemesterController {
         Stage parentStage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ActivityView.fxml"));
-        fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new ActivityView(activityObservableList));
+        fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new ActivityView(activityObservableList, taskSelect.getValue()));
         Parent root;
         try {
             root = fxmlLoader.load();
@@ -264,9 +270,8 @@ public class MainView extends SemesterController {
             stage.setScene(new Scene(root, 450, 450));
             stage.setResizable(false);
             stage.show();
-            stage.setOnCloseRequest(event ->
-                    parentStage.show()
-            );
+            stage.setOnCloseRequest(event -> parentStage.show());
+            stage.setOnHidden(event -> parentStage.show());
             parentStage.hide();
         } catch (IOException e) {
             e.printStackTrace();
