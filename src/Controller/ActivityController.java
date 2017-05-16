@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Didac on 07/05/2017.
@@ -44,7 +45,8 @@ public class ActivityController {
         int quantity = resultSet.getInt("quantity");
         int time = resultSet.getInt("time");
         String title = resultSet.getString("activity_title");
-        return new Activity(activityId, title, quantity, time);
+        Date date = resultSet.getDate("date");
+        return new Activity(activityId, title, quantity, time,date);
         //return new Activity();
     }
 }

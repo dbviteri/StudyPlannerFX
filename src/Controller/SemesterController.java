@@ -76,6 +76,7 @@ public class SemesterController {
         Session.addSemesterToUser(find(QUERY_USER_SEMESTER, userId));
     }
 
+
     private static SemesterProfile find(String sql, Object... properties) {
         SemesterProfile semesterProfile = null;
 
@@ -189,12 +190,14 @@ public class SemesterController {
                             .get(assessment).getTasks().get(task)
                             .addNote(taskNote);
                 }
-
             }
         }
         return semesterProfile;
     }
 
+    public static void updateSemester(){
+
+    }
 
 
 

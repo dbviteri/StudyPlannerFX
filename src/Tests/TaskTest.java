@@ -34,9 +34,9 @@ public class TaskTest {
 
     @Test
     public void addActivity() throws Exception {
-        Activity activity = new Activity("test", 2, 2);
-        Activity activity2 = new Activity("test", 2, 2);
-        Activity activity3 = new Activity("test", 2, 2);
+        Activity activity = new Activity("test", 2, 2, new Date());
+        Activity activity2 = new Activity("test", 2, 2, new Date());
+        Activity activity3 = new Activity("test", 2, 2, new Date());
 
         Task task = new Task();
         task.addActivity(activity);

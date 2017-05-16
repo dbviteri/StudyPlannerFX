@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -17,11 +18,13 @@ public class TaskController {
     // Constant queries ------------------------------------------------------------------------------------------------
 
     private static final String QUERY_FIND_TASKS =
-            "SELECT * FROM Task LEFT JOIN Assessment ON (Task.assessment_id = Assessment.assessment_id) WHERE Task.assessment_id = ?";
+            "SELECT * FROM Task LEFT JOIN Assessment ON (Task.assessment_id = Assessment.assessment_id)" +
+                    " WHERE Task.assessment_id = ?";
     private static final String QUERY_FIND_DEPENDENCIES =
             "SELECT * FROM Task WHERE dependency = ?"; // taskId
     private static final String QUERY_INSERT_TASK =
-            "INSERT INTO Task (title, type, time, criterion, criterion_value, progress, assessment_id, dependency) VALUES (?,?,?,?,?,?,?,?)";
+            "INSERT INTO Task (title, type, time, criterion, " +
+                    "criterion_value, progress, assessment_id, dependency, date) VALUES (?,?,?,?,?,?,?,?,?)";
     private static final String QUERY_DELETE_TASK =
             "DELETE FROM Task WHERE task_id = ?";
 
@@ -62,7 +65,10 @@ public class TaskController {
                 task.getCriterionValue(),
                 task.getProgress(),
                 //task.getAssessmentId(),
-                null // Dependency
+                null, // activity_id
+                null, // Dependency
+                task.getDate()
+
         };
 
         // if the dependency of task is null, it has no dependency
@@ -107,11 +113,11 @@ public class TaskController {
         String criterion = resultSet.getString("criterion");
         int criterionValue = resultSet.getInt("criterion_value");
         int progress = resultSet.getInt("progress");
-
+        Date date = resultSet.getDate("date");
         // Find the dependencies for this task
         //ArrayList<Task> dependencies = findAllDependencies(id);
         //int assessmentId = resultSet.getInt("assessment_id");
-        Task task = new Task(id, title, taskType, criterion, criterionValue, progress);
+        Task task = new Task(id, title, taskType, criterion, criterionValue, progress, date);
         task.setTime(time);
         return task;
     }
@@ -124,8 +130,8 @@ public class TaskController {
         String criterion = resultSet.getString("dep_criterion");
         int criterionValue = resultSet.getInt("dep_crit_val");
         int progress = resultSet.getInt("dep_progress");
-
-        Task task = new Task(id, title, taskType, criterion, criterionValue, progress);
+        Date date = resultSet.getDate("dep_date");
+        Task task = new Task(id, title, taskType, criterion, criterionValue, progress,date);
         task.setTime(time);
         return task;
     }

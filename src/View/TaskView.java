@@ -11,6 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Date;
+
 /**
  * Created by Didac on 14/05/2017.
  */
@@ -61,11 +63,11 @@ public class TaskView {
         int critValue = criteriaValue.getValue();
 
         if (dependencyList.getValue() != null) {
-            Task task = new Task(taskTitle, taskType, criteria, critValue, 0);
+            Task task = new Task(taskTitle, taskType, criteria, critValue, 0, new Date());
             task.addDependency(dependencyList.getValue());
             tasks.add(task);
         } else {
-            tasks.add(new Task(taskTitle, taskType, criteria, critValue, 0));
+            tasks.add(new Task(taskTitle, taskType, criteria, critValue, 0, new Date()));
         }
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

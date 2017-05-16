@@ -11,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.util.Date;
+
 /**
  *
  * Created by Didac on 14/05/2017.
@@ -58,6 +60,6 @@ public class ActivityView {
         //if (task.getCriterionSoFar() == allowedQuantities + )
         Stage stage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
         stage.hide();
-        activities.add(new Activity(activityTitle, quantity, time));
+        activities.add(new Activity(activityTitle, quantity, time, new Date()));
     }
 }

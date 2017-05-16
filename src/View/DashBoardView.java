@@ -163,12 +163,12 @@ public class DashBoardView extends SemesterController {
             for(Task task : tasks){
                 Activity [] activities = new Activity[task.getActivities().size()];
                 task.getActivities().values().toArray(activities);
-                series.getData().add(new XYChart.Data(0, task.getTitle(), new GanttChart.MetaData(4,"status-red")));
+                series.getData().add(new XYChart.Data(0, task.getTitle(), new GanttChart.MetaData(2,"status-red")));
                 for(Activity activity : activities){
                     series.getData().add(new XYChart.Data(2, activity.getTitle(), new GanttChart.MetaData(4,"status-purple")));
                 }
             }
-            series.getData().add(new XYChart.Data(4, entry.getTitle(), new GanttChart.MetaData(4,"status-green")));
+            series.getData().add(new XYChart.Data(4, entry.getTitle(), new GanttChart.MetaData(6,"status-blue")));
             chartEntry.add(series);
             series = new XYChart.Series();
         }

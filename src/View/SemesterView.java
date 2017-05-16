@@ -1,14 +1,19 @@
 package View;
 
 import Controller.SemesterController;
+import Model.SemesterProfile;
 import Model.User;
 import Utils.ControlledScene;
+import Utils.FileParser;
 import Utils.StageHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+
+import java.io.File;
 
 /**
  * Created by Didac on 07/05/2017.
@@ -109,7 +114,15 @@ public class SemesterView extends SemesterController implements ControlledScene{
     @FXML
     public void updateSemesterProfile() {
         // TODO: CALL UPLOAD A FILE HERE, UPDATE USING THIS USER's ID
+        File file = null;
+        final FileChooser fileChooser = new FileChooser();
+        file = fileChooser.showOpenDialog(stageHandler.getStage());
 
+        SemesterProfile semesterProfile = null;
+        if(file != null){
+            semesterProfile = FileParser.parseFile(file);
+        }
+       // SemesterController.();
     }
 
 }
