@@ -20,6 +20,8 @@ public class Task {
     private int criterionValue;
     private double criterionSoFar;
     private double progress; // related to criterion value
+    private int progress; // related to criterion value
+    private Date date;
     // TODO :'a task cannot be started before another has been completed'
 
     private Map<Task, Task> dependencies = new HashMap<>();
@@ -42,6 +44,7 @@ public class Task {
         this.criterionValue = criterionValue;
         this.progress = progress;
         this.time = 0;
+        this.date = new Date(); // current date
     }
     public Task(Integer id, String title, TaskType type, String criterion,
                 int criterionValue, int progress) {
@@ -60,6 +63,8 @@ public class Task {
 
 
     public Integer getId() {return id;}
+
+    public Date getDate() { return date; }
 
     public void setId(Integer id) { this.id = id; }
 
