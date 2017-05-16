@@ -233,6 +233,8 @@ public class MainView extends SemesterController {
                     taskProgressBar.setProgress(taskSelect.getValue().getProgress() / 100);
                     // Update assessment completion based on the task
                     assessmentSelect.getValue().calculateCompletion();
+                    taskDetails.setText(taskSelect.getValue().toString());
+
                     System.out.println("AFTER: " + taskSelect.getValue().getActivities().size());
                 }
             });
