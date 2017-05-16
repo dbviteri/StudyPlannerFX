@@ -9,6 +9,8 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.*;
+
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -83,7 +85,33 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
             getPlotChildren().add(frameHolder);
         }
     }
+    @Override
+    protected void updateAxisRange(){
+        Axis<X> xAxis = getXAxis();
+        Axis<Y> yAxis = getYAxis();
+        ArrayList<X> xList = null;
+        ArrayList<Y> yList = null;
+        if(xAxis.isAutoRanging()) { xList = new ArrayList<>(); }
+        if(yAxis.isAutoRanging()) { yList = new ArrayList<>(); }
 
+        if(xAxis != null || yAxis != null) {
+            for (Series<X, Y> series : getData()) {
+                for (Data<X, Y> data : series.getData()) {
+                    if(xList != null) {
+                        xList.add(data.getXValue());
+                        xList.add(xAxis.toRealValue(xAxis.toNumericValue(data.getXValue())
+                                + getLength(data.getExtraValue())));
+                    }
+                    if(yList != null) {
+                        yList.add(data.getYValue());
+                    }
+                }
+            }
+            if(xList != null) { xAxis.invalidateRange(xList); }
+            if(yList != null)  { yAxis.invalidateRange(yList); }
+        }
+
+    }
 
     @Override
     protected void seriesRemoved(Series<X,Y> series) {

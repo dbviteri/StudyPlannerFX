@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ public class Activity {
     private String title;
     private int quantity;
     private int time;
+    private Date date;
     private Map<ActivityNote, ActivityNote> notes = new HashMap<>();
 
     // Constructor -----------------------------------------------------------------------------------------------------
@@ -26,6 +28,7 @@ public class Activity {
         this.title = title;
         this.quantity = quantity;
         this.time = time;
+        this.date = new Date(); // current date
     }
     // TODO: Decide whether we need constructors
     public Activity(Integer activityId, String title, int quantity, int time) {
@@ -46,11 +49,28 @@ public class Activity {
 
     // Getters and setters ---------------------------------------------------------------------------------------------
 
+    public Date getDate() { return date; }
+
     public Integer getActivityId() { return activityId; }
 
     public String getTitle() {
         return title;
     }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public Map<ActivityNote, ActivityNote> getNotes() {
+        return notes;
+    }
+
+
+    public void setDate(Date date) { this.date = date; }
 
     public void setActivityId(Integer activityId) { this.activityId = activityId; }
 
@@ -58,25 +78,14 @@ public class Activity {
         this.title = title;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public int getTime() {
-        return time;
     }
 
     public void setTime(int time) {
         this.time = time;
     }
 
-    public Map<ActivityNote, ActivityNote> getNotes() {
-        return notes;
-    }
 
 //    public void setNotes(ArrayList<ActivityNote> notes) {
 //        this.notes = notes;

@@ -7,14 +7,17 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 import java.util.*;
 
@@ -144,22 +147,29 @@ public class DashBoardView extends SemesterController {
     }
     public void openChart(Module module){
 
-        HashMap<Assessment,Assessment> assessments = module.getAssessments();
-        HashMap<Task,Task> tasks = new HashMap<>();
-        HashMap<Activity, Activity> activities = new HashMap<>();
-        HashMap<Milestone,Milestone> milestones = new HashMap<>();
-
+        Assessment[] assessments = (Assessment[]) module.getAssessments().values().toArray();
+//        HashMap<Task,Task> tasks = new HashMap<>();
+//        HashMap<Activity, Activity> activities = new HashMap<>();
+//        HashMap<Milestone,Milestone> milestones = new HashMap<>();
         ArrayList<String> assessmentTitles = new ArrayList<>();
+        ArrayList<XYChart.Series> chartEntry = new ArrayList<>();
+        XYChart.Series series = new XYChart.Series();
 
-        for(HashMap.Entry entryAssessment : assessments.entrySet()){
-            Assessment assessment = (Assessment)entryAssessment.getValue();
-            //milestones.put(assessment.getMilestone(),assessment.getMilestone());
-            tasks.putAll(assessment.getTasks());
-            assessmentTitles.add(assessment.getTitle());
+        for(Assessment entry : assessments) {
+            Task[] tasks = (Task[])entry.getTasks().values().toArray();
+            assessmentTitles.add(entry.getTitle());
+            for(Task task : tasks){
+                Activity [] activities = (Activity[])task.getActivities().values().toArray();
+                series.getData().add(new XYChart.Data(task.getDate(), task.getTitle(), new GanttChart.MetaData(1,"status-red")));
+                for(Activity activity : activities){
+                    series.getData().add(new XYChart.Data(activity.getDate(), activity.getTitle(), new GanttChart.MetaData(2,"status-purple")));
+                }
+            }
+            series.getData().add(new XYChart.Data(entry.getDeadLine(), entry.getTitle(), new GanttChart.MetaData(3,"status-green")));
+            chartEntry.add(series);
+            series = new XYChart.Series();
         }
-        for(HashMap.Entry entryTask : tasks.entrySet()){
-            activities.putAll(((Task)entryTask.getValue()).getActivities());
-        }
+
         NumberAxis xAxis = new NumberAxis();
         CategoryAxis yAxis = new CategoryAxis();
         GanttChart ganttChart = new GanttChart<>(xAxis,yAxis);
@@ -177,7 +187,18 @@ public class DashBoardView extends SemesterController {
         yAxis.setTickLabelGap(10);
         yAxis.setCategories(FXCollections.observableArrayList(assessmentTitles));
 
-        XYChart.Series series = new XYChart.Series();
+        ganttChart.getData().addAll(chartEntry);
         //series.getData().add(new XYChart.Data(tasks.get, assessmentTitles.get(0), new GanttChart.MetaData( 1, "status-red")));
+
+        ScrollPane pane = new ScrollPane();
+        pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        pane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+
+        Scene chartScene = new Scene(pane,620,350);
+        pane.setContent(ganttChart);
+
+        Stage stage = new Stage();
+        stage.setScene(chartScene);
+        stage.show();
     }
 }
