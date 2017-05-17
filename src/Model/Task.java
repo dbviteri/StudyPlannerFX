@@ -35,9 +35,7 @@ public class Task {
     public Task(String title, TaskType type, String criterion,
                 int criterionValue, int progress, Date date) {
         // IF FIRST ADDED TO PROFILE DATE = CURRENT DATE
-        if (id == null) {
-            this.id = UUID.randomUUID().hashCode();
-        }
+        this.id = UUID.randomUUID().hashCode();
         this.title = title;
         this.type = type;
         this.criterion = criterion;

@@ -17,13 +17,12 @@
         <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="30.0" valignment="CENTER"/>
         <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="5.0" valignment="CENTER"/>
         <RowConstraints maxHeight="248.0" minHeight="111.0" prefHeight="172.0" valignment="CENTER"/>
-        <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="24.0" valignment="CENTER"/>
-        <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="0.0" valignment="CENTER"/>
-        <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="31.0" valignment="CENTER"/>
-        <RowConstraints maxHeight="276.0" minHeight="146.0" prefHeight="160.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="20.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="248.0" minHeight="0.0" prefHeight="7.0" valignment="CENTER"/>
+        <RowConstraints maxHeight="276.0" minHeight="31.0" prefHeight="153.0" valignment="CENTER"/>
     </rowConstraints>
     <children>
-        <HBox alignment="CENTER" prefHeight="183.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <HBox alignment="CENTER" prefHeight="183.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
             <children>
                 <TableView fx:id="activitiesTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                            prefHeight="183.0" prefWidth="405.0">
@@ -46,13 +45,13 @@
                 <Insets left="5.0"/>
             </GridPane.margin>
         </HBox>
-        <VBox alignment="CENTER" GridPane.rowIndex="5">
+        <VBox alignment="CENTER" GridPane.rowIndex="8">
             <children>
-                <ComboBox fx:id="taskSelect" maxHeight="30" promptText="Choose a task">
+                <ChoiceBox fx:id="taskSelect" maxHeight="30">
                     <VBox.margin>
                         <Insets bottom="2.0"/>
                     </VBox.margin>
-                </ComboBox>
+                </ChoiceBox>
                 <ProgressBar fx:id="taskProgressBar" maxWidth="1.7976931348623157E308" progress="0.0">
                     <padding>
                         <Insets left="20.0" right="20.0"/>
@@ -91,7 +90,7 @@
                         </TableView>
                         <VBox alignment="TOP_CENTER" maxWidth="0.0" prefHeight="154.0" prefWidth="9.0">
                             <children>
-                                <Button mnemonicParsing="false" onAction="#addTask" text="+">
+                                <Button fx:id="addTask" mnemonicParsing="false" onAction="#addTask" text="+">
                                     <VBox.margin>
                                         <Insets bottom="5.0"/>
                                     </VBox.margin>
@@ -120,41 +119,69 @@
         </Label>
         <Separator prefWidth="200.0" GridPane.rowIndex="1"/>
         <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-        <Label text="Add Activities" GridPane.rowIndex="3">
+        <Label text="Add milestone tasks" GridPane.rowIndex="3">
             <font>
                 <Font size="25.0"/>
             </font>
         </Label>
         <Separator prefWidth="200.0" GridPane.rowIndex="4"/>
         <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-        <Label text="Add Milestones" GridPane.rowIndex="6">
+        <Label text="Add Activities" GridPane.rowIndex="6">
             <font>
                 <Font size="25.0"/>
             </font>
         </Label>
         <Separator prefHeight="7.0" prefWidth="400.0" GridPane.rowIndex="7"/>
         <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
             <children>
-                <TableView fx:id="milestoneActivitiesTable" maxHeight="1.7976931348623157E308"
+                <TableView fx:id="milestoneTasksTable" maxHeight="1.7976931348623157E308"
                            maxWidth="1.7976931348623157E308" prefHeight="160.0" prefWidth="479.0">
                     <columns>
-                        <TableColumn prefWidth="372.0" text="Tasks"/>
+                        <TableColumn prefWidth="372.0" text="Milestone Tasks"/>
                     </columns>
                 </TableView>
                 <VBox alignment="TOP_CENTER" maxWidth="0.0" prefHeight="90.0" prefWidth="0.0">
                     <children>
-                        <Button mnemonicParsing="false" text="+">
+                        <Button fx:id="addMilestoneTask" onAction="#addTask" mnemonicParsing="false" text="+">
                             <VBox.margin>
                                 <Insets bottom="5.0"/>
                             </VBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" text="-"/>
+                        <Button onAction="#deleteMilestoneTask" mnemonicParsing="false" text="-"/>
                     </children>
                 </VBox>
             </children>
         </HBox>
-        <TextArea prefHeight="135.0" prefWidth="400.0" promptText="Milestone information" GridPane.rowIndex="9"/>
-        <ComboBox fx:id="milestoneSelect" prefWidth="150.0" promptText="Choose a milestone" GridPane.rowIndex="8"/>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="5">
+            <children>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#deleteMilestone" text="-">
+                            <HBox.margin>
+                                <Insets left="75.0"/>
+                            </HBox.margin>
+                        </Button>
+                        <ComboBox fx:id="milestoneSelect" maxHeight="25.0" prefWidth="150.0"
+                                  promptText="Choose a milestone">
+                            <HBox.margin>
+                                <Insets left="10.0"/>
+                            </HBox.margin>
+                        </ComboBox>
+                        <Button mnemonicParsing="false" onAction="#addMilestone" text="+">
+                            <HBox.margin>
+                                <Insets left="10.0"/>
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
+                <ProgressBar fx:id="milestoneProgress" maxWidth="1.7976931348623157E308" progress="0.0">
+                    <padding>
+                        <Insets left="20.0" right="20.0"/>
+                    </padding>
+                </ProgressBar>
+                <TextArea prefHeight="135.0" prefWidth="400.0" promptText="Milestone information"/>
+            </children>
+        </VBox>
     </children>
 </GridPane>

@@ -59,7 +59,8 @@ public class ActivityView {
 
         //if (task.getCriterionSoFar() == allowedQuantities + )
         Stage stage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
-        stage.hide();
         activities.add(new Activity(activityTitle, quantity, time, new Date()));
+
+        stage.hide();
     }
 }

@@ -8,6 +8,8 @@ import javafx.scene.control.ButtonType;
  */
 public class AlertDialog {
 
+    public AlertDialog() {}
+
     public AlertDialog(Alert.AlertType alertType, String message) {
         Alert alert = new Alert(alertType,
                 message,
@@ -16,5 +18,16 @@ public class AlertDialog {
         alert.showAndWait()
                 .filter(response -> response == ButtonType.OK)
                 .ifPresent(response -> System.out.println("Test"));
+    }
+
+    public boolean getConfirmation(String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                message,
+                ButtonType.YES, ButtonType.CANCEL);
+
+        alert.showAndWait();
+
+        return alert.getResult() == ButtonType.YES;
+
     }
 }

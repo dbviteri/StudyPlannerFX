@@ -29,7 +29,7 @@ public class MainView extends SemesterController {
     @FXML
     ComboBox<Assessment> assessmentSelect;
     @FXML
-    ComboBox<Task> taskSelect;
+    ChoiceBox<Task> taskSelect;
     @FXML
     TextArea moduleDetails;
     @FXML
@@ -37,7 +37,7 @@ public class MainView extends SemesterController {
     @FXML
     TableView<Task> taskTable;
     @FXML
-    TableView<Milestone> milestoneActivitiesTable;
+    TableView<Task> milestoneTasksTable;
     @FXML
     TableView<Activity> activitiesTable;
     @FXML
@@ -45,7 +45,8 @@ public class MainView extends SemesterController {
 
     private ObservableList<Task> taskObservableList; // All the tasks inside an assessment
     private ObservableList<Activity> activityObservableList; // All the activities inside an activity
-    private ObservableList<Milestone> milestoneObservableList; // All the activities inside an activity
+    private ObservableList<Task> milestoneTaskObservableList; // All the activities inside an activity
+    private ObservableList<Milestone> milestoneObservableList; // Milestones observable list
 
     /**
      * Adds the modules from semester profile to the combo box
@@ -78,10 +79,16 @@ public class MainView extends SemesterController {
     public void addTask(ActionEvent actionEvent) {
         if (assessmentSelect.getValue() == null) return;
 
+        FXMLLoader fxmlLoader;
         Stage parentStage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
+        if ((((Node) (actionEvent.getSource())).getId()).equals("addTask")) {
+            fxmlLoader = new FXMLLoader(getClass().getResource("TaskView.fxml"));
+            fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new TaskView(taskObservableList));
+        } else {
+            fxmlLoader = new FXMLLoader(getClass().getResource("TaskView.fxml"));
+            fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new TaskView(milestoneTaskObservableList));
+        }
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TaskView.fxml"));
-        fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new TaskView(taskObservableList));
         Parent root;
         try {
             root = fxmlLoader.load();
@@ -101,7 +108,7 @@ public class MainView extends SemesterController {
     /**
      * Adds columns to the table view. It essentially populates the table with tasks.
      */
-    private void addTaskColumns() {
+    private void addTaskColumns(TableView<Task> table) {
         // Add tasks to table
         TableColumn<Task, String> titleCol = new TableColumn<>("Title");
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -115,7 +122,7 @@ public class MainView extends SemesterController {
         TableColumn<Task, Integer> criterionCol = new TableColumn<>("Criterion");
         criterionCol.setCellValueFactory(new PropertyValueFactory<>("criterion"));
 
-        taskTable.getColumns().addAll(titleCol, typeCol, timeCol, criterionCol);
+        table.getColumns().addAll(titleCol, typeCol, timeCol, criterionCol);
     }
 
     /**
@@ -132,16 +139,6 @@ public class MainView extends SemesterController {
         timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
 
         activitiesTable.getColumns().addAll(titleCol, quantityCol, timeCol);
-    }
-
-    private void addMilestoneColumns() {
-        TableColumn<Milestone, String> titleCol = new TableColumn<>("Title");
-        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-
-        TableColumn<Milestone, String> deadlineCol = new TableColumn<>("Deadline");
-        deadlineCol.setCellValueFactory(new PropertyValueFactory<>("deadline"));
-
-        milestoneActivitiesTable.getColumns().addAll(titleCol, deadlineCol);
     }
 
     /**
@@ -162,22 +159,71 @@ public class MainView extends SemesterController {
 
 
             }
+
+            milestoneSelect.getItems().clear();
+            milestoneTasksTable.getColumns().clear();
+        });
+
+        milestoneSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
+
+            if (newValue == null) {
+                return;
+            }
+            taskSelect.getItems().clear();
+
+            milestoneTasksTable.getItems().clear();
+            milestoneTasksTable.getColumns().clear();
+
+            milestoneTaskObservableList = FXCollections.observableArrayList(milestoneSelect.getValue().getTasks().values());
+            taskSelect.getItems().addAll(milestoneTaskObservableList);
+
+            milestoneTaskObservableList.addListener((ListChangeListener<Task>) pChange -> {
+                if (milestoneSelect.getValue() == null) return;
+
+                pChange.next();
+                if (pChange.wasRemoved()) {
+                    taskSelect.getItems().clear();
+                    milestoneSelect.getValue().deleteTask(pChange.getRemoved().get(0));
+                    milestoneSelect.getItems().addAll(milestoneObservableList);
+                    taskSelect.getItems().clear();
+                    taskSelect.getItems().addAll(milestoneTaskObservableList);
+                    if (!taskObservableList.isEmpty())
+                        taskSelect.getItems().addAll(taskObservableList);
+                } else if (pChange.wasAdded()) {
+                    milestoneSelect.getValue().addTask(pChange.getAddedSubList().get(pChange.getAddedSubList().size() - 1));
+                    taskSelect.getItems().clear();
+                    taskSelect.getItems().addAll(milestoneTaskObservableList);
+                    if (!taskObservableList.isEmpty())
+                        taskSelect.getItems().addAll(taskObservableList);
+                }
+            });
+
+            addTaskColumns(milestoneTasksTable);
+            milestoneTasksTable.setItems(milestoneTaskObservableList);
         });
 
         // Assessment combo box listener:
         // Inside there's a observable list listener, which gets updated whenever there's a
         // change with the combo box
         assessmentSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
-            taskTable.getItems().clear();
-            if (newValue == null) return;
+            if (newValue == null) {
+                milestoneSelect.getItems().clear();
+                milestoneTasksTable.getItems().clear();
+                activitiesTable.getItems().clear();
+                taskSelect.getItems().clear();
+                taskTable.getItems().clear();
+                return;
+            }
+
+            milestoneSelect.getItems().addAll(assessmentSelect.getValue().getMilestones().values());
 
             moduleDetails.setText(moduleSelect.getValue().toString() + "\n" + assessmentSelect.getValue().toString());
 
-            milestoneActivitiesTable.getItems().clear();
-            milestoneActivitiesTable.getColumns().clear();
-
             taskSelect.getItems().clear();
             taskTable.getColumns().clear();
+
+            milestoneSelect.getItems().clear();
+            milestoneTasksTable.getColumns().clear();
 
             taskObservableList = FXCollections.observableArrayList(assessmentSelect.getValue().getTasks().values());
             taskSelect.getItems().addAll(taskObservableList);
@@ -193,24 +239,43 @@ public class MainView extends SemesterController {
                     assessmentSelect.getValue().deleteTask(pChange.getRemoved().get(0));
                     taskSelect.getItems().clear();
                     taskSelect.getItems().addAll(taskObservableList);
+                    if (!milestoneTaskObservableList.isEmpty())
+                        taskSelect.getItems().addAll(milestoneTaskObservableList);
                 } else if (pChange.wasAdded()) {
                     System.out.println("BEFORE: " + dbhandler.getSemesterSession().getModules().get(moduleSelect.getValue()).getAssessments().get(assessmentSelect.getValue()).getTasks().size());
                     //int index = pChange.getTo() - pChange.getFrom();
                     assessmentSelect.getValue().addTask(pChange.getAddedSubList().get(pChange.getAddedSubList().size() - 1));
                     taskSelect.getItems().clear();
                     taskSelect.getItems().addAll(taskObservableList);
+                    if (!milestoneTaskObservableList.isEmpty())
+                        taskSelect.getItems().addAll(milestoneTaskObservableList);
                     System.out.println("AFTER: " + dbhandler.getSemesterSession().getModules().get(moduleSelect.getValue()).getAssessments().get(assessmentSelect.getValue()).getTasks().size());
                 }
             });
 
-            addTaskColumns();
+            addTaskColumns(taskTable);
             taskTable.setItems(taskObservableList);
 
             milestoneObservableList = FXCollections.observableArrayList(assessmentSelect.getValue().getMilestones().values());
 
-            addMilestoneColumns();
             milestoneSelect.getItems().addAll(milestoneObservableList);
-            milestoneActivitiesTable.setItems(milestoneObservableList);
+
+            milestoneObservableList.addListener((ListChangeListener<Milestone>) pChange -> {
+                pChange.next();
+
+                if (pChange.wasRemoved()) {
+                    assessmentSelect.getValue().deleteMilestone(milestoneSelect.getValue());
+                    milestoneSelect.getItems().clear();
+                    milestoneSelect.getItems().addAll(milestoneObservableList);
+                } else if (pChange.wasAdded()) {
+                    assessmentSelect.getValue().addMilestone(pChange.getAddedSubList().get(pChange.getAddedSubList().size() - 1));
+                    milestoneSelect.getItems().clear();
+                    milestoneSelect.getItems().addAll(milestoneObservableList);
+                }
+            });
+
+            if (milestoneTaskObservableList == null) return;
+            taskSelect.setItems(milestoneTaskObservableList);
         });
 
         // Task combo box listener:
@@ -313,4 +378,41 @@ public class MainView extends SemesterController {
         activityObservableList.remove(selectedActivity);
         System.out.println("AFTER: " + taskSelect.getValue().getActivities().size());
     }
+
+    public void addMilestone(ActionEvent actionEvent) {
+        if (assessmentSelect.getValue() == null) return;
+
+        Stage parentStage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MilestoneView.fxml"));
+        fxmlLoader.setControllerFactory((Class<?> CreateTaskView) -> new MilestoneView(milestoneObservableList, assessmentSelect.getValue()));
+        Parent root;
+        try {
+            root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Add milestone");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.setResizable(false);
+            stage.show();
+            stage.setOnCloseRequest(event -> parentStage.show());
+            stage.setOnHidden(event -> parentStage.show());
+            parentStage.hide();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteMilestone(ActionEvent actionEvent) {
+        // Add confirmation
+        if (milestoneSelect.getValue() == null) return;
+        AlertDialog alertDialog = new AlertDialog();
+        if (alertDialog.getConfirmation("You sure you want to delete this milestone?"))
+            milestoneObservableList.remove(milestoneSelect.getValue());
+    }
+
+    public void addMilestoneTask(ActionEvent actionEvent) {
+
+    }
+
+    public void deleteMilestoneTask(ActionEvent actionEvent) {}
 }

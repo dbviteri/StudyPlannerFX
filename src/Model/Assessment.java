@@ -92,7 +92,12 @@ public class Assessment {
 
     public Map<Task, Task> getTasks() { return new HashMap<>(tasks); }
 
-    public void addMilestone(Milestone milestone) { milestones.put(milestone, milestone);}
+    public void addMilestone(Milestone milestone) {
+        if (!milestones.containsKey(milestone))
+            milestones.put(milestone, milestone);
+    }
+
+    public void deleteMilestone(Milestone milestone) { milestones.remove(milestone); }
 
     //public void addTasks(Map<Integer, Task> tasks) { this.tasks = tasks; }
 

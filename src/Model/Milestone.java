@@ -17,7 +17,7 @@ public class Milestone {
     private DoubleProperty progress = new SimpleDoubleProperty();
     private Date start;
     private Date deadline;
-    private HashMap<Task,Task> tasks;
+    private HashMap<Task, Task> tasks = new HashMap<>();
 
     public Milestone(String title, Date start, Date deadline) {
         // IF FIRST TIME MILESTONE IS ADDED DATE = CURRENT DATE
@@ -49,6 +49,8 @@ public class Milestone {
     public void setProgress(double progress) {this.progress.set(progress);}
 
     public void setDeadline(Date deadline) { this.deadline = deadline; }
+
+    public void deleteTask(Task task) { tasks.remove(task); }
 
     /** Function used to check if milestone is complete
      *  by checking if every depending task is complete
@@ -97,5 +99,31 @@ public class Milestone {
             sb.append(entry.getValue());
         }
         return sb.toString();
+    }
+
+    /**
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+
+        if (getClass() != obj.getClass())
+            return false;
+
+        if (id == null) return false;
+
+
+        Milestone milestone = (Milestone) obj;
+        return this.id.equals(milestone.id);
+    }
+
+    @Override
+    public int hashCode() {
+        if (id == null)
+            return title.hashCode();
+
+        return id.hashCode();
     }
 }
