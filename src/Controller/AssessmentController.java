@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * Created by 100125468 on 04/05/2017.
  */
-public class AssessmentController implements DBQuerry {
+public class AssessmentController implements DBQuery {
 
     // QUERIES ---------------------------------------------------------------------------------------------------------
 

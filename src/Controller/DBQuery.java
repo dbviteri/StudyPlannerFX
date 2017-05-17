@@ -8,9 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by 100125468 on 16/05/2017.
+ *    Created by 100125468 on 16/05/2017.
  */
-public interface DBQuerry {
+public interface DBQuery {
     DatabaseHandler db = new DatabaseHandler();
     default boolean update(String sql, Object... properties){
         try (
@@ -18,7 +18,7 @@ public interface DBQuerry {
                         db.prepareStatement(sql, false, properties)
         ) {
             int updatedRows = statement.executeUpdate();
-            if (updatedRows == 0) throw new SPException("Failed to update Modules. No rows affected");
+            if (updatedRows == 0) throw new SPException("Failed to update , No rows affected");
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,7 +33,7 @@ public interface DBQuerry {
 
         ) {
             int updatedRows = statement.executeUpdate();
-            if (updatedRows == 0) throw new SPException("Failed to create new Semester. No rows affected");
+            if (updatedRows == 0) throw new SPException("Failed to insert. No rows affected");
 
             try (ResultSet set = statement.getGeneratedKeys()) {
                 if (set.next()) {

@@ -1,6 +1,9 @@
 package Controller;
 
 import Model.Activity;
+import Model.Milestone;
+import Utils.SPException;
+import org.omg.PortableInterceptor.ACTIVE;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,11 +14,15 @@ import java.util.Date;
 /**
  * Created by Didac on 07/05/2017.
  */
-public class ActivityController implements DBQuerry {
+public class ActivityController implements DBQuery {
 
     // QUERIES ---------------------------------------------------------------------------------------------------------
 
     private static final String QUERY_FIND_ACTIVITIES = "SELECT * FROM Activity WHERE task_id = ?";
+    private static final String QUERY_INSERT_ACTIVITY =
+            "INSERT INTO Activity (quantity, time, activity_title, date) VALUES (?,?,?,?)";
+    private static final String QUERY_UPDATE_ACTIVITY =
+            "UPDATE Activity SET quantity = ?, time = ?, activity_title = ?, data = ? WHERE activity_ID = ?";
 
     // DATABASE INSTANCE -----------------------------------------------------------------------------------------------
 
@@ -39,6 +46,27 @@ public class ActivityController implements DBQuerry {
 
         return activities;
     }
+    public boolean insertActivity(Activity activity){
+        Object[] properties = {
+
+                activity.getQuantity(),
+                activity.getTime(),
+                activity.getTitle(),
+                activity.getDate()
+
+        };
+
+        try (
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT_ACTIVITY, false, properties)
+        ) {
+            int updatedRows = statement.executeUpdate();
+            if (updatedRows == 0) throw new SPException("Failed to create new activity. No rows affected");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
 
     public Activity formActivity(ResultSet resultSet) throws SQLException {
         Integer activityId = resultSet.getInt("activity_ID");
@@ -48,5 +76,25 @@ public class ActivityController implements DBQuerry {
         Date date = resultSet.getDate("date");
         return new Activity(activityId, title, quantity, time,date);
         //return new Activity();
+    }
+    public boolean updateActivity(Activity activity){
+        Object[] properties = {
+                activity.getQuantity(),
+                activity.getTime(),
+                activity.getTitle(),
+                activity.getDate()
+
+        };
+        try (
+                PreparedStatement statement =
+                        dbhandler.prepareStatement(QUERY_UPDATE_ACTIVITY, false, properties)
+        ) {
+            int updates = statement.executeUpdate();
+            if (updates == 0) throw new SPException("Failed to update Activity. No rows affected");
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

@@ -19,7 +19,7 @@ public class Milestone {
     private Date deadline;
     private HashMap<Task,Task> tasks;
 
-    public Milestone(String title, Date start, Date deadline) {
+    public Milestone(String title, double progress, Date start, Date deadline) {
         // IF FIRST TIME MILESTONE IS ADDED DATE = CURRENT DATE
         id = UUID.randomUUID().hashCode();
         this.title = title;
@@ -28,20 +28,25 @@ public class Milestone {
     }
 
     public Milestone(Integer id, String title, double progress, Date start, Date deadline) {
-        this(title, start, deadline);
+        this(title,progress, start, deadline);
         this.progress.setValue(progress);
         this.id = id;
     }
 
+    public Integer getId() { return this.id; }
     public String getTitle(){
         return title;
     }
-
     public double getProgress() { return progress.get(); }
 
+    public Date getStart() { return start; }
+
     public Date getDeadline() { return deadline; }
+
     public HashMap<Task,Task> getTasks() { return new HashMap<>(tasks); }
 
+
+    public void setId(Integer id) { this.id = id; }
     public void setTitle(String title){
         this.title = title;
     }
@@ -50,19 +55,22 @@ public class Milestone {
 
     public void setDeadline(Date deadline) { this.deadline = deadline; }
 
+    public void setStart(Date start) { this.start = start; }
+
     /** Function used to check if milestone is complete
      *  by checking if every depending task is complete
      *  it also updates isComplete variable
      *
      * @return boolean
      */
-    public boolean checkCompletion(){
-        for(HashMap.Entry entry : tasks.entrySet()){
-            if(!((Task)entry.getValue()).isComplete()){
-                return false;
-            }
+    public double updateProgress(){
+        double prog = 0;
+        for(Task task : tasks.values()){
+            prog += task.getProgress();
         }
-        return true;
+        prog = prog / tasks.size();
+        progress.setValue(prog);
+        return prog;
     }
 
     /** Function used to return a HashMap
@@ -86,7 +94,9 @@ public class Milestone {
      * @param task
      */
     public void addTask(Task task){
-        tasks.put(task,task);
+        if(!tasks.containsKey(task)){
+            tasks.put(task,task);
+        }
     }
     @Override
     public String toString(){

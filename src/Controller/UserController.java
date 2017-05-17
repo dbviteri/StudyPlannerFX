@@ -20,7 +20,7 @@ import java.util.HashMap;
  *
  * Created by Didac on 30/04/2017.
  */
-public class UserController implements DBQuerry {
+public class UserController implements DBQuery {
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
