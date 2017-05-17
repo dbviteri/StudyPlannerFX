@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * Created by 100125468 on 07/05/2017.
  */
-public class NoteController implements DBQuerry {
+public class NoteController implements DBQuery {
 
     private static final String QUERY_FIND_TASK_NOTES =
             "SELECT * FROM Note WHERE task_ID = ?";

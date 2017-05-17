@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by 100125468 on 04/05/2017.
  */
-public class ModuleController implements  DBQuerry{
+public class ModuleController implements DBQuery {
     private static final String QUERY_INSERT_MODULE =
             "INSERT INTO Module (module_title, code, Semester_ID) VALUES (?, ?, ?)";
     private static final String QUERY_FIND_MODULES =

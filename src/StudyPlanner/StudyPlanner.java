@@ -2,11 +2,9 @@ package StudyPlanner;
 
 import Controller.ActivityController;
 import Controller.DatabaseHandler;
+import Controller.MilestoneController;
 import Controller.TaskController;
-import Model.Assessment;
-import Model.Module;
-import Model.SemesterProfile;
-import Model.Task;
+import Model.*;
 import Utils.StageHandler;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -14,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class StudyPlanner extends Application {
-
+    private static int UID_VARIABLE = 10000;
     private static String WINDOW_TITLE = "Study Planner";
 
     private static String LOGINFXML = "../View/LoginView.fxml";
@@ -66,7 +64,28 @@ public class StudyPlanner extends Application {
         for(Module module : semester.getModules().values()) {
             for(Assessment assessment : module.getAssessments().values()) {
                 for(Task task : assessment.getTasks().values()) {
-                    //taskController.
+                    if(task.getId() < UID_VARIABLE){
+                        taskController.updateTask(task);
+                    }
+                    else{
+                        taskController.insertTask(task);
+                    }
+                    for(Activity activity : task.getActivities().values()) {
+                        if(activity.getActivityId() < UID_VARIABLE){
+                            activityController.updateActivity(activity);
+                        }
+                        else{
+                            activityController.insertActivity(activity);
+                        }
+                    }
+                }
+                for(Milestone milestone : assessment.getMilestones().values()){
+                    if(milestone.getId() < UID_VARIABLE){
+                        MilestoneController.updateMilestone(milestone);
+                    }
+                    else {
+                        MilestoneController.insertMilestone(milestone);
+                    }
                 }
             }
         }

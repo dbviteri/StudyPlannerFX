@@ -13,7 +13,7 @@ import java.util.Date;
  *
  * Created by Didac on 04/05/2017.
  */
-public class TaskController implements DBQuerry {
+public class TaskController implements DBQuery {
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ public class TaskController implements DBQuerry {
             "DELETE FROM Task WHERE task_id = ?";
     private static final String QUERY_UPDATE_TASK =
             "UPDATE Task SET task_title = ?, task_type = ?, time = ?, criterion = ?," +
-                    " criterion_value = ?, progress = ?, date = ?, assessment_id = ?, dependency =?, activity_ID = ?, task_milestone_id = ? WHERE task_id = ?";
+                    " criterion_value = ?, progress = ?, date = ? WHERE task_id = ?";
 
     private DatabaseHandler dbhandler = DatabaseHandler.getInstance();
 
@@ -107,14 +107,24 @@ public class TaskController implements DBQuerry {
             e.printStackTrace();
         }
     }
-    public boolean updateTask(String sql, Object... properties){
+    public boolean updateTask(Task task){
+        Object[] properties = {
+                task.getTitle(),
+                task.getType(),
+                task.getTime(),
+                task.getCriterion(),
+                task.getCriterionValue(),
+                task.getProgress(),
+                task.getDate(),
+                task.getId()
+        };
 
         try (
                 PreparedStatement statement =
                         dbhandler.prepareStatement(QUERY_UPDATE_TASK, false, properties)
         ) {
             int updates = statement.executeUpdate();
-            if (updates == 0) throw new SPException("Failed to update Modules. No rows affected");
+            if (updates == 0) throw new SPException("Failed to update Task. No rows affected");
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

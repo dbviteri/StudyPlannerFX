@@ -3,8 +3,6 @@ package Controller;
 import Model.*;
 import Utils.SPException;
 import Utils.StageHandler;
-import View.DashBoardView;
-import View.SemesterView;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +14,7 @@ import java.util.Map;
  *
  * Created by Didac on 01/05/2017.
  */
-public class SemesterController implements  DBQuerry {
+public class SemesterController implements DBQuery {
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
