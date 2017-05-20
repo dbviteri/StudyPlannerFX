@@ -1,12 +1,11 @@
 package View;
 
-import Controller.SemesterController;
+import Controller.DatabaseHandler;
 import Model.*;
-import Utils.StageHandler;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -16,46 +15,49 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by Didac on 08/05/2017.
  */
-public class DashBoardView extends SemesterController {
-
-    private static final int COMPLETED_COLUMN = 2;
-    private static final int UPCOMING_COLUMN = 1;
-    private static final int MISSED_COLUMN = 0;
-
-    private static int ROW_INDEX_COMPLETED = 0;
-    private static int ROW_INDEX_UPCOMING = 0;
-    private static int ROW_INDEX_MISSED = 0;
+public class DashBoardView {
 
     @FXML
     GridPane dashboardGrid;
     @FXML
-    GridPane completedDeadlineGrid;
+    VBox completedDeadlineBox;
     @FXML
-    GridPane upcomingDeadlineGrid;
+    VBox upcomingDeadlineBox;
     @FXML
-    GridPane missedDeadlineGrid;
+    VBox missedDeadlineBox;
 
+    @FXML
+    ScrollPane completeScrollPane;
+    @FXML
+    ScrollPane upcomingScrollPane;
+    @FXML
+    ScrollPane missedScrollPane;
     //private DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
 
-    private DoubleProperty doubleProperty = new SimpleDoubleProperty();
-
     public void load() {
-        User user = dbhandler.getUserSession();
+        completedDeadlineBox.prefWidthProperty().bind(completeScrollPane.widthProperty());
+        upcomingDeadlineBox.prefWidthProperty().bind(completeScrollPane.widthProperty());
+        missedDeadlineBox.prefWidthProperty().bind(completeScrollPane.widthProperty());
+
+        completedDeadlineBox.setPadding(new Insets(16, 16, 16, 16));
+        upcomingDeadlineBox.setPadding(new Insets(16, 16, 16, 16));
+        missedDeadlineBox.setPadding(new Insets(16, 16, 16, 16));
+
+        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
         //SemesterProfile semesterProfile = MasterController.getSemester(user.getId());
-        loadSemester(user.getId());
 
-        Map<Module, Module> modules = dbhandler.getSemesterSession().getModules();
-
-        dashboardGrid.setId("dashboardGrid");
-        upcomingDeadlineGrid.setId("upcomingGrid");
+        Map<Module, Module> modules = databaseHandler.getSemesterSession().getModules();
 
         // Decide what pane should the assignments go based on deadline
         Date date = new Date();
@@ -69,83 +71,68 @@ public class DashBoardView extends SemesterController {
                 // For each module create a label with the module name
                 Assessment assessment = assessmentEntry.getValue();
 
-                // Create a list of labels of the size of assessments
-                // If compareTo is more than 0, date is after the deadline
-                // Should go to missed deadlines
-
-                // If compareTo is less than 0, date is before the deadline
-                // Should go to upcoming deadlines
                 moduleInfo.setText(
                         moduleInfo.getText() +
                                 "ASSESSMENT: " + assessment.toString() + "\n" + "Deadline : "
                                 + assessment.getDeadLine() + "\n" +
                                 "Progress for this assessment: \n"
                 );
+                moduleInfo.setMaxWidth(Double.MAX_VALUE);
 
-                if (date.compareTo(assessment.getDeadLine()) < 0) {
-                    Button button = new Button(moduleEntry.getValue().getTitle() + "'s \n ganttchart");
-                    button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                    button.setWrapText(true);
-                    button.setOnAction(event -> openChart(moduleEntry.getValue()));
+                Button button = new Button(moduleEntry.getValue().getTitle() + "'s \n ganttchart");
+                button.setMaxWidth(Double.MAX_VALUE);
+                button.setWrapText(true);
+                button.setOnAction(event -> openChart(moduleEntry.getValue()));
 
-                    ProgressBar progressBar = new ProgressBar(0);
-                    progressBar.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                    System.out.println(assessment.getCompletion());
-                    progressBar.setProgress(assessment.getCompletion() / 100);
+                ProgressBar progressBar = new ProgressBar(0);
+                progressBar.setMaxWidth(Double.MAX_VALUE);
+                progressBar.progressProperty().bind(assessment.completionProperty().divide(100));
 
-                    assessment.completionProperty().addListener((observable, oldValue, newValue) -> {
-                        progressBar.setProgress(assessment.getCompletion()/100);
-                    });
-//                    Bounds upcomingDeadlinesLblBounds = upcomingDeadlinesLbl.getBoundsInLocal();
-//                    Point2D labelLocation = upcomingDeadlinesLbl.localToScreen()
-                    upcomingDeadlineGrid.addColumn(0, moduleInfo);
-                    //upcomingDeadlineGrid.addColumn(UPCOMING_COLUMN, assessmentInfo);
-                    upcomingDeadlineGrid.addColumn(0, progressBar);
-                    upcomingDeadlineGrid.addRow(ROW_INDEX_UPCOMING, button);
-                    //upcomingDeadlineGrid.getChildren().get(ROW_INDEX_UPCOMING).setStyle("-fx-background-color: cornsilk; -fx-alignment: center;");
-                    //upcomingDeadlineGrid.setVgap(20);
-                    //upcomingDeadlinesLbl.setText(assessment.getTitle());
+                assessment.completionProperty().addListener(((observable, oldValue, newValue) -> {
+                    if (oldValue.doubleValue() < 100) {
+                        if (newValue.doubleValue() == 100) {
+                            removeElements(upcomingDeadlineBox, moduleInfo, progressBar, button);
+                            addElements(completedDeadlineBox, moduleInfo, progressBar, button);
+                        }
+                    } else if (oldValue.doubleValue() == 100) {
+                        if (newValue.doubleValue() < 100 && date.compareTo(assessment.getDeadLine()) < 0) {
+                            removeElements(completedDeadlineBox, moduleInfo, progressBar, button);
+                            addElements(upcomingDeadlineBox, moduleInfo, progressBar, button);
+                        } else {
+                            removeElements(completedDeadlineBox, moduleInfo, progressBar, button);
+                            addElements(missedDeadlineBox, moduleInfo, progressBar, button);
+                        }
+                    }
+                }));
 
-                    ROW_INDEX_UPCOMING += upcomingDeadlineGrid.impl_getColumnCount();
-                } else if (date.compareTo(assessment.getDeadLine()) > 0) {
-                    missedDeadlineGrid.add(moduleInfo, MISSED_COLUMN, ROW_INDEX_MISSED);
-                    //missedDeadlineGrid.setVgap(20);
-                    //missedDeadlinesLbl.setText(assessment.getTitle());
-                    ROW_INDEX_MISSED++;
+                // If compareTo is more than 0, date is after the deadline
+                // Should go to missed deadlines
+
+                // If compareTo is less than 0, date is before the deadline
+                // Should go to upcoming deadlines
+                if (date.compareTo(assessment.getDeadLine()) < 0 && assessment.getCompletion() < 100) {
+                    addElements(upcomingDeadlineBox, moduleInfo, progressBar, button);
+                } else if (date.compareTo(assessment.getDeadLine()) > 0 && assessment.getCompletion() < 100) {
+                    addElements(missedDeadlineBox, moduleInfo, progressBar, button);
+                } else {
+                    addElements(completedDeadlineBox, moduleInfo, progressBar, button);
                 }
-
-                //assessmentInfo.setPadding(new Insets(0, 0, 20, 0));
-                //System.out.println(date.compareTo(assessment.getDeadLine()));
             }
-
-
         }
-
-//        // Re-fit the gridpane after adding the new rows based on the largest row index
-        int rowsAdded = (ROW_INDEX_COMPLETED > ROW_INDEX_MISSED) ? ROW_INDEX_COMPLETED : ROW_INDEX_MISSED;
-        rowsAdded = (rowsAdded > ROW_INDEX_UPCOMING) ? rowsAdded : ROW_INDEX_UPCOMING;
-
-//        ColumnConstraints columnConstraints = new ColumnConstraints();
-//        columnConstraints.setHalignment(HPos.RIGHT);
-//        upcomingDeadlineGrid.getColumnConstraints().add(columnConstraints);
-//
-        completedDeadlineGrid.setVgap(20);
-        upcomingDeadlineGrid.setVgap(20);
-        missedDeadlineGrid.setVgap(20);
-//
-        completedDeadlineGrid.setHgap(20);
-        upcomingDeadlineGrid.setHgap(20);
-        missedDeadlineGrid.setHgap(20);
-        //completedDeadlineGrid.setAlignment(Pos.CENTER);
-
-
-        //System.out.println(SemesterController.find(user.getId()).getEndDate());
-        //System.out.println("can call");
-        ROW_INDEX_COMPLETED = 0;
-        ROW_INDEX_UPCOMING = 0;
-        ROW_INDEX_MISSED = 0;
-
     }
+
+    private void addElements(VBox box, Node... nodes) {
+        for (Node node : nodes) {
+            box.getChildren().add(node);
+        }
+    }
+
+    private void removeElements(VBox box, Node... nodes) {
+        for (Node node : nodes) {
+            box.getChildren().remove(node);
+        }
+    }
+
     public void openChart(Module module){
 
         Assessment[] assessments = new Assessment[module.getAssessments().values().size()];
@@ -162,7 +149,7 @@ public class DashBoardView extends SemesterController {
             entry.getTasks().values().toArray(tasks);
             assessmentTitles.add(entry.getTitle());
             for(Task task : tasks){
-                Activity [] activities = new Activity[task.getActivities().size()];
+                Activity[] activities = new Activity[task.getActivities().size()];
                 task.getActivities().values().toArray(activities);
                 series.getData().add(new XYChart.Data(0, task.getTitle(), new GanttChart.MetaData(2,"status-red")));
                 for(Activity activity : activities){

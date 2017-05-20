@@ -23,13 +23,13 @@ public class TaskTest {
         TaskNote note = new TaskNote("test", "test", new Date());
         TaskNote note2 = new TaskNote("test", "test", new Date());
 
-        Task task = new Task();
-        task.addNote(note);
-        task.addNote(note2);
-
-        //System.out.println(task.getNotes().get(note).getTitle());
-        //assert !task.getNotes().get(note).equals(task.getNotes().get(note2));
-        assert task.getNotes().size() == 2;
+//        Task task = new Task();
+//        task.addNote(note);
+//        task.addNote(note2);
+//
+//        //System.out.println(task.getNotes().get(note).getTitle());
+//        //assert !task.getNotes().get(note).equals(task.getNotes().get(note2));
+//        assert task.getNotes().size() == 2;
     }
 
     @Test

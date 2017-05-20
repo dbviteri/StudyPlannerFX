@@ -2,6 +2,8 @@ package Model;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import java.util.Map;
  * Created by Didac on 02/05/2017.
  */
 public class Assessment {
+
 
     // Properties ------------------------------------------------------------------------------------------------------
 
@@ -26,8 +29,8 @@ public class Assessment {
     private HashMap<Task, Task> tasks = new HashMap<>();
     private HashMap<Milestone,Milestone> milestones = new HashMap<>();
 
-    // Foreign key code module
-    //private String moduleCode;
+    private ObservableList<Task> observableTaskList = FXCollections.observableArrayList();
+    private ObservableList<Milestone> observableMilestoneList = FXCollections.observableArrayList();
 
     //TODO: Be able to define study milestones which must be attached to coursework or exams
     //TODO: Be able to define study tasks contributing towards specific coursework or exams
@@ -104,17 +107,18 @@ public class Assessment {
     //public void addAllTasks(ArrayList<Task> tasks) { this.tasks = tasks; }
 
 
-    public boolean deleteTask(Task task) {
-        for (HashMap.Entry entry : tasks.entrySet()) {
-            if (!(entry.getValue()).equals(task)) {
-                for (HashMap.Entry dependency : ((Task) entry.getValue()).getDependencies().entrySet()) {
-                    if (dependency.getValue().equals(task)) { return false; }
+    public boolean deleteTask(Task passedTask) {
+        for (Task task : tasks.values()) {
+            if (!task.equals(passedTask)) {
+                for (Task dependency : task.getDependencies().values()) {
+                    if (dependency.equals(passedTask)) { return false; }
                 }
             }
         }
+
         //if (!task.getDependencies().isEmpty()) return false;
-        tasks.remove(task);
-        calculateCompletion();
+        tasks.remove(passedTask);
+        updateCompletion();
         return true;
     }
 
@@ -124,23 +128,44 @@ public class Assessment {
         return completion;
     }
 
-    public void calculateCompletion(){
+    public void updateCompletion() {
         double count = 0;
-        if (tasks.isEmpty()) completion.setValue(0);
-        for(HashMap.Entry entry : tasks.entrySet()) {
-            Task task = (Task) entry.getValue();
-            //task.isComplete();
+        if (tasks.isEmpty()) {
+            completion.setValue(0);
+            return;
+        }
+
+        for (Task task : tasks.values()) {
             count += task.getProgress();
         }
-        count = count / tasks.entrySet().size();
-        completion.setValue(count);
+
+        completion.set(count / tasks.size());
     }
 
     public void addTask(Task task) {
         if (!tasks.containsKey(task))
             tasks.put(task, task);
-        calculateCompletion();
+        updateCompletion();
     }
+
+    public ObservableList<Task> getObservableTaskList() {
+        for (Task task : tasks.values()) {
+            if (!observableTaskList.contains(task)) {
+                observableTaskList.add(task);
+            }
+        }
+        return observableTaskList;
+    }
+
+    public ObservableList<Milestone> getObservableMilestoneList() {
+        for (Milestone milestone : milestones.values()) {
+            if (!observableMilestoneList.contains(milestone)) {
+                observableMilestoneList.add(milestone);
+            }
+        }
+        return observableMilestoneList;
+    }
+
     // Overrides -------------------------------------------------------------------------------------------------------
 
     // TODO: Rewrite the tostring

@@ -211,7 +211,7 @@ public class SemesterController implements DBQuery {
 
                     modules.get(module).getAssessments()
                             .get(assessment).getTasks().get(task)
-                            .addNote(taskNote);
+                            .setTaskNote(taskNote);
                 }
             }
         } while (resultSet.next());

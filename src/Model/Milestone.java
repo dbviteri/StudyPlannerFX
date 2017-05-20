@@ -2,6 +2,8 @@ package Model;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +20,8 @@ public class Milestone {
     private Date start;
     private Date deadline;
     private HashMap<Task, Task> tasks = new HashMap<>();
+
+    private ObservableList<Task> observableTaskList = FXCollections.observableArrayList(tasks.values());
 
     public Milestone(String title, Date start, Date deadline) {
         // IF FIRST TIME MILESTONE IS ADDED DATE = CURRENT DATE
@@ -38,13 +42,13 @@ public class Milestone {
         return title;
     }
     public double getProgress() { return progress.get(); }
-
     public Date getStart() { return start; }
-
     public Date getDeadline() { return deadline; }
-
     public HashMap<Task,Task> getTasks() { return new HashMap<>(tasks); }
 
+    public ObservableList<Task> getObservableTaskList() {
+        return observableTaskList;
+    }
 
     public void setId(Integer id) { this.id = id; }
     public void setTitle(String title){
@@ -55,12 +59,14 @@ public class Milestone {
 
     public void setDeadline(Date deadline) { this.deadline = deadline; }
 
-    public void deleteTask(Task task) { tasks.remove(task); }
+    public void deleteTask(Task task) {
+        tasks.remove(task);
+        updateProgress();
+    }
 
-    /** Function used to check if milestone is complete
-     *  by checking if every depending task is complete
-     *  it also updates isComplete variable
-     *
+    public DoubleProperty progressProperty() { return progress; }
+
+    /** Function used to check update milestone's progress
      * @return boolean
      */
     public double updateProgress(){
@@ -97,6 +103,7 @@ public class Milestone {
         if(!tasks.containsKey(task)){
             tasks.put(task,task);
         }
+        updateProgress();
     }
     @Override
     public String toString(){

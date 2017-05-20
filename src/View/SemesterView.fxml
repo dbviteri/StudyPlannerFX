@@ -1,45 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
-<VBox id="SemesterView" fx:id="semesterView" prefHeight="400" prefWidth="600" xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.SemesterView">
+<?import javafx.scene.layout.*?>
+<GridPane fx:id="semesterView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+          minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
+          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.SemesterView">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="23.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="563.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
    <children>
-       <MenuBar fx:id="menuBar" maxHeight="25" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-         <menus>
-            <Menu mnemonicParsing="false" text="Semesters...">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Add semesterProfile..." />
-                   <MenuItem mnemonicParsing="false" onAction="#updateSemesterProfile"
-                             text="Update semesterProfile..."/>
-               </items>
-            </Menu>
-            <Menu fx:id="userMenu" mnemonicParsing="false" text="User">
-              <items>
-                <MenuItem mnemonicParsing="false" onAction="#directLogOut" text="Log out" />
-              </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-               </items>
-            </Menu>
-         </menus>
+       <MenuBar fx:id="menuBar" GridPane.columnSpan="2">
+           <menus>
+               <Menu fx:id="userMenu" mnemonicParsing="false" text="User">
+                   <items>
+                       <MenuItem onAction="#directLogOut" mnemonicParsing="false" text="Log out"/>
+                   </items>
+               </Menu>
+               <Menu mnemonicParsing="false" text="Semesters...">
+                   <items>
+                       <MenuItem onAction="#updateSemesterProfile" mnemonicParsing="false" text="Update Semester"/>
+                   </items>
+               </Menu>
+           </menus>
       </MenuBar>
-       <TabPane fx:id="tabPane" prefHeight="400.0" prefWidth="600.0" side="LEFT" tabClosingPolicy="UNAVAILABLE"
-                VBox.vgrow="ALWAYS">
+       <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE"
+                GridPane.rowIndex="1">
         <tabs>
-            <Tab text="Main">
-            <content>
-                <fx:include fx:id="mainView" source="NewMain.fxml"/>
-            </content>
-          </Tab>
             <Tab text="Dashboard">
-            <content>
-                <fx:include fx:id="dashboard" source="Dashboard.fxml"/>
-            </content>
-          </Tab>
+                <content>
+                    <fx:include fx:id="dashboard" source="Dashboard.fxml"/>
+                </content>
+            </Tab>
+            <Tab text="Assessments">
+                <content>
+                    <fx:include fx:id="assessmentsView" source="AssessmentsView.fxml"/>
+                </content>
+            </Tab>
+            <Tab text="Milestones">
+                <content>
+                    <fx:include fx:id="milestonesView" source="MilestonesView.fxml"/>
+                </content>
+            </Tab>
+            <Tab text="Activities">
+                <content>
+                    <TabPane prefHeight="200.0" prefWidth="200.0" side="LEFT" tabClosingPolicy="UNAVAILABLE">
+                        <tabs>
+                            <Tab text="Milestone">
+                                <content>
+                                    <fx:include fx:id="activityMilestone" source="ActivityMilestone.fxml"/>
+                                </content>
+                            </Tab>
+                            <Tab text="Assessment">
+                                <content>
+                                    <fx:include fx:id="activityAssessment" source="ActivityAssessment.fxml"/>
+                                </content>
+                            </Tab>
+                        </tabs>
+                    </TabPane>
+                </content>
+            </Tab>
         </tabs>
       </TabPane>
    </children>
-</VBox>
+</GridPane>

@@ -2,16 +2,19 @@ package View;
 
 import Controller.DatabaseHandler;
 import Controller.SemesterController;
+import Model.Assessment;
+import Model.Module;
 import Model.SemesterProfile;
 import Model.User;
 import Utils.ControlledScene;
 import Utils.FileParser;
 import Utils.StageHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -19,7 +22,7 @@ import java.io.File;
 /**
  * Created by Didac on 07/05/2017.
  */
-public class SemesterView implements ControlledScene{
+public class SemesterView implements ControlledScene {
 
     private StageHandler stageHandler;
     private SemesterController semesterController;
@@ -31,7 +34,7 @@ public class SemesterView implements ControlledScene{
     @FXML
     private TabPane tabPane;
     @FXML
-    private VBox semesterView;
+    private GridPane semesterView;
 
 
     // Inherits the FXML from DashboardView, needs to have Controller as suffix.
@@ -40,14 +43,25 @@ public class SemesterView implements ControlledScene{
     private DashBoardView dashboardController;
 
     @FXML
-    private MainView mainViewController;
+    private MilestonesView milestonesViewController;
 
+    @FXML
+    private AssessmentsView assessmentsViewController;
+
+    @FXML
+    private ActivityAssessmentView activityAssessmentController;
+
+    @FXML
+    private ActivityMilestoneView activityMilestoneController;
+
+    DatabaseHandler databaseHandler;
     /**
      * Constructs a SemesterProfile controller.
      */
     public SemesterView(StageHandler stageHandler){
         this.semesterController = new SemesterController();
         this.stageHandler = stageHandler;
+        databaseHandler = DatabaseHandler.getInstance();
     }
 
     // Methods ---------------------------------------------------------------------------------------------------------
@@ -57,9 +71,11 @@ public class SemesterView implements ControlledScene{
      */
     public void initialize() {
         //semesterLabel.setText("test");
-        if (DatabaseHandler.getInstance().getUserSession() == null) return;
+        if (databaseHandler.getUserSession() == null) return;
 
         User user = DatabaseHandler.getInstance().getUserSession();
+        semesterController.loadSemester(user.getId());
+
         // DECORATE STAGE ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
         userMenu.setText(user.getFirstname());
@@ -70,32 +86,36 @@ public class SemesterView implements ControlledScene{
         semesterView.prefWidthProperty().bind(stageHandler.getStage().widthProperty());
         semesterView.prefHeightProperty().bind(stageHandler.getStage().heightProperty());
 
-        dashboardController.dashboardGrid.prefWidthProperty().bind(
-                semesterView.widthProperty()
-        );
-
-        dashboardController.dashboardGrid.prefHeightProperty().bind(
-                semesterView.heightProperty()
-        );
-
-        mainViewController.mainViewPane.prefHeightProperty().bind(
-                semesterView.widthProperty()
-        );
-
-        mainViewController.mainViewPane.prefWidthProperty().bind(
-                semesterView.heightProperty()
-        );
-
-
-
         // POPULATE DASHBOARD TAB PANE •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
         dashboardController.load();
+
+        dropdownFiller(milestonesViewController.moduleSelect, milestonesViewController.assessmentSelect);
+        dropdownFiller(activityAssessmentController.moduleSelect, activityAssessmentController.assessmentSelect);
+        dropdownFiller(activityMilestoneController.moduleSelect, activityMilestoneController.assessmentSelect);
+        milestonesViewController.initialize();
+        assessmentsViewController.initialize();
+        activityAssessmentController.initialize();
+        activityMilestoneController.initialize();
+
         //dashboardController.assignments.setText(assessments.get(0).getTitle());
 
-        mainViewController.load();
+        //mainViewController.load();
 
         System.out.println(user.getEmail());
+    }
+
+    private void dropdownFiller(ComboBox<Module> moduleBox, ComboBox<Assessment> assessmentBox) {
+        moduleBox.getItems().addAll(databaseHandler.getSemesterSession().getModules().values());
+
+        // Module dropdown box listener:
+        moduleBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            assessmentBox.getItems().clear();
+            if (newValue == null) return;
+
+            // add items to assessment select
+            assessmentBox.getItems().addAll(newValue.getAssessments().values());
+        });
     }
 
     /** Function used to log user out, delete

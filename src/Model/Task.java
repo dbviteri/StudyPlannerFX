@@ -1,6 +1,12 @@
 package Model;
 
-import java.util.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Model representation for a task
@@ -18,14 +24,16 @@ public class Task {
     private int time;
     private String criterion;
     private int criterionValue;
-    private double criterionSoFar;
+    private int criterionSoFar;
     private double progress; // related to criterion value
     private Date date;
     // TODO :'a task cannot be started before another has been completed'
 
     private Map<Task, Task> dependencies = new HashMap<>();
-    private Map<TaskNote, TaskNote> notes = new HashMap<>();
+    //private Map<TaskNote, TaskNote> notes = new HashMap<>();
+    private TaskNote taskNote;
     private Map<Activity, Activity> activities = new HashMap<>();
+    private ObservableList<Activity> activityObservableList = FXCollections.observableArrayList();
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
@@ -51,13 +59,28 @@ public class Task {
 
     // Methods ---------------------------------------------------------------------------------------------------------
 
-    public void addNote(TaskNote note) {
-        if (!notes.containsKey(note))
-            notes.put(note, note);
+//    public void addNote(TaskNote note) {
+//        if (!notes.containsKey(note))
+//            notes.put(note, note);
+//    }
+
+    public void setTaskNote(TaskNote taskNote) {
+        this.taskNote = taskNote;
     }
 
+    public TaskNote getTaskNote() {
+        return taskNote;
+    }
     // Getters and setters ---------------------------------------------------------------------------------------------
 
+    public ObservableList<Activity> getObservableActivityList() {
+        for (Activity activity : activities.values()) {
+            if (!activityObservableList.contains(activity)) {
+                activityObservableList.add(activity);
+            }
+        }
+        return activityObservableList;
+    }
 
     public Integer getId() {return id;}
 
@@ -101,7 +124,7 @@ public class Task {
         return criterionValue;
     }
 
-    public double getCriterionSoFar() {
+    public int getCriterionSoFar() {
         return criterionSoFar;
     }
 
@@ -129,14 +152,20 @@ public class Task {
     //public Map<Task, Task> getDependencyTasks() {return dependencies;}
     public Map<Task, Task> getDependencies() { return new HashMap<>(dependencies); }
 
-    public void addActivity(Activity activity) {
-        if(!activities.containsKey(activity)) {
+    public boolean addActivity(Activity activity) {
+        if (!activities.containsKey(activity) && criterionSoFar < criterionValue) {
+            // Check if dependencies are completed
+            for (Task dependency : dependencies.values()) {
+                if (!dependency.isComplete()) return false;
+            }
             activities.put(activity, activity);
             criterionSoFar += activity.getQuantity();
-            progress = (criterionSoFar / criterionValue) * 100;
+            progress = ((double) criterionSoFar / criterionValue) * 100;
             System.out.println(progress);
             this.time += activity.getTime();
+            return true;
         }
+        return false;
     }
 
     //public Map<Activity, Activity> getActivities() { return activities; }
@@ -154,25 +183,26 @@ public class Task {
      * @return
      */
     public boolean isComplete(){
-        int completion = 0;
-        for(HashMap.Entry entry : activities.entrySet()){
-            Activity activity = (Activity)entry.getValue();
-            completion+= activity.getQuantity();
+        updateProgress();
+        return progress == 100;
+
+    }
+
+    public void updateProgress() {
+        double count = 0;
+        for (Activity activity : activities.values()) {
+            count += activity.getQuantity();
         }
-        if(completion == criterionValue) {
-            progress = 100;
-            return true;
-        }
-        else
-            progress = (criterionValue / completion) * 100;
-            return false;
+
+        if (progress == criterionValue) progress = 100;
+        else progress = (criterionValue / count) * 100;
     }
 
 //    public Map<TaskNote, TaskNote> getNotes() {
 //        return notes;
 //    }
 
-    public List<TaskNote> getNotes() { return new ArrayList<>(notes.values()); }
+    //public List<TaskNote> getNotes() { return new ArrayList<>(notes.values()); }
     // Overrides -------------------------------------------------------------------------------------------------------
 
     @Override
