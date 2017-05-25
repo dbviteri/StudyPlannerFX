@@ -23,8 +23,9 @@ public class TaskController implements DBQuery {
     private static final String QUERY_FIND_DEPENDENCIES =
             "SELECT * FROM Task WHERE dependency = ?"; // taskId
     private static final String QUERY_INSERT_TASK =
-            "INSERT INTO Task (title, type, time, criterion, " +
-                    "criterion_value, progress, assessment_id, dependency, date) VALUES (?,?,?,?,?,?,?,?,?)";
+            "INSERT INTO Task (task_title, task_type, time, criterion, " +
+                    "criterion_value, progress, date, dependency, task_assessment_id, task_milestone_id) " +
+                    "VALUES (?,?,?,?,?,?,?,?,?,?)";
     private static final String QUERY_DELETE_TASK =
             "DELETE FROM Task WHERE task_id = ?";
     private static final String QUERY_UPDATE_TASK =
@@ -58,8 +59,7 @@ public class TaskController implements DBQuery {
         return tasks;
     }
 
-    public void insertTask(Task task){
-        // INSERT TASK
+    public void insertTask(Task task, Integer assessmentId, Integer milestoneId) {
         Object[] properties = {
                 task.getTitle(),
                 task.getType().toString(),
@@ -67,23 +67,30 @@ public class TaskController implements DBQuery {
                 task.getCriterion(),
                 task.getCriterionValue(),
                 task.getProgress(),
-                //task.getAssessmentId(),
-                null, // activity_id
-                null, // Dependency
-                task.getDate()
-
+                task.getDate(),
+                null,
+                assessmentId,
+                milestoneId,
         };
 
-        // if the dependency of task is null, it has no dependency
-//        if (task.getDependencyTasks() != null) {
-//            properties[properties.length - 1] = task.getDependencyTasks().get(0).getId();
-//        }
+        // INSERT TASK
+        if (task.getDependency() != null) {
+            properties[7] = task.getDependency().getId();
+        }
+
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT_TASK, false, properties)
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT_TASK, true, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to create new task. No rows affected");
+            try (ResultSet set = statement.getGeneratedKeys()) {
+                if (set.next()) {
+                    task.setId(set.getInt(1));
+                } else {
+                    throw new SPException("Failed to create new Task. No key obtained");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

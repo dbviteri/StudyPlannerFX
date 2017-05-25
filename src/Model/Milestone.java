@@ -21,7 +21,7 @@ public class Milestone {
     private Date deadline;
     private HashMap<Task, Task> tasks = new HashMap<>();
 
-    private ObservableList<Task> observableTaskList = FXCollections.observableArrayList(tasks.values());
+    private ObservableList<Task> observableTaskList = FXCollections.observableArrayList();
 
     public Milestone(String title, Date start, Date deadline) {
         // IF FIRST TIME MILESTONE IS ADDED DATE = CURRENT DATE
@@ -47,6 +47,10 @@ public class Milestone {
     public HashMap<Task,Task> getTasks() { return new HashMap<>(tasks); }
 
     public ObservableList<Task> getObservableTaskList() {
+        for (Task task : tasks.values()) {
+            if (!observableTaskList.contains(task))
+                observableTaskList.add(task);
+        }
         return observableTaskList;
     }
 
@@ -59,9 +63,19 @@ public class Milestone {
 
     public void setDeadline(Date deadline) { this.deadline = deadline; }
 
-    public void deleteTask(Task task) {
-        tasks.remove(task);
+    public boolean deleteTask(Task passedTask) {
+        for (Task task : tasks.values()) {
+            if (!task.equals(passedTask)) {
+                if (task.getDependency() != null) {
+                    if (task.getDependency().equals(passedTask)) return false;
+                }
+            }
+        }
+
+        //if (!task.getDependencies().isEmpty()) return false;
+        tasks.remove(passedTask);
         updateProgress();
+        return true;
     }
 
     public DoubleProperty progressProperty() { return progress; }

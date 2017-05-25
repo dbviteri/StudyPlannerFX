@@ -1,10 +1,11 @@
 package View;
 
-import Controller.AssessmentController;
-import Controller.DatabaseHandler;
+import Controller.NoteController;
+import Controller.TaskController;
 import Model.Assessment;
 import Model.Module;
 import Model.Task;
+import Model.TaskNote;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -21,6 +22,7 @@ import java.util.function.Predicate;
  */
 public class AssessmentsView {
 
+
     // FIELDS --------------------------------------------
     @FXML
     private TextField taskTitleField;
@@ -32,10 +34,11 @@ public class AssessmentsView {
     private TextField amountField;
     @FXML
     private ComboBox<Task> taskDependenciesBox;
-
+    @FXML
+    private TextArea notesField;
     // VIEW ----------------------------------------------
     @FXML
-    private ComboBox<Module> moduleSelect;
+    ComboBox<Module> moduleSelect;
     @FXML
     private TableView<Assessment> assessmentTable;
     @FXML
@@ -44,15 +47,14 @@ public class AssessmentsView {
     private ProgressBar assessmentProgress;
 
     private ObservableList<Task> tasks = FXCollections.observableArrayList();
+    private NoteController noteController;
+    private TaskController taskController;
 
     // Needs to have a reference to assessments and modules
     public void initialize() {
-        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
-        AssessmentController assessmentController = new AssessmentController();
+        noteController = new NoteController();
+        taskController = new TaskController();
 
-        if (databaseHandler.getSemesterSession() == null) return;
-
-        moduleSelect.getItems().addAll(databaseHandler.getSemesterSession().getModules().values());
         taskTypeBox.getItems().addAll(Task.TaskType.values());
 
         // Module dropdown box listener:
@@ -64,6 +66,15 @@ public class AssessmentsView {
             // but clear tasks table
             tasksTable.getItems().clear();
         });
+
+        tasksTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue == null || newValue.getTaskNote() == null) {
+                notesField.clear();
+                return;
+            }
+
+            notesField.setText(newValue.getTaskNote().getText());
+        }));
 
         assessmentTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue == null) return;
@@ -170,13 +181,14 @@ public class AssessmentsView {
         Task.TaskType taskType = taskTypeBox.getValue();
         int critValue = Integer.parseInt(amountField.getText());
 
+        Task task = new Task(taskTitle, taskType, criteria, critValue, 0, new Date());
+
         if (taskDependenciesBox.getValue() != null) {
-            Task task = new Task(taskTitle, taskType, criteria, critValue, 0, new Date());
             task.addDependency(taskDependenciesBox.getValue());
-            tasks.add(task);
-        } else {
-            tasks.add(new Task(taskTitle, taskType, criteria, critValue, 0, new Date()));
         }
+
+        tasks.add(task);
+        taskController.insertTask(task, assessmentTable.getSelectionModel().getSelectedItem().getId(), null);
     }
 
     public void deleteTask() {
@@ -194,7 +206,22 @@ public class AssessmentsView {
             // Try to delete task from the original reference
             if (!tasks.removeIf(acceptedTask)) {
                 new AlertDialog(Alert.AlertType.ERROR, "Can't delete task. It has dependencies.");
+            } else {
+                taskController.deleteTask(selectedTask);
             }
         }
+    }
+
+    public void updateNotes() {
+        if (notesField.getText().isEmpty()) return;
+        if (tasksTable.getSelectionModel().getSelectedItem() == null) return;
+
+        Task selectedTask = tasksTable.getSelectionModel().getSelectedItem();
+        TaskNote taskNote = new TaskNote("test", notesField.getText(), new Date());
+
+        selectedTask.setTaskNote(taskNote);
+
+        noteController.updateNote(taskNote, selectedTask.getId(), null);
+        //System.out.println("notes " + tasksTable.getSelectionModel().getSelectedItem().getNotes().size());
     }
 }

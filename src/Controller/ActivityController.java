@@ -1,9 +1,7 @@
 package Controller;
 
 import Model.Activity;
-import Model.Milestone;
 import Utils.SPException;
-import org.omg.PortableInterceptor.ACTIVE;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +18,7 @@ public class ActivityController implements DBQuery {
 
     private static final String QUERY_FIND_ACTIVITIES = "SELECT * FROM Activity WHERE task_id = ?";
     private static final String QUERY_INSERT_ACTIVITY =
-            "INSERT INTO Activity (quantity, time, activity_title, date) VALUES (?,?,?,?)";
+            "INSERT INTO Activity (quantity, time, activity_title, date, task_id) VALUES (?,?,?,?,?)";
     private static final String QUERY_UPDATE_ACTIVITY =
             "UPDATE Activity SET quantity = ?, time = ?, activity_title = ?, data = ? WHERE activity_ID = ?";
 
@@ -46,21 +44,28 @@ public class ActivityController implements DBQuery {
 
         return activities;
     }
-    public boolean insertActivity(Activity activity){
-        Object[] properties = {
 
+    public boolean insertActivity(Activity activity, int taskId) {
+        Object[] properties = {
                 activity.getQuantity(),
                 activity.getTime(),
                 activity.getTitle(),
-                activity.getDate()
-
+                activity.getDate(),
+                taskId
         };
 
         try (
-                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT_ACTIVITY, false, properties)
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_INSERT_ACTIVITY, true, properties)
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to create new activity. No rows affected");
+            try (ResultSet set = statement.getGeneratedKeys()) {
+                if (set.next()) {
+                    activity.setActivityId(set.getInt(1));
+                } else {
+                    throw new SPException("Failed to create new activity. No key obtained");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

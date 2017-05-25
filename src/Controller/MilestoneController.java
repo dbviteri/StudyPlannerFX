@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.Milestone;
-import Model.SemesterProfile;
 import Utils.SPException;
 
 import java.sql.PreparedStatement;
@@ -9,29 +8,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ *
  * Created by 100125468 on 16/05/2017.
  */
 public class MilestoneController {
     private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
-    private static String QUERY_INSERT_MILESTONE =
-            "INSERT INTO (milestone_title, milestone_progress, milestone_start, milestone_deadline) VALUES (?,?,?,?,?)";
-    private static String QUERY_UPDATE_MILESTONE =
+    private final static String QUERY_INSERT_MILESTONE =
+            "INSERT INTO Milestone " +
+                    "(milestone_title, milestone_progress, milestone_start, milestone_deadline, assessment_id) " +
+                    "VALUES (?,?,?,?,?)";
+    private final static String QUERY_UPDATE_MILESTONE =
             "UPDATE Milestone SET milestone_title = ?, milestone_progress = ?," +
                     " milestone_start = ?, milestone_deadline = ? WHERE Milestone_id = ?";
-    public MilestoneController(){
 
-    }
-    public static void insertMilestone(Milestone milestone) {
+    public void insertMilestone(Milestone milestone, int assessmentId) {
         Object[] properties = {
                 milestone.getTitle(),
                 milestone.getProgress(),
                 milestone.getStart(),
-                milestone.getDeadline()
+                milestone.getDeadline(),
+                assessmentId
         };
         try (
                 PreparedStatement statement =
                         dbhandler.prepareStatement(QUERY_INSERT_MILESTONE, true, properties)
-
         ) {
             int updatedRows = statement.executeUpdate();
             if (updatedRows == 0) throw new SPException("Failed to create new Semester. No rows affected");
@@ -39,8 +39,9 @@ public class MilestoneController {
             try (ResultSet set = statement.getGeneratedKeys()) {
                 if (set.next()) {
                     //semester.setSemesterId(set.getInt(1));
+                    milestone.setId(set.getInt(1));
                 } else {
-                    throw new SPException("Failed to create new Semester. No key obtained");
+                    throw new SPException("Failed to create new Milestone. No key obtained");
                 }
             }
         }
@@ -48,6 +49,7 @@ public class MilestoneController {
             e.printStackTrace();
         }
     }
+
     public static boolean updateMilestone(Milestone milestone){
         Object[] properties = {
                 milestone.getTitle(),

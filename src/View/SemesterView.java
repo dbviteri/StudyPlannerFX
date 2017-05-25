@@ -90,13 +90,14 @@ public class SemesterView implements ControlledScene {
 
         dashboardController.load();
 
+        dropdownFiller(assessmentsViewController.moduleSelect, milestonesViewController.assessmentSelect);
         dropdownFiller(milestonesViewController.moduleSelect, milestonesViewController.assessmentSelect);
         dropdownFiller(activityAssessmentController.moduleSelect, activityAssessmentController.assessmentSelect);
         dropdownFiller(activityMilestoneController.moduleSelect, activityMilestoneController.assessmentSelect);
-        milestonesViewController.initialize();
-        assessmentsViewController.initialize();
-        activityAssessmentController.initialize();
-        activityMilestoneController.initialize();
+//        milestonesViewController.initialize();
+//        assessmentsViewController.initialize();
+//        activityAssessmentController.initialize();
+//        activityMilestoneController.initialize();
 
         //dashboardController.assignments.setText(assessments.get(0).getTitle());
 

@@ -28,8 +28,7 @@ public class Task {
     private double progress; // related to criterion value
     private Date date;
     // TODO :'a task cannot be started before another has been completed'
-
-    private Map<Task, Task> dependencies = new HashMap<>();
+    private Task dependency;
     //private Map<TaskNote, TaskNote> notes = new HashMap<>();
     private TaskNote taskNote;
     private Map<Activity, Activity> activities = new HashMap<>();
@@ -49,6 +48,7 @@ public class Task {
         this.criterion = criterion;
         this.criterionValue = criterionValue;
         this.progress = progress;
+        this.date = date;
         this.time = 0;
     }
     public Task(Integer id, String title, TaskType type, String criterion,
@@ -150,14 +150,10 @@ public class Task {
     }
 
     //public Map<Task, Task> getDependencyTasks() {return dependencies;}
-    public Map<Task, Task> getDependencies() { return new HashMap<>(dependencies); }
+    public Task getDependency() { return dependency; }
 
     public boolean addActivity(Activity activity) {
         if (!activities.containsKey(activity) && criterionSoFar < criterionValue) {
-            // Check if dependencies are completed
-            for (Task dependency : dependencies.values()) {
-                if (!dependency.isComplete()) return false;
-            }
             activities.put(activity, activity);
             criterionSoFar += activity.getQuantity();
             progress = ((double) criterionSoFar / criterionValue) * 100;
@@ -172,8 +168,7 @@ public class Task {
     public Map<Activity, Activity> getActivities() { return new HashMap<>(activities); }
 
     public void addDependency(Task dependency) {
-        if (!dependencies.containsKey(dependency))
-            dependencies.put(dependency, dependency);
+        this.dependency = dependency;
     }
 
     /** Function checks if task is completed based on all the related activities
@@ -195,7 +190,10 @@ public class Task {
         }
 
         if (progress == criterionValue) progress = 100;
-        else progress = (criterionValue / count) * 100;
+        else {
+            if (count != 0) progress = (criterionValue / count) * 100;
+            else progress = 0;
+        }
     }
 
 //    public Map<TaskNote, TaskNote> getNotes() {
@@ -208,7 +206,6 @@ public class Task {
     @Override
     public String toString() {
 
-
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(title).append("\n")
@@ -218,14 +215,10 @@ public class Task {
                 .append(criterionValue).append("\n")
                 .append(progress).append("\n");
 
-        if (dependencies.size() == 0) {
-            stringBuilder.append("No dependencies!").append("\n");
-        } else {
-            stringBuilder.append(title).append( " has ").append(dependencies.size()).append(" dependencies: ");
-//            for (Task task : dependencies){
-//                stringBuilder.append(task.title + ", ");
-//            }
-        }
+//        if (dependency.title != null) {
+//            stringBuilder.append(title).append(" depends on ").append(dependency.title);
+//        }
+
         return stringBuilder.toString();
     }
 

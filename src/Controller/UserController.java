@@ -87,15 +87,17 @@ public class UserController implements DBQuery {
         SemesterProfile profile = FileParser.parseFile(file);
         return profile;
     }
+
     public void insertProfile(SemesterProfile profile){
         SemesterController semesterController = new SemesterController();
         ModuleController moduleController = new ModuleController();
+        AssessmentController assessmentController = new AssessmentController();
         semesterController.insertSemester(profile);
         for (HashMap.Entry entry : profile.getModules().entrySet()) {
             Module module = (Module)entry.getValue();
             moduleController.insertModule(module, profile.getSemesterId());
             for (HashMap.Entry aEntry : module.getAssessments().entrySet()) {
-                AssessmentController.insertAssessment((Assessment) aEntry.getValue(), module.getId());
+                assessmentController.insertAssessment((Assessment) aEntry.getValue(), module.getId());
             }
         }
     }

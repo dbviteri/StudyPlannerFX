@@ -1,7 +1,11 @@
 package View;
 
+import Controller.MilestoneController;
+import Controller.NoteController;
+import Controller.TaskController;
 import Model.*;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -63,10 +67,50 @@ public class MilestonesView {
     private ObservableList<Milestone> milestones = FXCollections.observableArrayList();
     private ObservableList<Task> tasks = FXCollections.observableArrayList();
 
+    private MilestoneController milestoneController;
+
+    private ListChangeListener<Milestone> milestonesListener;
+    private ListChangeListener<Task> tasksListener;
+    private TaskController taskController;
+    private NoteController noteController;
+
     /**
      * Initializes the items and adds listeners.
      */
     public void initialize() {
+        noteController = new NoteController();
+        taskController = new TaskController();
+        milestoneController = new MilestoneController();
+
+        taskTypeBox.getItems().setAll(Task.TaskType.values());
+
+        tasksListener = changedValue -> {
+            changedValue.next();
+
+            Milestone selectedMilestone = milestonesTable.getSelectionModel().getSelectedItem();
+            if (changedValue.wasAdded()) {
+                selectedMilestone.addTask(changedValue.getAddedSubList().get(
+                        changedValue.getAddedSubList().size() - 1));
+            } else {
+                selectedMilestone.deleteTask(changedValue.getRemoved().get(0));
+            }
+        };
+
+        milestonesListener = changedValue -> {
+            changedValue.next();
+            if (changedValue.wasAdded()) {
+                milestoneController.insertMilestone(
+                        changedValue.getAddedSubList().get(changedValue.getAddedSubList().size() - 1),
+                        assessmentSelect.getValue().getId()
+                );
+                assessmentSelect.getValue().addMilestone(
+                        changedValue.getAddedSubList().get(changedValue.getAddedSubList().size() - 1)
+                );
+            } else {
+                assessmentSelect.getValue().deleteMilestone(changedValue.getRemoved().get(0));
+            }
+        };
+
         assessmentSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
                 reset();
@@ -113,6 +157,14 @@ public class MilestonesView {
         });
     }
 
+
+    /**
+     *
+     */
+    public void configureListeners() {
+
+    }
+
     /**
      * Clears the tables
      */
@@ -146,18 +198,11 @@ public class MilestonesView {
 
         Milestone selectedMilestone = milestonesTable.getSelectionModel().getSelectedItem();
 
-        tasks = selectedMilestone.getObservableTaskList();
-        taskTypeBox.getItems().addAll(Task.TaskType.values());
-        tasks.addListener((ListChangeListener<? super Task>) changedValue -> {
-            changedValue.next();
+        tasks.removeListener(tasksListener);
 
-            if (changedValue.wasAdded()) {
-                selectedMilestone.addTask(changedValue.getAddedSubList().get(
-                        changedValue.getAddedSubList().size() - 1));
-            } else {
-                selectedMilestone.deleteTask(changedValue.getRemoved().get(0));
-            }
-        });
+        tasks = selectedMilestone.getObservableTaskList();
+
+        tasks.addListener(tasksListener);
 
         addTasksColumns();
         Bindings.bindContent(tasksTable.getItems(), tasks);
@@ -170,17 +215,9 @@ public class MilestonesView {
     private void refreshMilestoneTable() {
         clear(milestonesTable);
 
+        milestones.removeListener(milestonesListener);
         milestones = assessmentSelect.getValue().getObservableMilestoneList();
-        milestones.addListener((ListChangeListener<? super Milestone>) changedValue -> {
-            changedValue.next();
-            if (changedValue.wasAdded()) {
-                assessmentSelect.getValue().addMilestone(
-                        changedValue.getAddedSubList().get(changedValue.getAddedSubList().size() - 1)
-                );
-            } else {
-                assessmentSelect.getValue().deleteMilestone(changedValue.getRemoved().get(0));
-            }
-        });
+        milestones.addListener(milestonesListener);
 
         addMilestoneColumns();
         Bindings.bindContent(milestonesTable.getItems(), milestones);
@@ -217,6 +254,9 @@ public class MilestonesView {
 
         TableColumn<Task, Integer> criterionCol = new TableColumn<>("Criterion");
         criterionCol.setCellValueFactory(new PropertyValueFactory<>("criterion"));
+
+        TableColumn<Task, String> dependencyCol = new TableColumn<>("Depends on");
+        dependencyCol.setCellValueFactory(dep -> new SimpleStringProperty(dep.getValue().getDependency().toString()));
 
         tasksTable.getColumns().addAll(titleCol, typeCol, weightCol, criterionCol);
     }
@@ -268,13 +308,14 @@ public class MilestonesView {
         Task.TaskType taskType = taskTypeBox.getValue();
         int critValue = Integer.parseInt(amountField.getText());
 
+        Task task = new Task(taskTitle, taskType, criteria, critValue, 0, new Date());
+
         if (dependencyBox.getValue() != null) {
-            Task task = new Task(taskTitle, taskType, criteria, critValue, 0, new Date());
             task.addDependency(dependencyBox.getValue());
-            tasks.add(task);
-        } else {
-            tasks.add(new Task(taskTitle, taskType, criteria, critValue, 0, new Date()));
         }
+
+        tasks.add(task);
+        taskController.insertTask(task, null, milestonesTable.getSelectionModel().getSelectedItem().getId());
     }
 
     public void deleteTask() {
@@ -285,24 +326,30 @@ public class MilestonesView {
         AlertDialog alertDialog = new AlertDialog();
         boolean confirmed = alertDialog.getConfirmation("Are you sure you want to delete " + selectedTask.getTitle() + "?");
 
+        // Try to delete task from the original reference
         Predicate<Task> acceptedTask = task -> task.equals(selectedTask) &&
-                assessmentSelect.getValue().deleteTask(selectedTask);
+                milestonesTable.getSelectionModel().getSelectedItem().deleteTask(selectedTask);
 
         if (confirmed) {
-            // Try to delete task from the original reference
             if (!tasks.removeIf(acceptedTask)) {
                 new AlertDialog(Alert.AlertType.ERROR, "Can't delete task. It has dependencies.");
+            } else {
+                taskController.deleteTask(selectedTask);
             }
+
         }
     }
 
     public void updateNotes(ActionEvent actionEvent) {
         if (notesField.getText().isEmpty()) return;
+        if (tasksTable.getSelectionModel().getSelectedItem() == null) return;
 
-        tasksTable.getSelectionModel().getSelectedItem().setTaskNote(
-                new TaskNote("test", notesField.getText(), new Date())
-        );
+        Task selectedTask = tasksTable.getSelectionModel().getSelectedItem();
+        TaskNote taskNote = new TaskNote("test", notesField.getText(), new Date());
 
+        selectedTask.setTaskNote(taskNote);
+
+        noteController.updateNote(taskNote, selectedTask.getId(), null);
         //System.out.println("notes " + tasksTable.getSelectionModel().getSelectedItem().getNotes().size());
     }
 }

@@ -8,14 +8,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.Date;
 
 /**
  * Created by Didac on 17/05/2017.
  */
-public class ActivityMilestoneView {
+public class ActivityMilestoneView extends ActivityView {
+
+    @FXML
+    private TextArea notesField;
     @FXML
     private ProgressBar taskProgress;
     @FXML
@@ -39,18 +41,34 @@ public class ActivityMilestoneView {
     private ObservableList<Task> tasks = FXCollections.observableArrayList();
     private ObservableList<Milestone> milestones = FXCollections.observableArrayList();
 
+    private ListChangeListener<Activity> activitiesListener;
     public void initialize() {
+
+        activitiesListener = changedValue -> {
+            changedValue.next();
+
+            if (changedValue.wasAdded()) {
+                refreshActivitiesTable();
+            }
+        };
+
         assessmentSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
-            milestoneSelect.getItems().clear();
-            if (newValue == null) return;
+            if (newValue == null) {
+                milestoneSelect.getItems().clear();
+                Bindings.unbindContent(milestoneSelect.getItems(), milestones);
+                return;
+            }
 
             milestones = newValue.getObservableMilestoneList();
             Bindings.bindContent(milestoneSelect.getItems(), milestones);
         });
 
         milestoneSelect.valueProperty().addListener(((observable, oldValue, newValue) -> {
-            taskSelect.getItems().clear();
-            if (newValue == null) return;
+            if (newValue == null) {
+                taskSelect.getItems().clear();
+                Bindings.unbindContent(taskSelect.getItems(), tasks);
+                return;
+            }
 
             tasks = newValue.getObservableTaskList();
             Bindings.bindContent(taskSelect.getItems(), tasks);
@@ -66,43 +84,31 @@ public class ActivityMilestoneView {
             // populate activities table
             refreshActivitiesTable();
         });
+
+        timeSpentField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                timeSpentField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 
+    private void refreshTaskBox() {
 
-    private void addActivitiesColumns() {
-        TableColumn<Activity, String> titleCol = new TableColumn<>("Title");
-        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-
-        TableColumn<Activity, Integer> quantityCol = new TableColumn<>("Type");
-        quantityCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-
-        TableColumn<Activity, Integer> timeCol = new TableColumn<>("Weight");
-        timeCol.setCellValueFactory(new PropertyValueFactory<>("weight"));
-
-        activitiesTable.getColumns().addAll(titleCol, quantityCol, timeCol);
     }
 
     private void refreshActivitiesTable() {
         clearView();
 
-        for (int i = 0; i < taskSelect.getValue().getCriterionValue() - taskSelect.getValue().getCriterionSoFar(); i++) {
-            quantityBox.getItems().add(i + 1);
-        }
+        milestoneSelect.getValue().updateProgress();
 
+        activities.removeListener(activitiesListener);
         activities = taskSelect.getValue().getObservableActivityList();
-        activities.addListener((ListChangeListener<Activity>) changedValue -> {
-            changedValue.next();
+        activities.addListener(activitiesListener);
 
-            if (changedValue.wasAdded()) {
-                // Update the completion on the selected milestone
-                updateProgressBar();
-                taskSelect.getValue().addActivity(changedValue.getAddedSubList().get(changedValue.getAddedSubList().size() - 1));
-                milestoneSelect.getValue().updateProgress();
-            }
-        });
+        super.addActivitiesColumns(activitiesTable);
 
-        addActivitiesColumns();
         Bindings.bindContent(activitiesTable.getItems(), activities);
+        updateQuantityBox();
         updateProgressBar();
     }
 
@@ -111,6 +117,12 @@ public class ActivityMilestoneView {
         activitiesTable.getItems().clear();
         activitiesTable.getColumns().clear();
         taskProgress.setProgress(0);
+    }
+
+    private void updateQuantityBox() {
+        for (int i = 0; i < taskSelect.getValue().getCriterionValue() - taskSelect.getValue().getCriterionSoFar(); i++) {
+            quantityBox.getItems().add(i + 1);
+        }
     }
 
     private void updateProgressBar() {
@@ -123,16 +135,21 @@ public class ActivityMilestoneView {
         if (timeSpentField.getText().isEmpty()) return;
         if (quantityBox.getValue() == null) return;
 
+        Task selectedTask = taskSelect.getValue();
         Activity activity = new Activity(titleField.getText(), quantityBox.getValue(),
-                Integer.parseInt(timeSpentField.getText()),
-                new Date());
+                Integer.valueOf(timeSpentField.getText()), new Date());
 
-        if (taskSelect.getValue().addActivity(activity)) {
-            activities.add(activity);
-        } else {
-            new AlertDialog(Alert.AlertType.ERROR, "Can't start this task until dependencies are completed.");
+        if (super.addActivity(selectedTask, activity)) {
+            refreshActivitiesTable();
         }
     }
 
-    public void updateNotes(ActionEvent actionEvent) {}
+    public void updateNotes(ActionEvent actionEvent) {
+        if (notesField.getText().isEmpty()) return;
+        if (taskSelect.getValue() == null) return;
+
+        ActivityNote activityNote = new ActivityNote("test", notesField.getText(), new Date());
+
+        super.updateNotes(activitiesTable.getSelectionModel().getSelectedItem(), activityNote);
+    }
 }

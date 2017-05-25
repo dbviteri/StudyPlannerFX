@@ -50,7 +50,7 @@ public class AssessmentController implements DBQuery {
         return assessments;
     }
 
-    public static void insertAssessment(Assessment assessment, int moduleId) {
+    public void insertAssessment(Assessment assessment, int moduleId) {
         Object[] properties = {
                 assessment.getTitle(),
                 assessment.getType().toString(),

@@ -1,10 +1,6 @@
 package StudyPlanner;
 
-import Controller.ActivityController;
 import Controller.DatabaseHandler;
-import Controller.MilestoneController;
-import Controller.TaskController;
-import Model.*;
 import Utils.StageHandler;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -58,37 +54,37 @@ public class StudyPlanner extends Application {
         //TODO: SAVE STUFF HERE
         //TODO: This method handles when window closes
         //DatabaseHandler.getInstance().closeConnection();
-        TaskController taskController = new TaskController();
-        ActivityController activityController = new ActivityController();
-        SemesterProfile semester = DatabaseHandler.getInstance().getSemesterSession();
-        for(Module module : semester.getModules().values()) {
-            for(Assessment assessment : module.getAssessments().values()) {
-                for(Task task : assessment.getTasks().values()) {
-                    if(task.getId() < UID_VARIABLE){
-                        taskController.updateTask(task);
-                    }
-                    else{
-                        taskController.insertTask(task);
-                    }
-                    for(Activity activity : task.getActivities().values()) {
-                        if(activity.getActivityId() < UID_VARIABLE){
-                            activityController.updateActivity(activity);
-                        }
-                        else{
-                            activityController.insertActivity(activity);
-                        }
-                    }
-                }
-                for(Milestone milestone : assessment.getMilestones().values()){
-                    if(milestone.getId() < UID_VARIABLE){
-                        MilestoneController.updateMilestone(milestone);
-                    }
-                    else {
-                        MilestoneController.insertMilestone(milestone);
-                    }
-                }
-            }
-        }
+//        TaskController taskController = new TaskController();
+//        ActivityController activityController = new ActivityController();
+//        SemesterProfile semester = DatabaseHandler.getInstance().getSemesterSession();
+//        for(Module module : semester.getModules().values()) {
+//            for(Assessment assessment : module.getAssessments().values()) {
+//                for(Task task : assessment.getTasks().values()) {
+//                    if(task.getId() < UID_VARIABLE){
+//                        taskController.updateTask(task);
+//                    }
+//                    else{
+//                        taskController.insertTask(task);
+//                    }
+//                    for(Activity activity : task.getActivities().values()) {
+//                        if(activity.getActivityId() < UID_VARIABLE){
+//                            activityController.updateActivity(activity);
+//                        }
+//                        else{
+//                            activityController.insertActivity(activity);
+//                        }
+//                    }
+//                }
+//                for(Milestone milestone : assessment.getMilestones().values()){
+//                    if(milestone.getId() < UID_VARIABLE){
+//                        MilestoneController.updateMilestone(milestone);
+//                    }
+//                    else {
+//                        MilestoneController.insertMilestone(milestone);
+//                    }
+//                }
+//            }
+//        }
         System.out.println("Window closing");
     }
 }

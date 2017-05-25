@@ -1,24 +1,25 @@
 package View;
 
-import Model.Activity;
-import Model.Assessment;
-import Model.Module;
-import Model.Task;
+import Controller.ActivityController;
+import Controller.NoteController;
+import Model.*;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.Date;
 
 /**
  * Created by Didac on 17/05/2017.
  */
-public class ActivityAssessmentView {
+public class ActivityAssessmentView extends ActivityView {
 
+    @FXML
+    private TextArea notesField;
     @FXML
     private ProgressBar taskProgress;
     @FXML
@@ -39,8 +40,24 @@ public class ActivityAssessmentView {
     private ObservableList<Activity> activities = FXCollections.observableArrayList();
     private ObservableList<Task> tasks = FXCollections.observableArrayList();
 
+    private ActivityController activityController;
+    private NoteController noteController;
+
+    private ListChangeListener<Activity> activitiesListener;
     // Needs to have a reference to assessments and modules
     public void initialize() {
+        noteController = new NoteController();
+        activityController = new ActivityController();
+
+        activitiesListener = changedValue -> {
+            changedValue.next();
+
+            if (changedValue.wasAdded()) {
+                // Update the completion on the selected assessment
+                assessmentSelect.getValue().updateCompletion();
+            }
+        };
+
         assessmentSelect.valueProperty().addListener((observable, oldValue, newValue) -> {
             taskSelect.getItems().clear();
             if (newValue == null) return;
@@ -55,18 +72,6 @@ public class ActivityAssessmentView {
                 clearView();
                 return;
             }
-            activities = taskSelect.getValue().getObservableActivityList();
-
-            activities.addListener((ListChangeListener<Activity>) changedValue -> {
-                changedValue.next();
-
-                if (changedValue.wasAdded()) {
-                    // Update the completion on the selected assessment
-                    assessmentSelect.getValue().updateCompletion();
-                    refreshActivitiesTable();
-                }
-            });
-
             // populate activities table
             refreshActivitiesTable();
         });
@@ -78,29 +83,20 @@ public class ActivityAssessmentView {
         });
     }
 
-    private void addActivitiesColumns() {
-        TableColumn<Activity, String> titleCol = new TableColumn<>("Title");
-        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-
-        TableColumn<Activity, Integer> quantityCol = new TableColumn<>("Type");
-        quantityCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-
-        TableColumn<Activity, Integer> timeCol = new TableColumn<>("Weight");
-        timeCol.setCellValueFactory(new PropertyValueFactory<>("weight"));
-
-        activitiesTable.getColumns().addAll(titleCol, quantityCol, timeCol);
-    }
-
     private void refreshActivitiesTable() {
         clearView();
 
         taskProgress.setProgress(taskSelect.getValue().getProgress() / 100);
 
+        activities.removeListener(activitiesListener);
+        activities = taskSelect.getSelectionModel().getSelectedItem().getObservableActivityList();
+        activities.addListener(activitiesListener);
+
         for (int i = 0; i < taskSelect.getValue().getCriterionValue() - taskSelect.getValue().getCriterionSoFar(); i++) {
             quantityBox.getItems().add(i + 1);
         }
 
-        addActivitiesColumns();
+        super.addActivitiesColumns(activitiesTable);
         Bindings.bindContent(activitiesTable.getItems(), activities);
     }
 
@@ -116,14 +112,23 @@ public class ActivityAssessmentView {
         if (timeSpentField.getText().isEmpty()) return;
         if (quantityBox.getValue() == null) return;
 
+        // update the dependency before checking
+        Task selectedTask = taskSelect.getValue();
         Activity activity = new Activity(titleField.getText(), quantityBox.getValue(),
-                Integer.parseInt(timeSpentField.getText()),
-                new Date());
+                Integer.valueOf(timeSpentField.getText()), new Date());
 
-        if (taskSelect.getValue().addActivity(activity)) {
-            activities.add(activity);
-        } else {
-            new AlertDialog(Alert.AlertType.ERROR, "Can't start this task until dependencies are completed.");
+        if (super.addActivity(selectedTask, activity)) {
+            refreshActivitiesTable();
         }
+    }
+
+    public void updateNote(ActionEvent actionEvent) {
+
+        if (notesField.getText().isEmpty()) return;
+        if (taskSelect.getValue() == null) return;
+
+        ActivityNote activityNote = new ActivityNote("test", notesField.getText(), new Date());
+
+        super.updateNotes(activitiesTable.getSelectionModel().getSelectedItem(), activityNote);
     }
 }

@@ -80,8 +80,10 @@
                 </TableView>
                 <Button mnemonicParsing="false" onAction="#deleteTask" text="Delete task" GridPane.halignment="CENTER"
                         GridPane.rowIndex="1"/>
-                <TextArea prefHeight="200.0" prefWidth="200.0" promptText="Task's notes" GridPane.columnIndex="1"/>
-                <Button mnemonicParsing="false" text="Update note" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                <TextArea fx:id="notesField" prefHeight="200.0" prefWidth="200.0" promptText="Task's notes"
+                          GridPane.columnIndex="1"/>
+                <Button onAction="#updateNotes" mnemonicParsing="false" text="Update note" GridPane.columnIndex="1"
+                        GridPane.halignment="CENTER"
                         GridPane.rowIndex="1"/>
             </children>
             <GridPane.margin>

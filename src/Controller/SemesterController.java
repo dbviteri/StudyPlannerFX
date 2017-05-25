@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -37,6 +38,7 @@ public class SemesterController implements DBQuery {
                     "dep_task.criterion AS 'dep_criterion'," +
                     "dep_task.criterion_value AS 'dep_crit_val'," +
                     "dep_task.progress AS 'dep_progress'," +
+                    "dep_task.date AS 'dep_date', " +
                     "Activity.*," +
                     "Note.note_title," +
                     "Note.text," +
@@ -46,12 +48,12 @@ public class SemesterController implements DBQuery {
                     "FROM Semester_Profile " +
                     "JOIN Module ON (Semester_Profile.semester_id = Module.Semester_ID) " +
                     "LEFT JOIN Assessment ON (Module.module_id = Assessment.module_id) " +
-                    "LEFT JOIN Milestone ON (Assessment.milestone_id = Milestone.Milestone_id) " +
-                    "LEFT JOIN Task ON (Assessment.assessment_id = Task.assessment_id) " +
+                    "LEFT JOIN Milestone ON (Assessment.assessment_id = Milestone.assessment_id) " +
+                    "LEFT JOIN Task ON (Assessment.assessment_id = Task.task_assessment_id) OR (Task.task_milestone_id = Milestone.Milestone_id) " +
                     "LEFT JOIN Task dep_task ON (Task.task_id = dep_task.dependency) " +
-                    "LEFT JOIN Activity ON (Activity.activity_ID = Task.activity_ID) " +
+                    "LEFT JOIN Activity ON (Activity.task_id = Task.task_id) " +
                     "LEFT JOIN Note ON (Note.activity_ID = Activity.activity_ID OR Note.task_ID = Task.task_id) " +
-                    "WHERE user_id = ?";
+                    "WHERE user_id = ? ORDER BY Task.task_id DESC";
     private static final String QUERY_INSERT_SEMESTER =
             "INSERT INTO Semester_Profile (start_date, end_date, user_id) VALUES (?,?,?)";
     private static final String QUERY_GET_SEMESTER_ID =
@@ -158,49 +160,32 @@ public class SemesterController implements DBQuery {
             }
 
 
-            /** IF SEMESTER HAS TASK BUILD TASKS AND ADD IT TO MODULES **/
+            /** IF THERE IS A TASK BUILD IT AND ADD IT TO ASSESSMENT OR MILESTONE **/
             resultSet.getInt("task_id");
             if (!resultSet.wasNull()) {
+                HashMap<Task, Task> milestoneTasks = new HashMap<>();
+                Map<Task, Task> assessmentTasks = modules.get(module).getAssessments().get(assessment).getTasks();
+                if (milestone != null) {
+                    milestoneTasks = modules.get(module).getAssessments().get(assessment).getMilestones().get(milestone).getTasks();
+                }
+
                 Task task = taskController.formTask(resultSet);
+                if (assessmentTasks.containsKey(task)) task = assessmentTasks.get(task);
+                if (milestoneTasks.containsKey(task)) task = milestoneTasks.get(task);
 
-                // If task milestone id is not null, belongs to a milestone as well
-                resultSet.getInt("task_milestone_id");
-                if (!resultSet.wasNull()) {
-                    milestone.addTask(task);
-                }
-
-                modules.get(module).getAssessments()
-                        .get(assessment).addTask(task);
-
-                /** IF TASK HAS DEPENDENCIES BUILD DEPENDENCY AND ADD IT TO MODULES **/
-                resultSet.getInt("dep_id");
-                if (!resultSet.wasNull()) { // Add the dependency
-                    Task dependency = taskController.formDependency(resultSet);
-
-                    modules.get(module).getAssessments()
-                            .get(assessment).getTasks().get(task)
-                            .addDependency(dependency);
-                    //task.addDependency(depId, dependency);
-
-                }
-
-                /** IF TASK HAS ACTIVITIES BUILD IT AND ADD IT TO MODULES **/
+                /** IF TASK HAS ACTIVITIES BUILD IT AND ADD IT TO TASK **/
                 resultSet.getInt("activity_ID");
                 if (!resultSet.wasNull()) {
                     Activity activity = activityController.formActivity(resultSet);
 
-                    modules.get(module).getAssessments()
-                            .get(assessment).getTasks().get(task)
-                            .addActivity(activity);
+                    task.addActivity(activity);
 
                     int noteActivityId = resultSet.getInt("note_activity_id");
                     if (!resultSet.wasNull()) {
                         Note note = NoteController.formNote(resultSet);
                         ActivityNote activityNote = new ActivityNote(noteActivityId, note.getTitle(), note.getText(), note.getDate());
 
-                        modules.get(module).getAssessments()
-                                .get(assessment).getTasks().get(task)
-                                .getActivities().get(activity).addNote(activityNote);
+                        task.getActivities().get(activity).addNote(activityNote);
                     }
                 }
 
@@ -209,10 +194,48 @@ public class SemesterController implements DBQuery {
                     Note note = NoteController.formNote(resultSet);
                     TaskNote taskNote = new TaskNote(noteTaskId, note.getTitle(), note.getText(), note.getDate());
 
-                    modules.get(module).getAssessments()
-                            .get(assessment).getTasks().get(task)
-                            .setTaskNote(taskNote);
+                    task.setTaskNote(taskNote);
                 }
+
+                // If task milestone id is not null, belongs to a milestone
+                resultSet.getInt("task_milestone_id");
+                if (!resultSet.wasNull()) {
+                    /** FIND WHERE THE DEPENDENCY BELONGS **/
+                    int depId = resultSet.getInt("dep_id");
+                    if (!resultSet.wasNull()) { // Add the dependency
+//                        Map<Task, Task> milestoneTasks = modules.get(module).getAssessments().get(assessment)
+//                                .getMilestones().get(milestone).getTasks();
+
+                        // if taskid = dep_id add the current row task as a dependency
+                        for (Task currentTask : milestoneTasks.values()) {
+                            if (currentTask.getId() == depId) {
+                                task.addDependency(currentTask);
+                                break;
+                            }
+                        }
+                    }
+
+                    modules.get(module).getAssessments()
+                            .get(assessment).getMilestones()
+                            .get(milestone).addTask(task);
+                } else {
+                    /** FIND WHERE THE DEPENDENCY BELONGS **/
+                    int depId = resultSet.getInt("dep_id");
+                    if (!resultSet.wasNull()) { // Add the dependency
+//                        Map<Task, Task> assessmentTasks = modules.get(module).getAssessments().get(assessment)
+//                                .getTasks();
+
+                        // if taskid = dep_id add the current row task as a dependency
+                        for (Task currentTask : assessmentTasks.values()) {
+                            if (currentTask.getId() == depId) currentTask.addDependency(task);
+                        }
+                    }
+
+                    modules.get(module).getAssessments()
+                            .get(assessment).addTask(task);
+                }
+
+
             }
         } while (resultSet.next());
         return semesterProfile;

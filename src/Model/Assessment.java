@@ -110,8 +110,8 @@ public class Assessment {
     public boolean deleteTask(Task passedTask) {
         for (Task task : tasks.values()) {
             if (!task.equals(passedTask)) {
-                for (Task dependency : task.getDependencies().values()) {
-                    if (dependency.equals(passedTask)) { return false; }
+                if (task.getDependency() != null) {
+                    if (task.getDependency().equals(passedTask)) return false;
                 }
             }
         }

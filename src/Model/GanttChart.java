@@ -1,12 +1,14 @@
 package Model;
 
-import com.sun.jdi.StackFrame;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.chart.*;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,15 +21,16 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
     private double frameHeight = 10;
 
     public static class MetaData {
-        public long length;
+        public double length;
         public String style;
 
-        public MetaData(long length, String style){
+        public MetaData(double length, String style) {
             //super();
             this.length = length;
             this.style = style;
         }
-        public long getLength() { return length; }
+
+        public double getLength() { return length; }
         public String getStyle() { return style; }
 
         public void setLength(long length) { this.length = length; }

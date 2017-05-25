@@ -1,8 +1,7 @@
 package Controller;
 
-import Model.ActivityNote;
 import Model.Note;
-import Model.TaskNote;
+import Utils.SPException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,20 +14,14 @@ import java.util.Date;
  */
 public class NoteController implements DBQuery {
 
-    private static final String QUERY_FIND_TASK_NOTES =
-            "SELECT * FROM Note WHERE task_ID = ?";
-    private static final String QUERY_FIND_ACTIVITY_NOTES =
-            "SELECT * FROM Note WHERE activity_ID = ?";
+    private static final String QUERY_FIND_NOTES =
+            "SELECT * FROM Note WHERE task_ID = ? OR activity_ID = ?";
+    private static final String QUERY_INSERT_NOTE =
+            "INSERT INTO Note (note_title, text, date, task_ID, activity_ID) VALUES (?,?,?,?,?)";
+    private static final String QUERY_UPDATE_NOTE =
+            "UPDATE Note SET text = ? WHERE task_ID = ? OR activity_ID = ?";
 
     private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
-
-    public static ArrayList<TaskNote> findTaskNotes(int taskId) {
-        return findAll(QUERY_FIND_TASK_NOTES, taskId);
-    }
-
-    public static ArrayList<ActivityNote> findActivityNotes(int activityId) {
-        return findAll(QUERY_FIND_ACTIVITY_NOTES, activityId);
-    }
 
     /** Function used to retrieve all
      *  notes of some given properties
@@ -51,6 +44,57 @@ public class NoteController implements DBQuery {
             e.printStackTrace();
         }
         return notes;
+    }
+
+    public void updateNote(Note note, Integer taskId, Integer activityId) {
+        Object[] properties = {
+                note.getTitle(),
+                note.getText(),
+                note.getDate(),
+                taskId,
+                activityId
+        };
+
+        Object[] updateProperties = {
+                note.getText(),
+                taskId,
+                activityId
+        };
+
+        if (noteExists(taskId, activityId)) {
+            updateNote(QUERY_UPDATE_NOTE, updateProperties);
+        } else {
+            updateNote(QUERY_INSERT_NOTE, properties);
+        }
+    }
+
+    private void updateNote(String sql, Object... properties) {
+        try (
+                PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties)
+        ) {
+            int updatedRows = statement.executeUpdate();
+            if (updatedRows == 0) throw new SPException("Failed to create new note. No rows affected");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean noteExists(Integer taskId, Integer activityId) {
+        Object[] properties = {
+                taskId,
+                activityId
+        };
+
+        try (
+                PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_NOTES, false, properties);
+                ResultSet set = statement.executeQuery()
+        ) {
+            if (set.next()) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     static Note formNote(ResultSet resultSet) throws SQLException {
