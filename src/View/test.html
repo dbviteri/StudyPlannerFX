@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="ganttInclude/jquery.css"/>
+    <link rel="stylesheet" type="text/css" href="ganttInclude/ganttChart.css"/>
+    <style type="text/css">
+        body {
+            font-family: tahoma, verdana, helvetica, sans-serif;
+            font-size: 0.8em;
+            padding: 10px;
+        }
+    </style>
+    <title>jQuery Gantt</title>
+</head>
+<body>
+
+<div id="ganttChart"></div>
+<br/><br/>
+<div id="eventMessage"></div>
+
+<script type="text/javascript" src="ganttInclude/jquery.js"></script>
+<script type="text/javascript" src="ganttInclude/date.js"></script>
+<script type="text/javascript" src="ganttInclude/jquery-ui.js"></script>
+<script type="text/javascript" src="ganttInclude/ganttChart.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#ganttChart").ganttChart({
+//            data: semesterData,
+            dataUrl: "data.json",
+            slideWidth: 900
+        });
+    });
+</script>
+
+</body>
+</html>

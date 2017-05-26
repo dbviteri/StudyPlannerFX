@@ -18,8 +18,8 @@ public class TaskController implements DBQuery {
     // Constant queries ------------------------------------------------------------------------------------------------
 
     private static final String QUERY_FIND_TASKS =
-            "SELECT * FROM Task LEFT JOIN Assessment ON (Task.assessment_id = Assessment.assessment_id)" +
-                    " WHERE Task.assessment_id = ?";
+            "SELECT * FROM Task LEFT JOIN Assessment ON (task_assessment_id = assessment_id)" +
+                    " WHERE task_assessment_id = ?";
     private static final String QUERY_FIND_DEPENDENCIES =
             "SELECT * FROM Task WHERE dependency = ?"; // taskId
     private static final String QUERY_INSERT_TASK =
@@ -117,7 +117,7 @@ public class TaskController implements DBQuery {
     public boolean updateTask(Task task){
         Object[] properties = {
                 task.getTitle(),
-                task.getType(),
+                task.getType().toString(),
                 task.getTime(),
                 task.getCriterion(),
                 task.getCriterionValue(),

@@ -1,0 +1,68 @@
+[
+  {
+    "assessmentTitle": "OMDBC++",
+    "start": "2017-08-15",
+    "deadline": "2017-09-10",
+    "tasks": [
+      {
+        "name": "tasktest",
+        "start": "2017-08-20",
+        "deadline": "2017-09-10"
+      },
+      {
+        "name": "anotherone",
+        "start": "2017-08-23",
+        "deadline": "2017-09-10"
+      },
+      {
+        "name": "anotherone",
+        "start": "2017-08-23",
+        "deadline": "2017-09-10"
+      }
+    ]
+  },
+  {
+    "assessmentTitle": "OMDBC++",
+    "start": "2017-08-15",
+    "deadline": "2017-09-10",
+    "tasks": [
+      {
+        "name": "tasktest",
+        "start": "2017-08-20",
+        "deadline": "2017-09-10"
+      },
+      {
+        "name": "anotherone",
+        "start": "2017-08-23",
+        "deadline": "2017-09-10"
+      },
+      {
+        "name": "anotherone",
+        "start": "2017-08-23",
+        "deadline": "2017-09-10"
+      },
+      {
+        "name": "anotherone",
+        "start": "2017-08-23",
+        "deadline": "2017-09-10"
+      }
+    ]
+  },
+  {
+    "assessmentTitle": "OMDBC++",
+    "start": "2017-08-15",
+    "deadline": "2017-09-10",
+    "tasks": [
+      {
+        "name": "tasktest",
+        "start": "2017-08-20",
+        "deadline": "2017-09-10"
+      },
+      {
+        "name": "anotherone",
+        "start": "2017-08-23",
+        "deadline": "2017-09-10"
+      }
+    ]
+  }
+]

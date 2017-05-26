@@ -1,0 +1,126 @@
+div.ganttchart-hzheader-month,
+div.ganttchart-hzheader-day,
+div.ganttchart-vtheader,
+div.ganttchart-vtheader-item-name,
+div.ganttchart-vtheader-series,
+div.ganttchart-grid,
+div.ganttchart-grid-row-cell {
+    float: left;
+}
+
+div.ganttchart-hzheader-month,
+div.ganttchart-hzheader-day {
+    text-align: center;
+}
+
+div.ganttchart-grid-row-cell.last,
+div.ganttchart-hzheader-day.last,
+div.ganttchart-hzheader-month.last {
+    border-right: none;
+}
+
+div.ganttchart {
+    border: 1px solid #999;
+}
+
+/* Horizontal Header */
+
+div.ganttchart-hzheader-month {
+    width: 60px;
+    height: 20px;
+    border-right: 1px solid #d0d0d0;
+    line-height: 20px;
+}
+
+div.ganttchart-hzheader-day {
+    width: 20px;
+    height: 20px;
+    border-right: 1px solid #f0f0f0;
+    border-top: 1px solid #d0d0d0;
+    line-height: 20px;
+    color: #777;
+}
+
+/* Vertical Header */
+
+div.ganttchart-vtheader {
+    margin-top: 41px;
+    width: 240px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+div.ganttchart-vtheader-item {
+    overflow: hidden;
+    color: #666;
+}
+
+div.ganttchart-vtheader-item-name {
+    width: 100px;
+    padding-left: 5px;
+    border-top: 1px solid #d0d0d0;
+    line-height: 16px;
+}
+
+div.ganttchart-vtheader-series-name {
+    width: 130px;
+    height: 31px;
+    border-top: 1px solid #d0d0d0;
+    line-height: 16px;
+    padding-left: 5px;
+}
+
+/* Slider */
+
+div.ganttchart-slide-container {
+    overflow: auto;
+    border-left: 1px solid #999;
+}
+
+/* Grid */
+
+div.ganttchart-grid-row-cell {
+    width: 20px;
+    height: 31px;
+    border-right: 1px solid #f0f0f0;
+    border-top: 1px solid #f0f0f0;
+}
+
+div.ganttchart-grid-row-cell.ganttchart-weekend {
+    background-color: #fafafa;
+}
+
+/* Blocks */
+
+div.ganttchart-blocks {
+    margin-top: 40px;
+}
+
+div.ganttchart-block-container {
+    height: 28px;
+    padding-top: 4px;
+}
+
+div.ganttchart-block {
+    position: relative;
+    height: 25px;
+    background-color: #E5ECF9;
+    border: 1px solid #c0c0c0;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+div.ganttchart-block-text {
+    position: absolute;
+    height: 12px;
+    font-size: 0.8em;
+    color: #999;
+    padding: 2px 3px;
+}
+
+/* Adjustments for jQuery UI Styling */
+
+div.ganttchart-block div.ui-resizable-handle.ui-resizable-s {
+    bottom: -0;
+}
