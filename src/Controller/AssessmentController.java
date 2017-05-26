@@ -33,6 +33,12 @@ public class AssessmentController implements DBQuery {
 
     // METHODS ---------------------------------------------------------------------------------------------------------
 
+    /** Function used to return all assessments
+     *  matching moduleID from the database
+     *
+     * @param moduleId
+     * @return assessments
+     */
     public ArrayList<Assessment> findAll(int moduleId) {
         ArrayList<Assessment> assessments = new ArrayList<>();
 
@@ -50,6 +56,12 @@ public class AssessmentController implements DBQuery {
         return assessments;
     }
 
+    /** Function used to insert an
+     *  assessment into the database
+     *
+     * @param assessment
+     * @param moduleId
+     */
     public void insertAssessment(Assessment assessment, int moduleId) {
         Object[] properties = {
                 assessment.getTitle(),
@@ -80,6 +92,12 @@ public class AssessmentController implements DBQuery {
         }
     }
 
+    /** Function used to update
+     *  an assessment in the Database
+     *
+     * @param assessment
+     * @return
+     */
     public boolean updateAssessment(Assessment assessment) {
         Object[] properties = {
                 assessment.getTitle(),
@@ -103,6 +121,13 @@ public class AssessmentController implements DBQuery {
 
         return false;
     }
+
+    /** Function used to update an assessments
+     *  deadline(in case of extension or general change of deadline)
+     *
+     * @param assessment
+     * @return
+     */
     public static boolean updateDeadline(Assessment assessment){
         Object[] properties = {
                 assessment.getDeadLine(),
@@ -124,6 +149,12 @@ public class AssessmentController implements DBQuery {
 
     // HELPER FUNCTIONS ------------------------------------------------------------------------------------------------
 
+    /** Function used to create an assessments from a resultSet
+     *
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     static Assessment formAssessment(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("assessment_id");
         String title = resultSet.getString("assessment_title");

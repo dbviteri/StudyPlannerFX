@@ -42,19 +42,12 @@ public class UserController implements DBQuery {
      * @param //dbhandler
      */
     public UserController() {
-        //dbhandler = DatabaseHandler.getInstance();
-        //System.out.println(dbhandler.getConnection());
     }
 
     // METHODS FOR QUERIES ---------------------------------------------------------------------------------------------
 
     @SuppressWarnings("ConstantConditions")
     public void create(User user) {
-        /*
-        if(user.getId() != null){
-            throw new IllegalArgumentException("Already in db");
-        }
-        */
         Object[] properties = {
                 user.getEmail(),
                 user.getUsername(),
@@ -81,10 +74,6 @@ public class UserController implements DBQuery {
             e.printStackTrace();
         }
         dbhandler.createSession(user);
-    }
-    private SemesterProfile parseProfile(File file){
-        SemesterProfile profile = FileParser.parseFile(file);
-        return profile;
     }
 
     public void insertProfile(SemesterProfile profile){
@@ -135,6 +124,12 @@ public class UserController implements DBQuery {
         return false;
     }
 
+    /** Function used to log user in
+     *
+     * @param username
+     * @param password
+     * @return true if logged in / false otherwise
+     */
     public boolean logIn(String username, String password) {
 
         User user = find(username, password);
@@ -144,7 +139,6 @@ public class UserController implements DBQuery {
             new AlertDialog(Alert.AlertType.INFORMATION, "User doesn't exist. Try again.");
             return false;
         }
-        //databaseHandler.createSession(user);
         DatabaseHandler.getInstance().createSession(user);
 
         return true;

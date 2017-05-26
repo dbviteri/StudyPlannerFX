@@ -21,6 +21,12 @@ public class MilestoneController {
             "UPDATE Milestone SET milestone_title = ?, milestone_progress = ?," +
                     " milestone_start = ?, milestone_deadline = ? WHERE Milestone_id = ?";
 
+    /** Function used to insert
+     *  a milestone in the database
+     *
+     * @param milestone
+     * @param assessmentId
+     */
     public void insertMilestone(Milestone milestone, int assessmentId) {
         Object[] properties = {
                 milestone.getTitle(),
@@ -50,6 +56,12 @@ public class MilestoneController {
         }
     }
 
+    /** Function used to update
+     *  a milestone in the database
+     *
+     * @param milestone
+     * @return true if updated/ false otherwise
+     */
     public static boolean updateMilestone(Milestone milestone){
         Object[] properties = {
                 milestone.getTitle(),
