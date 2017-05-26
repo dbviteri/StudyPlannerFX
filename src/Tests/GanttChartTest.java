@@ -32,9 +32,6 @@ public class GanttChartTest {
 
                 String[] tasks = new String[]{"Task1", "Task2"};
 
-//        final DateAxis xAxis = new DateAxis(new GregorianCalendar(2017,3,25).getTime(),new GregorianCalendar(2017,4,25).getTime());
-//        final CategoryAxis yAxis = new CategoryAxis();
-
                 NumberAxis xAxis = new NumberAxis();
                 CategoryAxis yAxis = new CategoryAxis();
                 GanttChart chart = new GanttChart<>(xAxis, yAxis);
