@@ -15,7 +15,6 @@ public class User {
     private String lastname;
     private boolean isStaff;
 
-    // EMPTY CONSTRUCTOR TO TEST!!!!!!!!!!!!!!!!!!!
     public User(){}
 
     public User(String email, String username, String password, String firstname, String lastname, boolean isStaff){
@@ -97,11 +96,4 @@ public class User {
         return String.format("User[id=%d,email=%s,firstname=%s,lastname=%s,username=%s]",
                 id, email, firstname, lastname, username);
     }
-
-    /* Sort of overloading equals operator
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-    */
 }

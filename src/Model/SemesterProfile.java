@@ -16,12 +16,8 @@ public class SemesterProfile {
     private Integer semesterId;
     private Date startDate;
     private Date endDate;
-    //private Integer userId;
 
     private Map<Module, Module> modules = new HashMap<>();
-    //private ArrayList<Module> modules = new ArrayList<>();
-    //private int semester_id;
-    // Maybe modules should be a hashmap to be able to retrieve by module name.
 
     public SemesterProfile() {}
 
@@ -29,7 +25,6 @@ public class SemesterProfile {
         this.semesterId = semesterId;
         this.startDate = start;
         this.endDate = end;
-        //this.userId = userId;
     }
 
     public SemesterProfile(Date start, Date end) {
@@ -51,15 +46,6 @@ public class SemesterProfile {
 
     public Map<Module, Module> getModules() { return modules; }
 
-    //public ArrayList<Module> getModules(){ return modules; }
-
-//    public Integer getUserId() { return userId; }
-//    public void setUserId(Integer userId) { this.userId = userId; }
-
-//    public Module getModule() {
-//        return modules.get(0);
-//    }
-
     public Integer getSemesterId() { return semesterId; }
 
     public void setSemesterId(Integer semesterId) { this.semesterId = semesterId; }
@@ -67,13 +53,7 @@ public class SemesterProfile {
     public void addModule(Module module) {
         if (!modules.containsKey(module))
             modules.put(module, module);
-//        if (!modules.contains(module))
-//            modules.add(module);
     }
-
-    //public void addModules(Set<Module> modules) { this.modules = modules; }
-
-
 
     // Overrides--------------------------------------------------------------------------------------------------------
 
