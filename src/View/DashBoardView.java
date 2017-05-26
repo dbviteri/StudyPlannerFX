@@ -1,13 +1,15 @@
 package View;
 
 import Controller.DatabaseHandler;
-import Model.Assessment;
-import Model.Module;
-import Model.SemesterProfile;
+import Model.*;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -15,6 +17,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -137,78 +140,86 @@ public class DashBoardView {
         }
     }
 
-//    public void openChart(Module module){
-//
-//        Assessment[] assessments = new Assessment[module.getAssessments().values().size()];
-//        module.getAssessments().values().toArray(assessments);
-////        HashMap<Task,Task> tasks = new HashMap<>();
-////        HashMap<Activity, Activity> activities = new HashMap<>();
-////        HashMap<Milestone,Milestone> milestones = new HashMap<>();
-//        ArrayList<String> assessmentTitles = new ArrayList<>();
-//        ArrayList<XYChart.Series> chartEntry = new ArrayList<>();
-//        XYChart.Series series = new XYChart.Series();
-//        int i = 0;
-//        for(Assessment entry : assessments) {
-//            Task[] tasks = new Task[entry.getTasks().size()];
-//            entry.getTasks().values().toArray(tasks);
-//            assessmentTitles.add(entry.getTitle());
-//            for(Task task : tasks){
-//                Activity[] activities = new Activity[task.getActivities().size()];
-//                task.getActivities().values().toArray(activities);
-//                series.getData().add(new XYChart.Data(0, task.getTitle(), new GanttChart.MetaData(2,"status-red")));
-//                for(Activity activity : activities){
-//                    series.getData().add(new XYChart.Data(2, activity.getTitle(), new GanttChart.MetaData(4,"status-purple")));
-//                }
-//            }
-//            series.getData().add(new XYChart.Data(4, entry.getTitle(), new GanttChart.MetaData(6,"status-blue")));
-//            chartEntry.add(series);
-//            series = new XYChart.Series();
-//        }
-//
-//        NumberAxis xAxis = new NumberAxis();
-//        CategoryAxis yAxis = new CategoryAxis();
-//        GanttChart ganttChart = new GanttChart<>(xAxis,yAxis);
-//
-//        ganttChart.setTitle(module.getTitle()+" chart");
-//        ganttChart.setLegendVisible(false);
-//        ganttChart.setFrameHeight( 50);
-//
-//        xAxis.setLabel("");
-//        xAxis.setTickLabelFill(Color.CHOCOLATE);
-//        xAxis.setMinorTickCount(4);
-//
-//        yAxis.setLabel("");
-//        yAxis.setTickLabelFill(Color.CHOCOLATE);
-//        yAxis.setTickLabelGap(10);
-//        yAxis.setCategories(FXCollections.observableArrayList(assessmentTitles));
-//
-//        for(XYChart.Series series1 : chartEntry){
-//            ganttChart.getData().add(series1);
-//        }
-//        ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
-//
-//        //series.getData().add(new XYChart.Data(tasks.get, assessmentTitles.get(0), new GanttChart.MetaData( 1, "status-red")));
-//
-//        ScrollPane pane = new ScrollPane();
-//        pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-//        pane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-//
-//        Scene chartScene = new Scene(pane,620,350);
-//        pane.setContent(ganttChart);
-//
-//        Stage stage = new Stage();
-//        stage.setScene(chartScene);
-//        stage.show();
-//    }
-
     public void openChart(Module module){
-        createJson();
+
+        Assessment[] assessments = new Assessment[module.getAssessments().values().size()];
+        module.getAssessments().values().toArray(assessments);
+//        HashMap<Task,Task> tasks = new HashMap<>();
+//        HashMap<Activity, Activity> activities = new HashMap<>();
+//        HashMap<Milestone,Milestone> milestones = new HashMap<>();
+        ArrayList<String> assessmentTitles = new ArrayList<>();
+        ArrayList<XYChart.Series> chartEntry = new ArrayList<>();
+        XYChart.Series series = new XYChart.Series();
+        int i = 0;
+        for(Assessment entry : assessments) {
+            Task[] tasks = new Task[entry.getTasks().size()];
+            entry.getTasks().values().toArray(tasks);
+            assessmentTitles.add(entry.getTitle());
+            for(Task task : tasks){
+                Activity[] activities = new Activity[task.getActivities().size()];
+                task.getActivities().values().toArray(activities);
+                series.getData().add(new XYChart.Data(task.getDate().getTime()/ 36000000, entry.getTitle(), new GanttChart.MetaData(task.getTime(),"status-red")));
+                for(Activity activity : activities){
+                    series.getData().add(new XYChart.Data(activity.getDate().getTime() / 36000000, entry.getTitle(), new GanttChart.MetaData(activity.getTime(),"status-purple")));
+                }
+            }
+            series.getData().add(new XYChart.Data(entry.getDeadLine().getTime() / 36000000, entry.getTitle(), new GanttChart.MetaData(6000000,"status-blue")));
+            chartEntry.add(series);
+            series = new XYChart.Series();
+        }
+//         Task[] tasks = new Task[assessments[0].getTasks().size()];
+//         assessments[0].getTasks().values().toArray(tasks);
+//         for(Task task : tasks){
+//             assessmentTitles.add(task.getTitle());
+//             series.getData().add((new XYChart.Data(task.getDate().getTime() / 36000000,task.getTitle(), new GanttChart.MetaData(task.getTime(),"status-blue"))));
+//             chartEntry.add(series);
+//             series = new XYChart.Series()
+//         }
+
+        NumberAxis xAxis = new NumberAxis();
+        CategoryAxis yAxis = new CategoryAxis();
+        GanttChart ganttChart = new GanttChart<>(xAxis,yAxis);
+
+        ganttChart.setTitle(module.getTitle()+" chart");
+        ganttChart.setLegendVisible(false);
+        ganttChart.setFrameHeight( 50);
+
+        xAxis.setLabel("");
+        xAxis.setTickLabelFill(Color.CHOCOLATE);
+        xAxis.setMinorTickCount(4);
+
+        yAxis.setLabel("");
+        yAxis.setTickLabelFill(Color.CHOCOLATE);
+        yAxis.setTickLabelGap(10);
+        yAxis.setCategories(FXCollections.observableArrayList(assessmentTitles));
+
+        for(XYChart.Series series1 : chartEntry){
+            ganttChart.getData().add(series1);
+        }
+        ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
+
+        //series.getData().add(new XYChart.Data(tasks.get, assessmentTitles.get(0), new GanttChart.MetaData( 1, "status-red")));
+
+        ScrollPane pane = new ScrollPane();
+        pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        pane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+
+        Scene chartScene = new Scene(pane,620,350);
+        pane.setContent(ganttChart);
+
         Stage stage = new Stage();
-        Browser webView = new Browser(stage);
-        //stage.setScene(new GanttChartView().load(module));
-        stage.setScene(new Scene(webView));
+        stage.setScene(chartScene);
         stage.show();
     }
+
+//    public void openChart(Module module){
+//        createJson();
+//        Stage stage = new Stage();
+//        Browser webView = new Browser(stage);
+//        //stage.setScene(new GanttChartView().load(module));
+//        stage.setScene(new Scene(webView));
+//        stage.show();
+//    }
 
     private void createJson() {
         SemesterProfile semesterProfile = databaseHandler.getSemesterSession();
