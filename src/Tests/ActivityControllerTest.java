@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 /**
- * Created by Didac on 09/05/2017.
+ * Test
  */
 public class ActivityControllerTest {
 
@@ -15,7 +15,7 @@ public class ActivityControllerTest {
     @Test
     public void findAll() throws Exception {
         ActivityController controller = new ActivityController();
-        ArrayList<Activity> activities = controller.findAll(2);
+        ArrayList<Activity> activities = controller.findAll(19);
         System.out.println(activities.get(0).toString());
     }
 

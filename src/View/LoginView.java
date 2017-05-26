@@ -1,12 +1,9 @@
 package View;
 
-import Controller.DatabaseHandler;
 import Controller.UserController;
-import Model.User;
 import Utils.ControlledScene;
 import Utils.StageHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -32,7 +29,12 @@ public class LoginView extends UserController implements ControlledScene{
     public void directLogIn() {
         String username = usernameField.getText();//"xdn15mcu";
         String password = passwordField.getText();//"test";
-        userController.logIn(stageHandler,username,password);
+        userController.logIn(username, password);
+
+        // Reload scene after creating a session
+        stageHandler.reloadScene(StageHandler.SCENE.SEMESTER);
+        stageHandler.setScene(StageHandler.SCENE.SEMESTER, true, 1024, 768);
+
     }
 
     /** Basic FXML function, on button press

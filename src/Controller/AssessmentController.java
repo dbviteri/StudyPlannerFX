@@ -21,7 +21,7 @@ public class AssessmentController implements DBQuery {
     private static final String QUERY_INSERT_ASSESSMENT =
             "INSERT INTO Assessment (assessment_title, assessment_type, weight, deadline, completion, module_id) VALUES (?,?,?,?,?,?)";
     private static final String QUERY_UPDATE_ASSESSMENT =
-            "UPDATE Assessment SET title = ?, type = ?, weight = ?, deadline = ?, completion = ? WHERE assessment_id = ?";
+            "UPDATE Assessment SET assessment_title = ?, assessment_type = ?, weight = ?, deadline = ?, completion = ? WHERE assessment_id = ?";
     private static final String QUERY_DELETE_ASSESSMENT =
             "";
     private static final String QUERY_UPDATE_DEADLINE =
@@ -33,7 +33,7 @@ public class AssessmentController implements DBQuery {
 
     // METHODS ---------------------------------------------------------------------------------------------------------
 
-    public static ArrayList<Assessment> findAll(int moduleId) {
+    public ArrayList<Assessment> findAll(int moduleId) {
         ArrayList<Assessment> assessments = new ArrayList<>();
 
         try (
@@ -80,13 +80,14 @@ public class AssessmentController implements DBQuery {
         }
     }
 
-    public static boolean updateAssessment(Assessment assessment){
+    public boolean updateAssessment(Assessment assessment) {
         Object[] properties = {
                 assessment.getTitle(),
                 assessment.getType().toString(),
                 assessment.getWeight(),
                 assessment.getDeadLine(), // TODO: CHANGE TO SQL DATE
                 assessment.getCompletion(),
+                assessment.getId()
         };
 
         try (

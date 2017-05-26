@@ -17,7 +17,7 @@ public class ModuleController implements DBQuery {
     private static final String QUERY_FIND_MODULES =
             "SELECT * FROM Module WHERE semester_id = ?";
     private static final String QUERY_UPDATE_MODULE =
-            "UPDATE Module SET title = ?, code = ?, semester_id = ? WHERE code = ?";
+            "UPDATE Module SET module_title = ?, code = ? WHERE module_id = ?";
     //TODO : GOOD OR BAD STATIC ?
     private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();
 
@@ -106,9 +106,9 @@ public class ModuleController implements DBQuery {
     public static boolean updateModule(Module module){
 
         Object[] properties = {
-                //module.getId(),
                 module.getTitle(),
-                module.getCode()
+                module.getCode(),
+                module.getId()
         };
         try (
                 PreparedStatement statement =
