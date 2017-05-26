@@ -210,7 +210,8 @@ public class Task {
 
     /** Function checks if task is completed based on all the related activities
      *  if complete , it returns true
-     *  if not , it sets progress to the
+     *  if not , it returns false and
+     *  updates progress to level of completion
      *
      * @return
      */

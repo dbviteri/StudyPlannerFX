@@ -11,11 +11,25 @@ public class ActivityNote extends Note {
 
     private Integer activityId;
 
+    /** Constructor used when creating
+     *  a note from Database into memory
+     *
+     * @param activityId
+     * @param title
+     * @param text
+     * @param date
+     */
     public ActivityNote(Integer activityId, String title, String text, Date date) {
         super(title, text, date);
         this.activityId = activityId;
     }
-
+    /** Constructor used when first
+     *  creating a note in memory
+     *
+     * @param title
+     * @param text
+     * @param date
+     */
     public ActivityNote(String title, String text, Date date) {
         super(title, text, date);
         activityId = null;

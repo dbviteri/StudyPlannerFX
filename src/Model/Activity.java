@@ -25,6 +25,14 @@ public class Activity {
 
     public Activity() {}
 
+    /** Constructor used when first
+     *  creating an activity into memory
+     *
+     * @param title
+     * @param quantity
+     * @param time
+     * @param date
+     */
     public Activity(String title, int quantity, int time, Date date) {
         // IF FIRST ADDED TO PROFILE DATE = CURRENT DATE
         if (activityId == null) {
@@ -34,6 +42,16 @@ public class Activity {
         this.quantity = quantity;
         this.time = time;
     }
+
+    /** Constructor used when recreating an
+     *  activity from database into memory
+     *
+     * @param activityId
+     * @param title
+     * @param quantity
+     * @param time
+     * @param date
+     */
     // TODO: Decide whether we need constructors
     public Activity(Integer activityId, String title, int quantity, int time, Date date) {
         this(title,quantity,time,date);
@@ -41,11 +59,6 @@ public class Activity {
     }
 
     // Methods ---------------------------------------------------------------------------------------------------------
-
-//    public boolean addNote(String title, String text) {
-//        ActivityNote note = new ActivityNote(activityId, title, text, new Date());
-//        return notes.add(note);
-//    }
 
     public void addNote(ActivityNote note) {
         notes.put(note, note);
