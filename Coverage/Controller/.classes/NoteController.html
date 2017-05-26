@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: NoteController</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">Controller</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: NoteController (Controller)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">NoteController</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 7)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 41)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package Controller;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import Model.Note;
+        <i>4</i>&nbsp;import Utils.SPException;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;import java.sql.PreparedStatement;
+        <i>7</i>&nbsp;import java.sql.ResultSet;
+        <i>8</i>&nbsp;import java.sql.SQLException;
+        <i>9</i>&nbsp;import java.util.ArrayList;
+        <i>10</i>&nbsp;import java.util.Date;
+        <i>11</i>&nbsp;
+        <i>12</i>&nbsp;/**
+        <i>13</i>&nbsp; * Created by 100125468 on 07/05/2017.
+        <i>14</i>&nbsp; */
+        <b class="nc"><i>15</i>&nbsp;public class NoteController implements DBQuery {</b>
+        <i>16</i>&nbsp;
+        <i>17</i>&nbsp; private static final String QUERY_FIND_NOTES =
+        <i>18</i>&nbsp; &quot;SELECT * FROM Note WHERE task_ID = ? OR activity_ID = ?&quot;;
+        <i>19</i>&nbsp; private static final String QUERY_INSERT_NOTE =
+        <i>20</i>&nbsp; &quot;INSERT INTO Note (note_title, text, date, task_ID, activity_ID) VALUES (?,?,?,?,?)&quot;;
+        <i>21</i>&nbsp; private static final String QUERY_UPDATE_NOTE =
+        <i>22</i>&nbsp; &quot;UPDATE Note SET text = ? WHERE task_ID = ? OR activity_ID = ?&quot;;
+        <i>23</i>&nbsp;
+        <b class="nc"><i>24</i>&nbsp; private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();</b>
+        <i>25</i>&nbsp;
+        <i>26</i>&nbsp; /** Function used to retrieve all
+        <i>27</i>&nbsp; * notes of some given properties
+        <i>28</i>&nbsp; *
+        <i>29</i>&nbsp; * @param sql
+        <i>30</i>&nbsp; * @param properties
+        <i>31</i>&nbsp; * @param &lt;T&gt;
+        <i>32</i>&nbsp; * @return
+        <i>33</i>&nbsp; */
+        <i>34</i>&nbsp; private static &lt;T&gt; ArrayList&lt;T&gt; findAll(String sql, Object... properties) {
+        <b class="nc"><i>35</i>&nbsp; ArrayList&lt;T&gt; notes = new ArrayList&lt;&gt;();</b>
+        <b class="nc"><i>36</i>&nbsp; try (</b>
+        <b class="nc"><i>37</i>&nbsp; PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties);</b>
+        <b class="nc"><i>38</i>&nbsp; ResultSet resultSet = statement.executeQuery()</b>
+        <i>39</i>&nbsp; ) {
+        <b class="nc"><i>40</i>&nbsp; while (resultSet.next()) {</b>
+        <b class="nc"><i>41</i>&nbsp; notes.add((T) formNote(resultSet));</b>
+        <i>42</i>&nbsp; }
+        <b class="nc"><i>43</i>&nbsp; } catch (SQLException e) {</b>
+        <b class="nc"><i>44</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>45</i>&nbsp; }</b>
+        <b class="nc"><i>46</i>&nbsp; return notes;</b>
+        <i>47</i>&nbsp; }
+        <i>48</i>&nbsp;
+        <i>49</i>&nbsp; public void updateNote(Note note, Integer taskId, Integer activityId) {
+        <b class="nc"><i>50</i>&nbsp; Object[] properties = {</b>
+        <b class="nc"><i>51</i>&nbsp; note.getTitle(),</b>
+        <b class="nc"><i>52</i>&nbsp; note.getText(),</b>
+        <b class="nc"><i>53</i>&nbsp; note.getDate(),</b>
+        <i>54</i>&nbsp; taskId,
+        <i>55</i>&nbsp; activityId
+        <i>56</i>&nbsp; };
+        <i>57</i>&nbsp;
+        <b class="nc"><i>58</i>&nbsp; Object[] updateProperties = {</b>
+        <b class="nc"><i>59</i>&nbsp; note.getText(),</b>
+        <i>60</i>&nbsp; taskId,
+        <i>61</i>&nbsp; activityId
+        <i>62</i>&nbsp; };
+        <i>63</i>&nbsp;
+        <b class="nc"><i>64</i>&nbsp; if (noteExists(taskId, activityId)) {</b>
+        <b class="nc"><i>65</i>&nbsp; updateNote(QUERY_UPDATE_NOTE, updateProperties);</b>
+        <i>66</i>&nbsp; } else {
+        <b class="nc"><i>67</i>&nbsp; updateNote(QUERY_INSERT_NOTE, properties);</b>
+        <i>68</i>&nbsp; }
+        <i>69</i>&nbsp; }
+        <i>70</i>&nbsp;
+        <i>71</i>&nbsp; private void updateNote(String sql, Object... properties) {
+        <b class="nc"><i>72</i>&nbsp; try (</b>
+        <b class="nc"><i>73</i>&nbsp; PreparedStatement statement = dbhandler.prepareStatement(sql, false,
+            properties)</b>
+        <i>74</i>&nbsp; ) {
+        <b class="nc"><i>75</i>&nbsp; int updatedRows = statement.executeUpdate();</b>
+        <b class="nc"><i>76</i>&nbsp; if (updatedRows == 0) throw new SPException(&quot;Failed to create new note. No
+            rows affected&quot;);</b>
+        <b class="nc"><i>77</i>&nbsp; } catch (SQLException e) {</b>
+        <b class="nc"><i>78</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>79</i>&nbsp; }</b>
+        <i>80</i>&nbsp; }
+        <i>81</i>&nbsp;
+        <i>82</i>&nbsp; private boolean noteExists(Integer taskId, Integer activityId) {
+        <b class="nc"><i>83</i>&nbsp; Object[] properties = {</b>
+        <i>84</i>&nbsp; taskId,
+        <i>85</i>&nbsp; activityId
+        <i>86</i>&nbsp; };
+        <i>87</i>&nbsp;
+        <b class="nc"><i>88</i>&nbsp; try (</b>
+        <b class="nc"><i>89</i>&nbsp; PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_NOTES, false,
+            properties);</b>
+        <b class="nc"><i>90</i>&nbsp; ResultSet set = statement.executeQuery()</b>
+        <i>91</i>&nbsp; ) {
+        <b class="nc"><i>92</i>&nbsp; if (set.next()) return true;</b>
+        <b class="nc"><i>93</i>&nbsp; } catch (SQLException e) {</b>
+        <b class="nc"><i>94</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>95</i>&nbsp; }</b>
+        <i>96</i>&nbsp;
+        <b class="nc"><i>97</i>&nbsp; return false;</b>
+        <i>98</i>&nbsp; }
+        <i>99</i>&nbsp;
+        <i>100</i>&nbsp; static Note formNote(ResultSet resultSet) throws SQLException {
+        <b class="nc"><i>101</i>&nbsp; String title = resultSet.getString(&quot;note_title&quot;);</b>
+        <b class="nc"><i>102</i>&nbsp; String text = resultSet.getString(&quot;text&quot;);</b>
+        <i>103</i>&nbsp; //Integer taskId = resultSet.getInt(&quot;task_ID&quot;);
+        <b class="nc"><i>104</i>&nbsp; Date date = resultSet.getDate(&quot;date&quot;);</b>
+        <i>105</i>&nbsp;
+        <b class="nc"><i>106</i>&nbsp; return new Note(title, text, date);</b>
+        <i>107</i>&nbsp; // If task id is null in db, means it&#39;s activity note
+        <i>108</i>&nbsp;// if (!resultSet.wasNull()) {
+        <i>109</i>&nbsp;// return new TaskNote(taskId, title, text, date);
+        <i>110</i>&nbsp;// } else {
+        <i>111</i>&nbsp;// Integer activityId = resultSet.getInt(&quot;activity_ID&quot;);
+        <i>112</i>&nbsp;// return new ActivityNote(activityId, title, text, date);
+        <i>113</i>&nbsp;// }
+        <i>114</i>&nbsp; }
+        <i>115</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>

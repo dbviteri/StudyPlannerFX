@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: TaskTest</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">Tests</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: TaskTest (Tests)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">TaskTest</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 3)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 13)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package Tests;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import Model.Activity;
+        <i>4</i>&nbsp;import Model.Task;
+        <i>5</i>&nbsp;import Model.TaskNote;
+        <i>6</i>&nbsp;import org.junit.Before;
+        <i>7</i>&nbsp;import org.junit.Test;
+        <i>8</i>&nbsp;
+        <i>9</i>&nbsp;import java.util.Date;
+        <i>10</i>&nbsp;import java.util.Map;
+        <i>11</i>&nbsp;
+        <i>12</i>&nbsp;/**
+        <i>13</i>&nbsp; * Created by Didac on 13/05/2017.
+        <i>14</i>&nbsp; */
+        <b class="nc"><i>15</i>&nbsp;public class TaskTest {</b>
+        <i>16</i>&nbsp; @Before
+        <i>17</i>&nbsp; public void setUp() throws Exception {
+        <i>18</i>&nbsp;
+        <i>19</i>&nbsp; }
+        <i>20</i>&nbsp;
+        <i>21</i>&nbsp; @Test
+        <i>22</i>&nbsp; public void addNote() throws Exception {
+        <b class="nc"><i>23</i>&nbsp; TaskNote note = new TaskNote(&quot;test&quot;, &quot;test&quot;, new Date());</b>
+        <b class="nc"><i>24</i>&nbsp; TaskNote note2 = new TaskNote(&quot;test&quot;, &quot;test&quot;, new Date());</b>
+        <i>25</i>&nbsp;
+        <i>26</i>&nbsp;// Task task = new Task();
+        <i>27</i>&nbsp;// task.addNote(note);
+        <i>28</i>&nbsp;// task.addNote(note2);
+        <i>29</i>&nbsp;//
+        <i>30</i>&nbsp;// //System.out.println(task.getNotes().get(note).getTitle());
+        <i>31</i>&nbsp;// //assert !task.getNotes().get(note).equals(task.getNotes().get(note2));
+        <i>32</i>&nbsp;// assert task.getNotes().size() == 2;
+        <i>33</i>&nbsp; }
+        <i>34</i>&nbsp;
+        <i>35</i>&nbsp; @Test
+        <i>36</i>&nbsp; public void addActivity() throws Exception {
+        <b class="nc"><i>37</i>&nbsp; Activity activity = new Activity(&quot;test&quot;, 2, 2, new Date());</b>
+        <b class="nc"><i>38</i>&nbsp; Activity activity2 = new Activity(&quot;test&quot;, 2, 2, new Date());</b>
+        <b class="nc"><i>39</i>&nbsp; Activity activity3 = new Activity(&quot;test&quot;, 2, 2, new Date());</b>
+        <i>40</i>&nbsp;
+        <b class="nc"><i>41</i>&nbsp; Task task = new Task();</b>
+        <b class="nc"><i>42</i>&nbsp; task.addActivity(activity);</b>
+        <b class="nc"><i>43</i>&nbsp; task.addActivity(activity2);</b>
+        <b class="nc"><i>44</i>&nbsp; task.addActivity(activity3);</b>
+        <i>45</i>&nbsp;
+        <i>46</i>&nbsp;
+        <b class="nc"><i>47</i>&nbsp; for (Map.Entry&lt;Activity, Activity&gt; activities :
+            task.getActivities().entrySet()) {</b>
+        <b class="nc"><i>48</i>&nbsp; System.out.println(activities.getValue().getTitle());</b>
+        <b class="nc"><i>49</i>&nbsp; }</b>
+        <i>50</i>&nbsp; }
+        <i>51</i>&nbsp;
+        <i>52</i>&nbsp; @Test
+        <i>53</i>&nbsp; public void addDependency() throws Exception {
+        <i>54</i>&nbsp;
+        <i>55</i>&nbsp; }
+        <i>56</i>&nbsp;
+        <i>57</i>&nbsp; @Test
+        <i>58</i>&nbsp; public void getDependencies() throws Exception {
+        <i>59</i>&nbsp;
+        <i>60</i>&nbsp; }
+        <i>61</i>&nbsp;
+        <i>62</i>&nbsp; @Test
+        <i>63</i>&nbsp; public void getActivities() throws Exception {
+        <i>64</i>&nbsp;
+        <i>65</i>&nbsp; }
+        <i>66</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 12:03</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: AssessmentTest</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">Tests</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: AssessmentTest (Tests)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">AssessmentTest</td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (3/ 3)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (20/ 20)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package Tests;
+        <i>2</i>&nbsp;import Model.Assessment;
+        <i>3</i>&nbsp;import Model.Milestone;
+        <i>4</i>&nbsp;import Model.Task;
+        <i>5</i>&nbsp;import View.AssessmentsView;
+        <i>6</i>&nbsp;import org.junit.Test;
+        <i>7</i>&nbsp;
+        <i>8</i>&nbsp;import java.util.Date;
+        <i>9</i>&nbsp;
+        <i>10</i>&nbsp;/**
+        <i>11</i>&nbsp; * Created by 100125468 on 26/05/2017.
+        <i>12</i>&nbsp; */
+        <b class="fc"><i>13</i>&nbsp;public class AssessmentTest {</b>
+        <b class="fc"><i>14</i>&nbsp; Assessment assessment = new Assessment(&quot;Test Exam&quot;,
+            Assessment.Type.EXAM,</b>
+        <b class="fc"><i>15</i>&nbsp; 50,new Date(), 0.0);</b>
+        <b class="fc"><i>16</i>&nbsp; Task task = new Task(&quot;Test task&quot;,Task.TaskType.READING, &quot;Chapters&quot;,</b>
+        <i>17</i>&nbsp; 5,50, new Date());
+        <b class="fc"><i>18</i>&nbsp; Milestone milestone = new Milestone(&quot;Test milestone&quot;,new Date(), new
+            Date());</b>
+        <i>19</i>&nbsp; @Test
+        <i>20</i>&nbsp; public void taskTest(){
+        <b class="fc"><i>21</i>&nbsp; System.out.println(&quot;Completion : &quot; + assessment.getCompletion());</b>
+        <b class="fc"><i>22</i>&nbsp; assessment.addTask(task);</b>
+        <b class="fc"><i>23</i>&nbsp; System.out.println(&quot;Added a task :&quot;);</b>
+        <i>24</i>&nbsp;
+        <b class="fc"><i>25</i>&nbsp; System.out.println(assessment.getTasks().values().toArray()[0]);</b>
+        <b class="fc"><i>26</i>&nbsp; System.out.println(&quot;Completion after adding : &quot; +
+            assessment.getCompletion());</b>
+        <i>27</i>&nbsp;
+        <b class="fc"><i>28</i>&nbsp; System.out.println(&quot;Trying to add same task again&quot;);</b>
+        <b class="fc"><i>29</i>&nbsp; System.out.println(assessment.addTask(task));</b>
+        <i>30</i>&nbsp;
+        <b class="fc"><i>31</i>&nbsp; assessment.deleteTask(task);</b>
+        <b class="fc"><i>32</i>&nbsp; System.out.println(&quot;Now deleted it &quot;);</b>
+        <b class="fc"><i>33</i>&nbsp; System.out.println(&quot;Completion after deleting : &quot; +
+            assessment.getCompletion());</b>
+        <i>34</i>&nbsp;
+        <b class="fc"><i>35</i>&nbsp; }</b>
+        <i>36</i>&nbsp; @Test
+        <i>37</i>&nbsp; public void milestoneTest(){
+        <b class="fc"><i>38</i>&nbsp; System.out.println(assessment.addMilestone(milestone));</b>
+        <b class="fc"><i>39</i>&nbsp; System.out.println(assessment.getMilestones().values().toArray()[0]);</b>
+        <b class="fc"><i>40</i>&nbsp; System.out.println(&quot;Trying to add the same milestone again : &quot; +
+            assessment.addMilestone(milestone));</b>
+        <b class="fc"><i>41</i>&nbsp; }</b>
+        <i>42</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>

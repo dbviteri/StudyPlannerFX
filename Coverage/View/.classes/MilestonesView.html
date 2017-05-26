@@ -1,0 +1,463 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: MilestonesView</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">View</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: MilestonesView (View)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">MilestonesView</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 22)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 134)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package View;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import Controller.MilestoneController;
+        <i>4</i>&nbsp;import Controller.NoteController;
+        <i>5</i>&nbsp;import Controller.TaskController;
+        <i>6</i>&nbsp;import Model.*;
+        <i>7</i>&nbsp;import javafx.beans.binding.Bindings;
+        <i>8</i>&nbsp;import javafx.beans.property.SimpleStringProperty;
+        <i>9</i>&nbsp;import javafx.collections.FXCollections;
+        <i>10</i>&nbsp;import javafx.collections.ListChangeListener;
+        <i>11</i>&nbsp;import javafx.collections.ObservableList;
+        <i>12</i>&nbsp;import javafx.event.ActionEvent;
+        <i>13</i>&nbsp;import javafx.fxml.FXML;
+        <i>14</i>&nbsp;import javafx.scene.Node;
+        <i>15</i>&nbsp;import javafx.scene.control.*;
+        <i>16</i>&nbsp;import javafx.scene.control.cell.PropertyValueFactory;
+        <i>17</i>&nbsp;import javafx.scene.layout.GridPane;
+        <i>18</i>&nbsp;import javafx.scene.layout.VBox;
+        <i>19</i>&nbsp;
+        <i>20</i>&nbsp;import java.time.Instant;
+        <i>21</i>&nbsp;import java.time.LocalDate;
+        <i>22</i>&nbsp;import java.time.ZoneId;
+        <i>23</i>&nbsp;import java.util.Date;
+        <i>24</i>&nbsp;import java.util.function.Predicate;
+        <i>25</i>&nbsp;
+        <i>26</i>&nbsp;/**
+        <i>27</i>&nbsp; * Created by Didac on 17/05/2017.
+        <i>28</i>&nbsp; */
+        <b class="nc"><i>29</i>&nbsp;public class MilestonesView {</b>
+        <i>30</i>&nbsp;
+        <i>31</i>&nbsp; // Task fields --------------------------------------------
+        <i>32</i>&nbsp; @FXML
+        <i>33</i>&nbsp; private TextField taskTitleField;
+        <i>34</i>&nbsp; @FXML
+        <i>35</i>&nbsp; private ComboBox&lt;Task.TaskType&gt; taskTypeBox;
+        <i>36</i>&nbsp; @FXML
+        <i>37</i>&nbsp; private TextField criteriaField;
+        <i>38</i>&nbsp; @FXML
+        <i>39</i>&nbsp; private TextField amountField;
+        <i>40</i>&nbsp; @FXML
+        <i>41</i>&nbsp; private ComboBox&lt;Task&gt; dependencyBox;
+        <i>42</i>&nbsp; @FXML
+        <i>43</i>&nbsp; private TextArea notesField;
+        <i>44</i>&nbsp; // --------------------------------------------
+        <i>45</i>&nbsp;
+        <i>46</i>&nbsp; @FXML
+        <i>47</i>&nbsp; private VBox milestoneFormBox;
+        <i>48</i>&nbsp; @FXML
+        <i>49</i>&nbsp; private VBox taskFormBox;
+        <i>50</i>&nbsp; @FXML
+        <i>51</i>&nbsp; private TableView&lt;Task&gt; tasksTable;
+        <i>52</i>&nbsp; @FXML
+        <i>53</i>&nbsp; private ProgressBar milestoneProgress;
+        <i>54</i>&nbsp; @FXML
+        <i>55</i>&nbsp; private GridPane assessmentGrid;
+        <i>56</i>&nbsp; @FXML
+        <i>57</i>&nbsp; ComboBox&lt;Module&gt; moduleSelect;
+        <i>58</i>&nbsp; @FXML
+        <i>59</i>&nbsp; ComboBox&lt;Assessment&gt; assessmentSelect;
+        <i>60</i>&nbsp; @FXML
+        <i>61</i>&nbsp; private TableView&lt;Milestone&gt; milestonesTable;
+        <i>62</i>&nbsp; @FXML
+        <i>63</i>&nbsp; private TextField milestoneTitleField;
+        <i>64</i>&nbsp; @FXML
+        <i>65</i>&nbsp; private DatePicker deadlinePicker;
+        <i>66</i>&nbsp;
+        <b class="nc"><i>67</i>&nbsp; private ObservableList&lt;Milestone&gt; milestones =
+            FXCollections.observableArrayList();</b>
+        <b class="nc"><i>68</i>&nbsp; private ObservableList&lt;Task&gt; tasks =
+            FXCollections.observableArrayList();</b>
+        <i>69</i>&nbsp;
+        <i>70</i>&nbsp; private MilestoneController milestoneController;
+        <i>71</i>&nbsp;
+        <i>72</i>&nbsp; private ListChangeListener&lt;Milestone&gt; milestonesListener;
+        <i>73</i>&nbsp; private ListChangeListener&lt;Task&gt; tasksListener;
+        <i>74</i>&nbsp; private TaskController taskController;
+        <i>75</i>&nbsp; private NoteController noteController;
+        <i>76</i>&nbsp;
+        <i>77</i>&nbsp; /**
+        <i>78</i>&nbsp; * Initializes the items and adds listeners.
+        <i>79</i>&nbsp; */
+        <i>80</i>&nbsp; public void initialize() {
+        <b class="nc"><i>81</i>&nbsp; noteController = new NoteController();</b>
+        <b class="nc"><i>82</i>&nbsp; taskController = new TaskController();</b>
+        <b class="nc"><i>83</i>&nbsp; milestoneController = new MilestoneController();</b>
+        <i>84</i>&nbsp;
+        <b class="nc"><i>85</i>&nbsp; taskTypeBox.getItems().setAll(Task.TaskType.values());</b>
+        <i>86</i>&nbsp;
+        <b class="nc"><i>87</i>&nbsp; tasksListener = changedValue -&gt; {</b>
+        <b class="nc"><i>88</i>&nbsp; changedValue.next();</b>
+        <i>89</i>&nbsp;
+        <b class="nc"><i>90</i>&nbsp; Milestone selectedMilestone =
+            milestonesTable.getSelectionModel().getSelectedItem();</b>
+        <b class="nc"><i>91</i>&nbsp; if (changedValue.wasAdded()) {</b>
+        <b class="nc"><i>92</i>&nbsp; selectedMilestone.addTask(changedValue.getAddedSubList().get(</b>
+        <b class="nc"><i>93</i>&nbsp; changedValue.getAddedSubList().size() - 1));</b>
+        <i>94</i>&nbsp; } else {
+        <b class="nc"><i>95</i>&nbsp; selectedMilestone.deleteTask(changedValue.getRemoved().get(0));</b>
+        <i>96</i>&nbsp; }
+        <i>97</i>&nbsp; };
+        <i>98</i>&nbsp;
+        <b class="nc"><i>99</i>&nbsp; milestonesListener = changedValue -&gt; {</b>
+        <b class="nc"><i>100</i>&nbsp; changedValue.next();</b>
+        <b class="nc"><i>101</i>&nbsp; if (changedValue.wasAdded()) {</b>
+        <b class="nc"><i>102</i>&nbsp; milestoneController.insertMilestone(</b>
+        <b class="nc"><i>103</i>&nbsp; changedValue.getAddedSubList().get(changedValue.getAddedSubList().size() -
+            1),</b>
+        <b class="nc"><i>104</i>&nbsp; assessmentSelect.getValue().getId()</b>
+        <i>105</i>&nbsp; );
+        <b class="nc"><i>106</i>&nbsp; assessmentSelect.getValue().addMilestone(</b>
+        <b class="nc"><i>107</i>&nbsp; changedValue.getAddedSubList().get(changedValue.getAddedSubList().size() - 1)</b>
+        <i>108</i>&nbsp; );
+        <i>109</i>&nbsp; } else {
+        <b class="nc"><i>110</i>&nbsp;
+            assessmentSelect.getValue().deleteMilestone(changedValue.getRemoved().get(0));</b>
+        <i>111</i>&nbsp; }
+        <i>112</i>&nbsp; };
+        <i>113</i>&nbsp;
+        <b class="nc"><i>114</i>&nbsp; assessmentSelect.valueProperty().addListener((observable, oldValue, newValue) -&gt;
+            {</b>
+        <b class="nc"><i>115</i>&nbsp; if (newValue == null) {</b>
+        <b class="nc"><i>116</i>&nbsp; reset();</b>
+        <i>117</i>&nbsp; return;
+        <i>118</i>&nbsp; }
+        <i>119</i>&nbsp;
+        <b class="nc"><i>120</i>&nbsp; refreshMilestoneTable();</b>
+        <i>121</i>&nbsp; //refreshTasksTable();
+        <i>122</i>&nbsp; });
+        <i>123</i>&nbsp;
+        <b class="nc"><i>124</i>&nbsp;
+            milestonesTable.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -&gt;
+            {</b>
+        <b class="nc"><i>125</i>&nbsp; if (newValue == null) {</b>
+        <b class="nc"><i>126</i>&nbsp; reset();</b>
+        <i>127</i>&nbsp; return;
+        <i>128</i>&nbsp; }
+        <i>129</i>&nbsp;
+        <b class="nc"><i>130</i>&nbsp;
+            milestoneProgress.progressProperty().bind(newValue.progressProperty().divide(100));</b>
+        <b class="nc"><i>131</i>&nbsp; refreshMilestoneTable();</b>
+        <b class="nc"><i>132</i>&nbsp; refreshTasksTable();</b>
+        <i>133</i>&nbsp; }));
+        <i>134</i>&nbsp;
+        <b class="nc"><i>135</i>&nbsp; tasksTable.getSelectionModel().selectedItemProperty().addListener(((observable,
+            oldValue, newValue) -&gt; {</b>
+        <b class="nc"><i>136</i>&nbsp; if (newValue == null || newValue.getTaskNote() == null) {</b>
+        <b class="nc"><i>137</i>&nbsp; notesField.clear();</b>
+        <i>138</i>&nbsp; return;
+        <i>139</i>&nbsp; }
+        <i>140</i>&nbsp;
+        <b class="nc"><i>141</i>&nbsp; notesField.setText(newValue.getTaskNote().getText());</b>
+        <i>142</i>&nbsp; }));
+        <i>143</i>&nbsp;
+        <b class="nc"><i>144</i>&nbsp; deadlinePicker.valueProperty().addListener((Ob, oldV, newV) -&gt; {</b>
+        <b class="nc"><i>145</i>&nbsp; if (newV == null) return;</b>
+        <b class="nc"><i>146</i>&nbsp; Date date = Date.from(newV.atStartOfDay(ZoneId.systemDefault()).toInstant());</b>
+        <b class="nc"><i>147</i>&nbsp; Date newD = new Date();</b>
+        <b class="nc"><i>148</i>&nbsp; if (date.compareTo(newD) &lt; 0)</b>
+        <b class="nc"><i>149</i>&nbsp; new AlertDialog(Alert.AlertType.INFORMATION, &quot;Wrong deadline&quot;);</b>
+        <i>150</i>&nbsp; });
+        <i>151</i>&nbsp;
+        <i>152</i>&nbsp; // Listener for the amount text field to only allow numbers
+        <b class="nc"><i>153</i>&nbsp; amountField.textProperty().addListener((observable, oldValue, newValue) -&gt;
+            {</b>
+        <b class="nc"><i>154</i>&nbsp; if (!newValue.matches(&quot;\\d*&quot;)) {</b>
+        <b class="nc"><i>155</i>&nbsp; amountField.setText(newValue.replaceAll(&quot;[^\\d]&quot;, &quot;&quot;));</b>
+        <i>156</i>&nbsp; }
+        <i>157</i>&nbsp; });
+        <i>158</i>&nbsp; }
+        <i>159</i>&nbsp;
+        <i>160</i>&nbsp;
+        <i>161</i>&nbsp; /**
+        <i>162</i>&nbsp; *
+        <i>163</i>&nbsp; */
+        <i>164</i>&nbsp; public void configureListeners() {
+        <i>165</i>&nbsp;
+        <i>166</i>&nbsp; }
+        <i>167</i>&nbsp;
+        <i>168</i>&nbsp; /**
+        <i>169</i>&nbsp; * Clears the tables
+        <i>170</i>&nbsp; */
+        <i>171</i>&nbsp; private void clear(TableView tableView) {
+        <b class="nc"><i>172</i>&nbsp; tableView.getColumns().clear();</b>
+        <b class="nc"><i>173</i>&nbsp; tableView.getItems().clear();</b>
+        <i>174</i>&nbsp; }
+        <i>175</i>&nbsp;
+        <i>176</i>&nbsp; private void reset() {
+        <b class="nc"><i>177</i>&nbsp; clear(tasksTable);</b>
+        <b class="nc"><i>178</i>&nbsp; clear(milestonesTable);</b>
+        <i>179</i>&nbsp; //assessmentSelect.getItems().clear();
+        <b class="nc"><i>180</i>&nbsp; milestoneProgress.progressProperty().unbind();</b>
+        <b class="nc"><i>181</i>&nbsp; milestoneProgress.setProgress(0);</b>
+        <b class="nc"><i>182</i>&nbsp; notesField.clear();</b>
+        <b class="nc"><i>183</i>&nbsp; for (Node node : milestoneFormBox.getChildren()) {</b>
+        <b class="nc"><i>184</i>&nbsp; if (node instanceof TextField) {</b>
+        <b class="nc"><i>185</i>&nbsp; ((TextField) node).setText(&quot;&quot;);</b>
+        <i>186</i>&nbsp; }
+        <b class="nc"><i>187</i>&nbsp; if (node instanceof ComboBox) {</b>
+        <b class="nc"><i>188</i>&nbsp; ((ComboBox) node).getItems().clear();</b>
+        <i>189</i>&nbsp; }
+        <b class="nc"><i>190</i>&nbsp; }</b>
+        <i>191</i>&nbsp; }
+        <i>192</i>&nbsp;
+        <i>193</i>&nbsp; /**
+        <i>194</i>&nbsp; * Clears the table, loads the new elements and binds them to the table
+        <i>195</i>&nbsp; */
+        <i>196</i>&nbsp; private void refreshTasksTable() {
+        <b class="nc"><i>197</i>&nbsp; clear(tasksTable);</b>
+        <i>198</i>&nbsp;
+        <b class="nc"><i>199</i>&nbsp; Milestone selectedMilestone =
+            milestonesTable.getSelectionModel().getSelectedItem();</b>
+        <i>200</i>&nbsp;
+        <b class="nc"><i>201</i>&nbsp; tasks.removeListener(tasksListener);</b>
+        <i>202</i>&nbsp;
+        <b class="nc"><i>203</i>&nbsp; tasks = selectedMilestone.getObservableTaskList();</b>
+        <i>204</i>&nbsp;
+        <b class="nc"><i>205</i>&nbsp; tasks.addListener(tasksListener);</b>
+        <i>206</i>&nbsp;
+        <b class="nc"><i>207</i>&nbsp; addTasksColumns();</b>
+        <b class="nc"><i>208</i>&nbsp; Bindings.bindContent(tasksTable.getItems(), tasks);</b>
+        <b class="nc"><i>209</i>&nbsp; Bindings.bindContent(dependencyBox.getItems(), tasks);</b>
+        <i>210</i>&nbsp; }
+        <i>211</i>&nbsp;
+        <i>212</i>&nbsp; /**
+        <i>213</i>&nbsp; * Clears the table, loads the new elements and binds them to the table
+        <i>214</i>&nbsp; */
+        <i>215</i>&nbsp; private void refreshMilestoneTable() {
+        <b class="nc"><i>216</i>&nbsp; clear(milestonesTable);</b>
+        <i>217</i>&nbsp;
+        <b class="nc"><i>218</i>&nbsp; milestones.removeListener(milestonesListener);</b>
+        <b class="nc"><i>219</i>&nbsp; milestones = assessmentSelect.getValue().getObservableMilestoneList();</b>
+        <b class="nc"><i>220</i>&nbsp; milestones.addListener(milestonesListener);</b>
+        <i>221</i>&nbsp;
+        <b class="nc"><i>222</i>&nbsp; addMilestoneColumns();</b>
+        <b class="nc"><i>223</i>&nbsp; Bindings.bindContent(milestonesTable.getItems(), milestones);</b>
+        <i>224</i>&nbsp; }
+        <i>225</i>&nbsp;
+        <i>226</i>&nbsp; /**
+        <i>227</i>&nbsp; * Helper function to add columns to the milestones table
+        <i>228</i>&nbsp; */
+        <i>229</i>&nbsp; private void addMilestoneColumns() {
+        <b class="nc"><i>230</i>&nbsp; TableColumn&lt;Milestone, String&gt; titleCol = new TableColumn&lt;&gt;(&quot;Title&quot;);</b>
+        <b class="nc"><i>231</i>&nbsp; titleCol.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;title&quot;));</b>
+        <i>232</i>&nbsp;
+        <b class="nc"><i>233</i>&nbsp; TableColumn&lt;Milestone, Date&gt; startCol = new TableColumn&lt;&gt;(&quot;Start
+            date&quot;);</b>
+        <b class="nc"><i>234</i>&nbsp; startCol.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;start&quot;));</b>
+        <i>235</i>&nbsp;
+        <b class="nc"><i>236</i>&nbsp; TableColumn&lt;Milestone, Date&gt; deadlineCol = new TableColumn&lt;&gt;(&quot;Deadline&quot;);</b>
+        <b class="nc"><i>237</i>&nbsp; deadlineCol.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;deadline&quot;));</b>
+        <i>238</i>&nbsp;
+        <b class="nc"><i>239</i>&nbsp; milestonesTable.getColumns().addAll(titleCol, startCol, deadlineCol);</b>
+        <i>240</i>&nbsp; }
+        <i>241</i>&nbsp;
+        <i>242</i>&nbsp; /**
+        <i>243</i>&nbsp; * Helper function to add columns to the tasks table
+        <i>244</i>&nbsp; */
+        <i>245</i>&nbsp; private void addTasksColumns() {
+        <b class="nc"><i>246</i>&nbsp; TableColumn&lt;Task, String&gt; titleCol = new TableColumn&lt;&gt;(&quot;Title&quot;);</b>
+        <b class="nc"><i>247</i>&nbsp; titleCol.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;title&quot;));</b>
+        <i>248</i>&nbsp;
+        <b class="nc"><i>249</i>&nbsp; TableColumn&lt;Task, Task.TaskType&gt; typeCol = new TableColumn&lt;&gt;(&quot;Type&quot;);</b>
+        <b class="nc"><i>250</i>&nbsp; typeCol.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;type&quot;));</b>
+        <i>251</i>&nbsp;
+        <b class="nc"><i>252</i>&nbsp; TableColumn&lt;Task, Integer&gt; weightCol = new TableColumn&lt;&gt;(&quot;Time
+            spent&quot;);</b>
+        <b class="nc"><i>253</i>&nbsp; weightCol.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;time&quot;));</b>
+        <i>254</i>&nbsp;
+        <b class="nc"><i>255</i>&nbsp; TableColumn&lt;Task, Integer&gt; criterionCol = new TableColumn&lt;&gt;(&quot;Criterion&quot;);</b>
+        <b class="nc"><i>256</i>&nbsp; criterionCol.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;criterion&quot;));</b>
+        <i>257</i>&nbsp;
+        <b class="nc"><i>258</i>&nbsp; TableColumn&lt;Task, String&gt; dependencyCol = new TableColumn&lt;&gt;(&quot;Depends
+            on&quot;);</b>
+        <b class="nc"><i>259</i>&nbsp; dependencyCol.setCellValueFactory(dep -&gt; new
+            SimpleStringProperty(dep.getValue().getDependency().toString()));</b>
+        <i>260</i>&nbsp;
+        <b class="nc"><i>261</i>&nbsp; tasksTable.getColumns().addAll(titleCol, typeCol, weightCol, criterionCol);</b>
+        <i>262</i>&nbsp; }
+        <i>263</i>&nbsp;
+        <i>264</i>&nbsp; /**
+        <i>265</i>&nbsp; * Adds a milestone to the observable list. The addition of an element in this list will trigger
+        the listener
+        <i>266</i>&nbsp; * and it will add it to the actual reference in semester profile
+        <i>267</i>&nbsp; */
+        <i>268</i>&nbsp; public void addMilestone() {
+        <b class="nc"><i>269</i>&nbsp; if (milestoneTitleField.getText().isEmpty()) return;</b>
+        <b class="nc"><i>270</i>&nbsp; if (deadlinePicker.getValue() == null) return;</b>
+        <i>271</i>&nbsp;
+        <b class="nc"><i>272</i>&nbsp; String title = milestoneTitleField.getText();</b>
+        <b class="nc"><i>273</i>&nbsp; LocalDate localDate = deadlinePicker.getValue();</b>
+        <b class="nc"><i>274</i>&nbsp; Instant instant =
+            Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));</b>
+        <b class="nc"><i>275</i>&nbsp; Date deadLineDate = Date.from(instant);</b>
+        <i>276</i>&nbsp;
+        <b class="nc"><i>277</i>&nbsp; milestones.add(new Milestone(title, new Date(), deadLineDate));</b>
+        <i>278</i>&nbsp; }
+        <i>279</i>&nbsp;
+        <i>280</i>&nbsp; /**
+        <i>281</i>&nbsp; * Deletes a milestone from the observable list. The removal of an element in this list will
+        trigger the listener
+        <i>282</i>&nbsp; * and it will remove it from the actual reference in semester profile
+        <i>283</i>&nbsp; */
+        <i>284</i>&nbsp; public void deleteMilestone() {
+        <b class="nc"><i>285</i>&nbsp; Milestone selectedMilestone =
+            milestonesTable.getSelectionModel().getSelectedItem();</b>
+        <b class="nc"><i>286</i>&nbsp; if (selectedMilestone == null) return;</b>
+        <i>287</i>&nbsp;
+        <b class="nc"><i>288</i>&nbsp; AlertDialog alertDialog = new AlertDialog();</b>
+        <b class="nc"><i>289</i>&nbsp; boolean confirmed = alertDialog.getConfirmation(&quot;Are you sure you want to
+            delete &quot; + selectedMilestone.getTitle() + &quot;?&quot;);</b>
+        <i>290</i>&nbsp;
+        <b class="nc"><i>291</i>&nbsp; if (confirmed) {</b>
+        <b class="nc"><i>292</i>&nbsp; milestoneProgress.progressProperty().unbind();</b>
+        <b class="nc"><i>293</i>&nbsp; milestones.remove(selectedMilestone);</b>
+        <i>294</i>&nbsp; }
+        <i>295</i>&nbsp; }
+        <i>296</i>&nbsp;
+        <i>297</i>&nbsp; /**
+        <i>298</i>&nbsp; * Called by the button event handler
+        <i>299</i>&nbsp; */
+        <i>300</i>&nbsp; public void addTask() {
+        <b class="nc"><i>301</i>&nbsp; if (taskTitleField.getText().isEmpty()) return;</b>
+        <b class="nc"><i>302</i>&nbsp; if (taskTypeBox.getValue() == null) return;</b>
+        <b class="nc"><i>303</i>&nbsp; if (criteriaField.getText().isEmpty()) return;</b>
+        <b class="nc"><i>304</i>&nbsp; if (amountField.getText().isEmpty()) return;</b>
+        <i>305</i>&nbsp;
+        <b class="nc"><i>306</i>&nbsp; String taskTitle = taskTitleField.getText();</b>
+        <b class="nc"><i>307</i>&nbsp; String criteria = criteriaField.getText();</b>
+        <b class="nc"><i>308</i>&nbsp; Task.TaskType taskType = taskTypeBox.getValue();</b>
+        <b class="nc"><i>309</i>&nbsp; int critValue = Integer.parseInt(amountField.getText());</b>
+        <i>310</i>&nbsp;
+        <b class="nc"><i>311</i>&nbsp; Task task = new Task(taskTitle, taskType, criteria, critValue, 0, new
+            Date());</b>
+        <i>312</i>&nbsp;
+        <b class="nc"><i>313</i>&nbsp; if (dependencyBox.getValue() != null) {</b>
+        <b class="nc"><i>314</i>&nbsp; task.addDependency(dependencyBox.getValue());</b>
+        <i>315</i>&nbsp; }
+        <i>316</i>&nbsp;
+        <b class="nc"><i>317</i>&nbsp; tasks.add(task);</b>
+        <b class="nc"><i>318</i>&nbsp; taskController.insertTask(task, null,
+            milestonesTable.getSelectionModel().getSelectedItem().getId());</b>
+        <i>319</i>&nbsp; }
+        <i>320</i>&nbsp;
+        <i>321</i>&nbsp; public void deleteTask() {
+        <b class="nc"><i>322</i>&nbsp; if (tasksTable.getSelectionModel().getSelectedItem() == null) return;</b>
+        <i>323</i>&nbsp;
+        <b class="nc"><i>324</i>&nbsp; Task selectedTask = tasksTable.getSelectionModel().getSelectedItem();</b>
+        <i>325</i>&nbsp;
+        <b class="nc"><i>326</i>&nbsp; AlertDialog alertDialog = new AlertDialog();</b>
+        <b class="nc"><i>327</i>&nbsp; boolean confirmed = alertDialog.getConfirmation(&quot;Are you sure you want to
+            delete &quot; + selectedTask.getTitle() + &quot;?&quot;);</b>
+        <i>328</i>&nbsp;
+        <i>329</i>&nbsp; // Try to delete task from the original reference
+        <b class="nc"><i>330</i>&nbsp; Predicate&lt;Task&gt; acceptedTask = task -&gt; task.equals(selectedTask) &amp;&amp;</b>
+        <b class="nc"><i>331</i>&nbsp;
+            milestonesTable.getSelectionModel().getSelectedItem().deleteTask(selectedTask);</b>
+        <i>332</i>&nbsp;
+        <b class="nc"><i>333</i>&nbsp; if (confirmed) {</b>
+        <b class="nc"><i>334</i>&nbsp; if (!tasks.removeIf(acceptedTask)) {</b>
+        <b class="nc"><i>335</i>&nbsp; new AlertDialog(Alert.AlertType.ERROR, &quot;Can&#39;t delete task. It has
+            dependencies.&quot;);</b>
+        <i>336</i>&nbsp; } else {
+        <b class="nc"><i>337</i>&nbsp; taskController.deleteTask(selectedTask);</b>
+        <i>338</i>&nbsp; }
+        <i>339</i>&nbsp;
+        <i>340</i>&nbsp; }
+        <i>341</i>&nbsp; }
+        <i>342</i>&nbsp;
+        <i>343</i>&nbsp; public void updateNotes(ActionEvent actionEvent) {
+        <b class="nc"><i>344</i>&nbsp; if (notesField.getText().isEmpty()) return;</b>
+        <b class="nc"><i>345</i>&nbsp; if (tasksTable.getSelectionModel().getSelectedItem() == null) return;</b>
+        <i>346</i>&nbsp;
+        <b class="nc"><i>347</i>&nbsp; Task selectedTask = tasksTable.getSelectionModel().getSelectedItem();</b>
+        <b class="nc"><i>348</i>&nbsp; TaskNote taskNote = new TaskNote(&quot;test&quot;, notesField.getText(), new
+            Date());</b>
+        <i>349</i>&nbsp;
+        <b class="nc"><i>350</i>&nbsp; selectedTask.setTaskNote(taskNote);</b>
+        <i>351</i>&nbsp;
+        <b class="nc"><i>352</i>&nbsp; noteController.updateNote(taskNote, selectedTask.getId(), null);</b>
+        <i>353</i>&nbsp; //System.out.println(&quot;notes &quot; +
+        tasksTable.getSelectionModel().getSelectedItem().getNotes().size());
+        <i>354</i>&nbsp; }
+        <i>355</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>

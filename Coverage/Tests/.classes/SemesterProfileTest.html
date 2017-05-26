@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: SemesterProfileTest</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">Tests</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: SemesterProfileTest (Tests)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">SemesterProfileTest</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 2)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 7)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package Tests;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import Model.Module;
+        <i>4</i>&nbsp;import Model.SemesterProfile;
+        <i>5</i>&nbsp;import org.junit.Before;
+        <i>6</i>&nbsp;import org.junit.Test;
+        <i>7</i>&nbsp;
+        <i>8</i>&nbsp;/**
+        <i>9</i>&nbsp; * Created by Didac on 12/05/2017.
+        <i>10</i>&nbsp; */
+        <b class="nc"><i>11</i>&nbsp;public class SemesterProfileTest {</b>
+        <i>12</i>&nbsp; @Before
+        <i>13</i>&nbsp; public void setUp() throws Exception {
+        <i>14</i>&nbsp; }
+        <i>15</i>&nbsp;
+        <i>16</i>&nbsp; @Test
+        <i>17</i>&nbsp; public void addModule() throws Exception {
+        <b class="nc"><i>18</i>&nbsp; Module module = new Module(&quot;test&quot;, &quot;test&quot;);</b>
+        <b class="nc"><i>19</i>&nbsp; Module module2 = new Module(&quot;test1&quot;, &quot;test1&quot;);</b>
+        <i>20</i>&nbsp;
+        <b class="nc"><i>21</i>&nbsp; SemesterProfile semesterProfile = new SemesterProfile();</b>
+        <b class="nc"><i>22</i>&nbsp; semesterProfile.addModule(module);</b>
+        <b class="nc"><i>23</i>&nbsp; semesterProfile.addModule(module2);</b>
+        <i>24</i>&nbsp;
+        <b class="nc"><i>25</i>&nbsp; System.out.println(semesterProfile.getModules().size());</b>
+        <i>26</i>&nbsp; }
+        <i>27</i>&nbsp;
+        <i>28</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 12:03</div>
+</div>
+</body>
+</html>

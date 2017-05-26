@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: DashBoardView</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">View</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: DashBoardView (View)</h1>
+
+    <table class="coverageStats">
+
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">DashBoardView</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 11)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 84)
+  </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="name">DashBoardView$Browser</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 7)
+  </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="name"><strong>total</strong></td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 12)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 91)
+  </span>
+            </td>
+        </tr>
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package View;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import Controller.DatabaseHandler;
+        <i>4</i>&nbsp;import Model.*;
+        <i>5</i>&nbsp;import javafx.collections.FXCollections;
+        <i>6</i>&nbsp;import javafx.fxml.FXML;
+        <i>7</i>&nbsp;import javafx.geometry.Insets;
+        <i>8</i>&nbsp;import javafx.scene.Node;
+        <i>9</i>&nbsp;import javafx.scene.Scene;
+        <i>10</i>&nbsp;import javafx.scene.chart.CategoryAxis;
+        <i>11</i>&nbsp;import javafx.scene.chart.NumberAxis;
+        <i>12</i>&nbsp;import javafx.scene.chart.XYChart;
+        <i>13</i>&nbsp;import javafx.scene.control.Button;
+        <i>14</i>&nbsp;import javafx.scene.control.Label;
+        <i>15</i>&nbsp;import javafx.scene.control.ProgressBar;
+        <i>16</i>&nbsp;import javafx.scene.control.ScrollPane;
+        <i>17</i>&nbsp;import javafx.scene.layout.GridPane;
+        <i>18</i>&nbsp;import javafx.scene.layout.Region;
+        <i>19</i>&nbsp;import javafx.scene.layout.VBox;
+        <i>20</i>&nbsp;import javafx.scene.paint.Color;
+        <i>21</i>&nbsp;import javafx.scene.web.WebEngine;
+        <i>22</i>&nbsp;import javafx.scene.web.WebView;
+        <i>23</i>&nbsp;import javafx.stage.Stage;
+        <i>24</i>&nbsp;import org.json.simple.JSONArray;
+        <i>25</i>&nbsp;import org.json.simple.JSONObject;
+        <i>26</i>&nbsp;
+        <i>27</i>&nbsp;import java.io.FileWriter;
+        <i>28</i>&nbsp;import java.io.IOException;
+        <i>29</i>&nbsp;import java.net.URL;
+        <i>30</i>&nbsp;import java.util.ArrayList;
+        <i>31</i>&nbsp;import java.util.Date;
+        <i>32</i>&nbsp;import java.util.List;
+        <i>33</i>&nbsp;import java.util.Map;
+        <i>34</i>&nbsp;/**
+        <i>35</i>&nbsp; * Created by Didac on 08/05/2017.
+        <i>36</i>&nbsp; */
+        <b class="nc"><i>37</i>&nbsp;public class DashBoardView {</b>
+        <i>38</i>&nbsp;
+        <i>39</i>&nbsp; @FXML
+        <i>40</i>&nbsp; GridPane dashboardGrid;
+        <i>41</i>&nbsp; @FXML
+        <i>42</i>&nbsp; VBox completedDeadlineBox;
+        <i>43</i>&nbsp; @FXML
+        <i>44</i>&nbsp; VBox upcomingDeadlineBox;
+        <i>45</i>&nbsp; @FXML
+        <i>46</i>&nbsp; VBox missedDeadlineBox;
+        <i>47</i>&nbsp;
+        <i>48</i>&nbsp; @FXML
+        <i>49</i>&nbsp; ScrollPane completeScrollPane;
+        <i>50</i>&nbsp; @FXML
+        <i>51</i>&nbsp; ScrollPane upcomingScrollPane;
+        <i>52</i>&nbsp; @FXML
+        <i>53</i>&nbsp; ScrollPane missedScrollPane;
+        <b class="nc"><i>54</i>&nbsp; private DatabaseHandler databaseHandler = DatabaseHandler.getInstance();</b>
+        <i>55</i>&nbsp;
+        <i>56</i>&nbsp; public void load() {
+        <b class="nc"><i>57</i>&nbsp; completedDeadlineBox.prefWidthProperty().bind(completeScrollPane.widthProperty());</b>
+        <b class="nc"><i>58</i>&nbsp; upcomingDeadlineBox.prefWidthProperty().bind(completeScrollPane.widthProperty());</b>
+        <b class="nc"><i>59</i>&nbsp;
+            missedDeadlineBox.prefWidthProperty().bind(completeScrollPane.widthProperty());</b>
+        <i>60</i>&nbsp;
+        <b class="nc"><i>61</i>&nbsp; completedDeadlineBox.setPadding(new Insets(16, 16, 16, 16));</b>
+        <b class="nc"><i>62</i>&nbsp; upcomingDeadlineBox.setPadding(new Insets(16, 16, 16, 16));</b>
+        <b class="nc"><i>63</i>&nbsp; missedDeadlineBox.setPadding(new Insets(16, 16, 16, 16));</b>
+        <i>64</i>&nbsp;
+        <i>65</i>&nbsp; //DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+        <i>66</i>&nbsp; //SemesterProfile semesterProfile = MasterController.getSemester(user.getId());
+        <i>67</i>&nbsp;
+        <b class="nc"><i>68</i>&nbsp; Map&lt;Module, Module&gt; modules =
+            databaseHandler.getSemesterSession().getModules();</b>
+        <i>69</i>&nbsp; // Decide what pane should the assignments go based on deadline
+        <b class="nc"><i>70</i>&nbsp; Date date = new Date();</b>
+        <i>71</i>&nbsp; // For each module
+        <b class="nc"><i>72</i>&nbsp; for (Module module : modules.values()) {</b>
+        <i>73</i>&nbsp; // Find the related assessments for that module
+        <i>74</i>&nbsp;
+        <b class="nc"><i>75</i>&nbsp; Map&lt;Assessment, Assessment&gt; assessments = module.getAssessments();</b>
+        <b class="nc"><i>76</i>&nbsp; for (Map.Entry&lt;Assessment, Assessment&gt; assessmentEntry :
+            assessments.entrySet()) {</b>
+        <b class="nc"><i>77</i>&nbsp; Label moduleInfo = new Label(&quot;MODULE: &quot; + module.getTitle() + &quot;:
+            \n\n&quot;);</b>
+        <i>78</i>&nbsp; // For each module create a label with the module name
+        <b class="nc"><i>79</i>&nbsp; Assessment assessment = assessmentEntry.getValue();</b>
+        <i>80</i>&nbsp;
+        <b class="nc"><i>81</i>&nbsp; moduleInfo.setText(</b>
+        <b class="nc"><i>82</i>&nbsp; moduleInfo.getText() +</b>
+        <b class="nc"><i>83</i>&nbsp; &quot;ASSESSMENT: &quot; + assessment.toString() + &quot;\n&quot; + &quot;Deadline
+            : &quot;</b>
+        <b class="nc"><i>84</i>&nbsp; + assessment.getDeadLine() + &quot;\n&quot; +</b>
+        <i>85</i>&nbsp; &quot;Progress for this assessment: \n&quot;
+        <i>86</i>&nbsp; );
+        <b class="nc"><i>87</i>&nbsp; moduleInfo.setMaxWidth(Double.MAX_VALUE);</b>
+        <i>88</i>&nbsp;
+        <b class="nc"><i>89</i>&nbsp; Button button = new Button(module.getTitle() + &quot;&#39;s \n ganttchart&quot;);</b>
+        <b class="nc"><i>90</i>&nbsp; button.setMaxWidth(Double.MAX_VALUE);</b>
+        <b class="nc"><i>91</i>&nbsp; button.setWrapText(true);</b>
+        <b class="nc"><i>92</i>&nbsp; button.setOnAction(event -&gt; openChart(module));</b>
+        <i>93</i>&nbsp;
+        <b class="nc"><i>94</i>&nbsp; ProgressBar progressBar = new ProgressBar(0);</b>
+        <b class="nc"><i>95</i>&nbsp; progressBar.setMaxWidth(Double.MAX_VALUE);</b>
+        <b class="nc"><i>96</i>&nbsp; progressBar.progressProperty().bind(assessment.completionProperty().divide(100));</b>
+        <i>97</i>&nbsp;
+        <b class="nc"><i>98</i>&nbsp; assessment.completionProperty().addListener(((observable, oldValue, newValue) -&gt;
+            {</b>
+        <b class="nc"><i>99</i>&nbsp; if (oldValue.doubleValue() &lt; 100) {</b>
+        <b class="nc"><i>100</i>&nbsp; if (newValue.doubleValue() == 100) {</b>
+        <b class="nc"><i>101</i>&nbsp; removeElements(upcomingDeadlineBox, moduleInfo, progressBar, button);</b>
+        <b class="nc"><i>102</i>&nbsp; addElements(completedDeadlineBox, moduleInfo, progressBar, button);</b>
+        <i>103</i>&nbsp; }
+        <b class="nc"><i>104</i>&nbsp; } else if (oldValue.doubleValue() == 100) {</b>
+        <b class="nc"><i>105</i>&nbsp; if (newValue.doubleValue() &lt; 100 &amp;&amp;
+            date.compareTo(assessment.getDeadLine()) &lt; 0) {</b>
+        <b class="nc"><i>106</i>&nbsp; removeElements(completedDeadlineBox, moduleInfo, progressBar, button);</b>
+        <b class="nc"><i>107</i>&nbsp; addElements(upcomingDeadlineBox, moduleInfo, progressBar, button);</b>
+        <i>108</i>&nbsp; } else {
+        <b class="nc"><i>109</i>&nbsp; removeElements(completedDeadlineBox, moduleInfo, progressBar, button);</b>
+        <b class="nc"><i>110</i>&nbsp; addElements(missedDeadlineBox, moduleInfo, progressBar, button);</b>
+        <i>111</i>&nbsp; }
+        <i>112</i>&nbsp; }
+        <i>113</i>&nbsp; }));
+        <i>114</i>&nbsp;
+        <i>115</i>&nbsp; // If compareTo is more than 0, date is after the deadline
+        <i>116</i>&nbsp; // Should go to missed deadlines
+        <i>117</i>&nbsp;
+        <i>118</i>&nbsp; // If compareTo is less than 0, date is before the deadline
+        <i>119</i>&nbsp; // Should go to upcoming deadlines
+        <b class="nc"><i>120</i>&nbsp; if (date.compareTo(assessment.getDeadLine()) &lt; 0 &amp;&amp;
+            assessment.getCompletion() &lt; 100) {</b>
+        <b class="nc"><i>121</i>&nbsp; addElements(upcomingDeadlineBox, moduleInfo, progressBar, button);</b>
+        <b class="nc"><i>122</i>&nbsp; } else if (date.compareTo(assessment.getDeadLine()) &gt; 0 &amp;&amp;
+            assessment.getCompletion() &lt; 100) {</b>
+        <b class="nc"><i>123</i>&nbsp; addElements(missedDeadlineBox, moduleInfo, progressBar, button);</b>
+        <i>124</i>&nbsp; } else {
+        <b class="nc"><i>125</i>&nbsp; addElements(completedDeadlineBox, moduleInfo, progressBar, button);</b>
+        <i>126</i>&nbsp; }
+        <b class="nc"><i>127</i>&nbsp; }</b>
+        <b class="nc"><i>128</i>&nbsp; }</b>
+        <i>129</i>&nbsp; }
+        <i>130</i>&nbsp;
+        <i>131</i>&nbsp; private void addElements(VBox box, Node... nodes) {
+        <b class="nc"><i>132</i>&nbsp; for (Node node : nodes) {</b>
+        <b class="nc"><i>133</i>&nbsp; box.getChildren().add(node);</b>
+        <i>134</i>&nbsp; }
+        <i>135</i>&nbsp; }
+        <i>136</i>&nbsp;
+        <i>137</i>&nbsp; private void removeElements(VBox box, Node... nodes) {
+        <b class="nc"><i>138</i>&nbsp; for (Node node : nodes) {</b>
+        <b class="nc"><i>139</i>&nbsp; box.getChildren().remove(node);</b>
+        <i>140</i>&nbsp; }
+        <i>141</i>&nbsp; }
+        <i>142</i>&nbsp;
+        <i>143</i>&nbsp; public void openChart(Module module){
+        <b class="nc"><i>144</i>&nbsp; createJson(module);</b>
+        <b class="nc"><i>145</i>&nbsp; Stage stage = new Stage();</b>
+        <b class="nc"><i>146</i>&nbsp; Browser webView = new Browser();</b>
+        <i>147</i>&nbsp; //stage.setScene(new GanttChartView().load(module));
+        <b class="nc"><i>148</i>&nbsp; stage.setScene(new Scene(webView));</b>
+        <b class="nc"><i>149</i>&nbsp; stage.show();</b>
+        <i>150</i>&nbsp; }
+        <i>151</i>&nbsp;
+        <i>152</i>&nbsp; private void createJson(Module module) {
+        <b class="nc"><i>153</i>&nbsp; DatabaseHandler databaseHandler = DatabaseHandler.getInstance();</b>
+        <b class="nc"><i>154</i>&nbsp; SemesterProfile semester = databaseHandler.getSemesterSession();</b>
+        <i>155</i>&nbsp; //semester.put(&quot;start_date&quot;, String.valueOf(semesterProfile.getStartDate()));
+        <i>156</i>&nbsp; //semester.put(&quot;end_date&quot;, String.valueOf(semesterProfile.getEndDate()));
+        <i>157</i>&nbsp;
+        <i>158</i>&nbsp;// JSONObject jsonModule = new JSONObject();
+        <i>159</i>&nbsp;// jsonModule.put(&quot;title&quot;, module.getTitle());
+        <i>160</i>&nbsp;// jsonModule.put(&quot;code&quot;, module.getCode());
+        <i>161</i>&nbsp; //JSONObject moduleJson = new JSONObject();
+        <b class="nc"><i>162</i>&nbsp; JSONArray moduleJson = new JSONArray();</b>
+        <i>163</i>&nbsp; //List&lt;JSONObject&gt; assessments = new ArrayList&lt;&gt;();
+        <b class="nc"><i>164</i>&nbsp; module.getAssessments().values().forEach(assessment -&gt; {</b>
+        <b class="nc"><i>165</i>&nbsp; JSONObject jsonAssessment = new JSONObject();</b>
+        <i>166</i>&nbsp;// jsonAssessment.put(&quot;title&quot;, assessment.getTitle());
+        <i>167</i>&nbsp;// jsonAssessment.put(&quot;type&quot;, assessment.getType().toString());
+        <i>168</i>&nbsp;// jsonAssessment.put(&quot;weight&quot;, assessment.getWeight());
+        <i>169</i>&nbsp;// jsonAssessment.put(&quot;completion&quot;, assessment.getCompletion());
+        <b class="nc"><i>170</i>&nbsp; jsonAssessment.put(&quot;assessmentTitle&quot;, assessment.getTitle());</b>
+        <b class="nc"><i>171</i>&nbsp; jsonAssessment.put(&quot;start&quot;,
+            String.valueOf(semester.getStartDate()));</b>
+        <b class="nc"><i>172</i>&nbsp; jsonAssessment.put(&quot;deadline&quot;,
+            String.valueOf(assessment.getDeadLine()));</b>
+        <i>173</i>&nbsp;
+        <b class="nc"><i>174</i>&nbsp; List&lt;JSONObject&gt; assessmentTasks = new ArrayList&lt;&gt;();</b>
+        <b class="nc"><i>175</i>&nbsp; assessment.getTasks().values().forEach(task -&gt; {</b>
+        <b class="nc"><i>176</i>&nbsp; JSONObject jsonTask = new JSONObject();</b>
+        <i>177</i>&nbsp;// jsonTask.put(&quot;title&quot;, task.getTitle());
+        <i>178</i>&nbsp;// jsonTask.put(&quot;type&quot;, task.getType().toString());
+        <i>179</i>&nbsp;// jsonTask.put(&quot;criterion&quot;, task.getCriterion());
+        <i>180</i>&nbsp;// jsonTask.put(&quot;criterion value&quot;, task.getCriterionValue());
+        <i>181</i>&nbsp;// jsonTask.put(&quot;progress&quot;, task.getProgress());
+        <b class="nc"><i>182</i>&nbsp; jsonTask.put(&quot;date&quot;, String.valueOf(task.getDate()));</b>
+        <b class="nc"><i>183</i>&nbsp; assessmentTasks.add(jsonTask);</b>
+        <i>184</i>&nbsp;
+        <b class="nc"><i>185</i>&nbsp; List&lt;JSONObject&gt; activities = new ArrayList&lt;&gt;();</b>
+        <b class="nc"><i>186</i>&nbsp; task.getActivities().values().forEach(activity -&gt; {</b>
+        <b class="nc"><i>187</i>&nbsp; JSONObject jsonActivitiy = new JSONObject();</b>
+        <b class="nc"><i>188</i>&nbsp; jsonActivitiy.put(&quot;title&quot;, activity.getTitle());</b>
+        <b class="nc"><i>189</i>&nbsp; jsonActivitiy.put(&quot;date&quot;, String.valueOf(activity.getDate()));</b>
+        <b class="nc"><i>190</i>&nbsp; jsonActivitiy.put(&quot;time&quot;, activity.getTime());</b>
+        <b class="nc"><i>191</i>&nbsp; activities.add(jsonActivitiy);</b>
+        <i>192</i>&nbsp; });
+        <i>193</i>&nbsp; });
+        <b class="nc"><i>194</i>&nbsp; jsonAssessment.put(&quot;tasks&quot;, assessmentTasks);</b>
+        <i>195</i>&nbsp;
+        <i>196</i>&nbsp;// List&lt;JSONObject&gt; milestones = new ArrayList&lt;&gt;();
+        <i>197</i>&nbsp;// assessment.getMilestones().values().forEach(milestone -&gt; {
+        <i>198</i>&nbsp;// JSONObject jsonMilestone = new JSONObject();
+        <i>199</i>&nbsp;// jsonMilestone.put(&quot;title&quot;, milestone.getTitle());
+        <i>200</i>&nbsp;// jsonMilestone.put(&quot;&quot;)
+        <i>201</i>&nbsp;// });
+        <i>202</i>&nbsp;// jsonAssessment.put(&quot;Milestones&quot;, milestones);
+        <i>203</i>&nbsp;
+        <i>204</i>&nbsp; //assessments.add(jsonAssessment);
+        <b class="nc"><i>205</i>&nbsp; moduleJson.add(jsonAssessment);</b>
+        <i>206</i>&nbsp; });
+        <i>207</i>&nbsp;
+        <i>208</i>&nbsp; //moduleJson.add(jsonAssessment);
+        <i>209</i>&nbsp;
+        <b class="nc"><i>210</i>&nbsp; try (FileWriter file = new FileWriter(&quot;data.json&quot;)) {</b>
+        <b class="nc"><i>211</i>&nbsp; file.write(moduleJson.toJSONString());</b>
+        <b class="nc"><i>212</i>&nbsp; System.out.println(&quot;Successfully Copied JSON Object to File...&quot;);</b>
+        <b class="nc"><i>213</i>&nbsp; System.out.println(&quot;\nJSON Object: &quot; + moduleJson);</b>
+        <b class="nc"><i>214</i>&nbsp; } catch (IOException e) {</b>
+        <b class="nc"><i>215</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>216</i>&nbsp; }</b>
+        <i>217</i>&nbsp;
+        <b class="nc"><i>218</i>&nbsp; System.out.println(moduleJson.toJSONString());</b>
+        <i>219</i>&nbsp; }
+        <i>220</i>&nbsp;
+        <i>221</i>&nbsp; class Browser extends Region {
+        <b class="nc"><i>222</i>&nbsp; private final String URL_LOCATION = &quot;test.html&quot;;</b>
+        <i>223</i>&nbsp;
+        <b class="nc"><i>224</i>&nbsp; final WebView browser = new WebView();</b>
+        <b class="nc"><i>225</i>&nbsp; final WebEngine webEngine = browser.getEngine();</b>
+        <i>226</i>&nbsp;
+        <i>227</i>&nbsp;
+        <b class="nc"><i>228</i>&nbsp; public Browser() {</b>
+        <i>229</i>&nbsp; // load the web page
+        <b class="nc"><i>230</i>&nbsp; URL url = getClass().getResource(URL_LOCATION);</b>
+        <b class="nc"><i>231</i>&nbsp; webEngine.load(url.toExternalForm());</b>
+        <i>232</i>&nbsp; //add the web view to the scene
+        <b class="nc"><i>233</i>&nbsp; getChildren().add(browser);</b>
+        <i>234</i>&nbsp;
+        <i>235</i>&nbsp; }
+        <i>236</i>&nbsp; }
+        <i>237</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>

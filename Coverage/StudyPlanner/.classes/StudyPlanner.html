@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: StudyPlanner</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">StudyPlanner</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: StudyPlanner (StudyPlanner)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">StudyPlanner</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 5)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 21)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package StudyPlanner;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import Controller.DatabaseHandler;
+        <i>4</i>&nbsp;import Utils.StageHandler;
+        <i>5</i>&nbsp;import javafx.application.Application;
+        <i>6</i>&nbsp;import javafx.scene.Group;
+        <i>7</i>&nbsp;import javafx.scene.Scene;
+        <i>8</i>&nbsp;import javafx.stage.Stage;
+        <i>9</i>&nbsp;
+        <b class="nc"><i>10</i>&nbsp;public class StudyPlanner extends Application {</b>
+        <b class="nc"><i>11</i>&nbsp; private static int UID_VARIABLE = 10000;</b>
+        <b class="nc"><i>12</i>&nbsp; private static String WINDOW_TITLE = &quot;Study Planner&quot;;</b>
+        <i>13</i>&nbsp;
+        <b class="nc"><i>14</i>&nbsp; private static String LOGINFXML = &quot;../View/LoginView.fxml&quot;;</b>
+        <i>15</i>&nbsp; //private static String LOGINCSS = &quot;../View/LoginCSS.css&quot;;
+        <i>16</i>&nbsp;
+        <b class="nc"><i>17</i>&nbsp; private static String REGISTERFXML = &quot;../View/RegisterView.fxml&quot;;</b>
+        <i>18</i>&nbsp; //private static String REGISTERCSS = &quot;../View/RegisterCSS.css&quot;;
+        <b class="nc"><i>19</i>&nbsp; private static String SEMESTERFXML = &quot;../View/SemesterView.fxml&quot;;</b>
+        <i>20</i>&nbsp; //public static Stage stage;
+        <i>21</i>&nbsp;
+        <i>22</i>&nbsp; public static void main(String[] args) {
+        <b class="nc"><i>23</i>&nbsp; launch(args);</b>
+        <i>24</i>&nbsp; }
+        <i>25</i>&nbsp;
+        <i>26</i>&nbsp; @Override
+        <i>27</i>&nbsp; public void start(Stage stage) throws Exception{
+        <b class="nc"><i>28</i>&nbsp; if (DatabaseHandler.getInstance().getConnection() != null) {</b>
+        <b class="nc"><i>29</i>&nbsp; StageHandler stageHandler = new StageHandler(stage);</b>
+        <i>30</i>&nbsp;
+        <b class="nc"><i>31</i>&nbsp; stageHandler.loadScene(StageHandler.SCENE.LOGIN, LOGINFXML);</b>
+        <b class="nc"><i>32</i>&nbsp; stageHandler.loadScene(StageHandler.SCENE.REGISTER, REGISTERFXML);</b>
+        <b class="nc"><i>33</i>&nbsp; stageHandler.loadScene(StageHandler.SCENE.SEMESTER, SEMESTERFXML);</b>
+        <i>34</i>&nbsp;
+        <b class="nc"><i>35</i>&nbsp; stageHandler.setScene(StageHandler.SCENE.LOGIN, false);</b>
+        <i>36</i>&nbsp;
+        <b class="nc"><i>37</i>&nbsp; Group root = new Group();</b>
+        <b class="nc"><i>38</i>&nbsp; root.getChildren().add(stageHandler);</b>
+        <i>39</i>&nbsp;
+        <b class="nc"><i>40</i>&nbsp; Scene scene = new Scene(root);</b>
+        <i>41</i>&nbsp;
+        <i>42</i>&nbsp; //root.scaleXProperty().bind(scene.widthProperty());
+        <i>43</i>&nbsp; //root.scaleYProperty().bind(scene.heightProperty());
+        <b class="nc"><i>44</i>&nbsp; System.out.println(stage.getHeight());</b>
+        <b class="nc"><i>45</i>&nbsp; stage.setScene(scene);</b>
+        <b class="nc"><i>46</i>&nbsp; stage.setTitle(WINDOW_TITLE);</b>
+        <b class="nc"><i>47</i>&nbsp; stage.show();</b>
+        <i>48</i>&nbsp; }
+        <i>49</i>&nbsp;
+        <i>50</i>&nbsp; }
+        <i>51</i>&nbsp;
+        <i>52</i>&nbsp; @Override
+        <i>53</i>&nbsp; public void stop(){
+        <i>54</i>&nbsp; //TODO: SAVE STUFF HERE
+        <i>55</i>&nbsp; //TODO: This method handles when window closes
+        <i>56</i>&nbsp; //DatabaseHandler.getInstance().closeConnection();
+        <i>57</i>&nbsp;// TaskController taskController = new TaskController();
+        <i>58</i>&nbsp;// ActivityController activityController = new ActivityController();
+        <i>59</i>&nbsp;// SemesterProfile semester = DatabaseHandler.getInstance().getSemesterSession();
+        <i>60</i>&nbsp;// for(Module module : semester.getModules().values()) {
+        <i>61</i>&nbsp;// for(Assessment assessment : module.getAssessments().values()) {
+        <i>62</i>&nbsp;// for(Task task : assessment.getTasks().values()) {
+        <i>63</i>&nbsp;// if(task.getId() &lt; UID_VARIABLE){
+        <i>64</i>&nbsp;// taskController.updateTask(task);
+        <i>65</i>&nbsp;// }
+        <i>66</i>&nbsp;// else{
+        <i>67</i>&nbsp;// taskController.insertTask(task);
+        <i>68</i>&nbsp;// }
+        <i>69</i>&nbsp;// for(Activity activity : task.getActivities().values()) {
+        <i>70</i>&nbsp;// if(activity.getActivityId() &lt; UID_VARIABLE){
+        <i>71</i>&nbsp;// activityController.updateActivity(activity);
+        <i>72</i>&nbsp;// }
+        <i>73</i>&nbsp;// else{
+        <i>74</i>&nbsp;// activityController.insertActivity(activity);
+        <i>75</i>&nbsp;// }
+        <i>76</i>&nbsp;// }
+        <i>77</i>&nbsp;// }
+        <i>78</i>&nbsp;// for(Milestone milestone : assessment.getMilestones().values()){
+        <i>79</i>&nbsp;// if(milestone.getId() &lt; UID_VARIABLE){
+        <i>80</i>&nbsp;// MilestoneController.updateMilestone(milestone);
+        <i>81</i>&nbsp;// }
+        <i>82</i>&nbsp;// else {
+        <i>83</i>&nbsp;// MilestoneController.insertMilestone(milestone);
+        <i>84</i>&nbsp;// }
+        <i>85</i>&nbsp;// }
+        <i>86</i>&nbsp;// }
+        <i>87</i>&nbsp;// }
+        <b class="nc"><i>88</i>&nbsp; System.out.println(&quot;Window closing&quot;);</b>
+        <i>89</i>&nbsp; }
+        <i>90</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>

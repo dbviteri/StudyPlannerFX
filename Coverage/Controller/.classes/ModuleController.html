@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: ModuleController</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">Controller</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: ModuleController (Controller)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">ModuleController</td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (6/ 6)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    87.8%
+  </span>
+                <span class="absValue">
+    (43/ 49)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package Controller;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import Model.Module;
+        <i>4</i>&nbsp;import Utils.SPException;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;import java.sql.PreparedStatement;
+        <i>7</i>&nbsp;import java.sql.ResultSet;
+        <i>8</i>&nbsp;import java.sql.SQLException;
+        <i>9</i>&nbsp;import java.util.ArrayList;
+        <i>10</i>&nbsp;
+        <i>11</i>&nbsp;/**
+        <i>12</i>&nbsp; * Created by 100125468 on 04/05/2017.
+        <i>13</i>&nbsp; */
+        <i>14</i>&nbsp;public class ModuleController implements DBQuery {
+        <i>15</i>&nbsp; private static final String QUERY_INSERT_MODULE =
+        <i>16</i>&nbsp; &quot;INSERT INTO Module (module_title, code, Semester_ID) VALUES (?, ?, ?)&quot;;
+        <i>17</i>&nbsp; private static final String QUERY_FIND_MODULES =
+        <i>18</i>&nbsp; &quot;SELECT * FROM Module WHERE semester_id = ?&quot;;
+        <i>19</i>&nbsp; private static final String QUERY_UPDATE_MODULE =
+        <i>20</i>&nbsp; &quot;UPDATE Module SET module_title = ?, code = ? WHERE module_id = ?&quot;;
+        <i>21</i>&nbsp; //TODO : GOOD OR BAD STATIC ?
+        <b class="fc"><i>22</i>&nbsp; private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();</b>
+        <i>23</i>&nbsp;
+        <b class="fc"><i>24</i>&nbsp; public ModuleController(){</b>
+        <b class="fc"><i>25</i>&nbsp; }</b>
+        <i>26</i>&nbsp; //TODO : SHOULD IT BE STATIC OR NOT | MAYBE ANOTHER CLASS FOR DB QUERRY?
+        <i>27</i>&nbsp;
+        <i>28</i>&nbsp; /** Function inserts a module into the DB
+        <i>29</i>&nbsp; * return true if action completed succesfuly ,
+        <i>30</i>&nbsp; * false otherwise
+        <i>31</i>&nbsp; *
+        <i>32</i>&nbsp; * @param module
+        <i>33</i>&nbsp; * @return true/false
+        <i>34</i>&nbsp; */
+        <i>35</i>&nbsp; public void insertModule(Module module, int semesterId) {
+        <i>36</i>&nbsp;
+        <b class="fc"><i>37</i>&nbsp; Object[] properties = {</b>
+        <b class="fc"><i>38</i>&nbsp; module.getTitle(),</b>
+        <b class="fc"><i>39</i>&nbsp; module.getCode(),</b>
+        <b class="fc"><i>40</i>&nbsp; semesterId</b>
+        <i>41</i>&nbsp; };
+        <i>42</i>&nbsp; //int id = module.getSemesterID();
+        <b class="fc"><i>43</i>&nbsp; try (</b>
+        <b class="fc"><i>44</i>&nbsp; PreparedStatement statement =</b>
+        <b class="fc"><i>45</i>&nbsp; dbhandler.prepareStatement(QUERY_INSERT_MODULE, true, properties)</b>
+        <i>46</i>&nbsp;
+        <i>47</i>&nbsp; ) {
+        <b class="fc"><i>48</i>&nbsp; int updatedRows = statement.executeUpdate();</b>
+        <b class="fc"><i>49</i>&nbsp; if (updatedRows == 0) throw new SPException(&quot;Failed to create new module. No
+            rows affected&quot;);</b>
+        <i>50</i>&nbsp;
+        <b class="fc"><i>51</i>&nbsp; try (ResultSet set = statement.getGeneratedKeys()) {</b>
+        <b class="fc"><i>52</i>&nbsp; if (set.next()) {</b>
+        <b class="fc"><i>53</i>&nbsp; module.setModuleId(set.getInt(1));</b>
+        <i>54</i>&nbsp; } else {
+        <b class="nc"><i>55</i>&nbsp; throw new SPException(&quot;Failed to create new module. No key
+            obtained&quot;);</b>
+        <i>56</i>&nbsp; }
+        <b class="fc"><i>57</i>&nbsp; }</b>
+        <b class="fc"><i>58</i>&nbsp; }</b>
+        <b class="nc"><i>59</i>&nbsp; catch (SQLException e) {</b>
+        <b class="nc"><i>60</i>&nbsp; e.printStackTrace();</b>
+        <b class="fc"><i>61</i>&nbsp; }</b>
+        <b class="fc"><i>62</i>&nbsp; }</b>
+        <i>63</i>&nbsp;
+        <i>64</i>&nbsp; /** Function used to return all modules
+        <i>65</i>&nbsp; * matching the semesterID from the database
+        <i>66</i>&nbsp; *
+        <i>67</i>&nbsp; * @param semesterID
+        <i>68</i>&nbsp; * @return ArrayList
+        <i>69</i>&nbsp; */
+        <i>70</i>&nbsp; public ArrayList&lt;Module&gt; findAll(int semesterID) {
+        <b class="fc"><i>71</i>&nbsp; ArrayList&lt;Module&gt; modules = new ArrayList&lt;&gt;();</b>
+        <b class="fc"><i>72</i>&nbsp; try (</b>
+        <b class="fc"><i>73</i>&nbsp; PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_MODULES,
+            false, semesterID);</b>
+        <b class="fc"><i>74</i>&nbsp; ResultSet resultSet = statement.executeQuery()</b>
+        <i>75</i>&nbsp; ) {
+        <b class="fc"><i>76</i>&nbsp; while (resultSet.next()) {</b>
+        <b class="fc"><i>77</i>&nbsp; modules.add(formModule(resultSet));</b>
+        <i>78</i>&nbsp; }
+        <b class="fc"><i>79</i>&nbsp; } catch (SQLException e) {</b>
+        <b class="nc"><i>80</i>&nbsp; e.printStackTrace();</b>
+        <b class="fc"><i>81</i>&nbsp; }</b>
+        <i>82</i>&nbsp;
+        <b class="fc"><i>83</i>&nbsp; return modules;</b>
+        <i>84</i>&nbsp; }
+        <i>85</i>&nbsp;
+        <i>86</i>&nbsp; /**
+        <i>87</i>&nbsp; * Function used to create an object from
+        <i>88</i>&nbsp; * a resultSet received from the database
+        <i>89</i>&nbsp; *
+        <i>90</i>&nbsp; * @param resultSet
+        <i>91</i>&nbsp; * @return Module
+        <i>92</i>&nbsp; * @throws SQLException
+        <i>93</i>&nbsp; */
+        <i>94</i>&nbsp; static Module formModule(ResultSet resultSet) throws SQLException {
+        <b class="fc"><i>95</i>&nbsp; int moduleId = resultSet.getInt(&quot;module_id&quot;);</b>
+        <b class="fc"><i>96</i>&nbsp; String title = resultSet.getString(&quot;module_title&quot;);</b>
+        <b class="fc"><i>97</i>&nbsp; String code = resultSet.getString(&quot;code&quot;);</b>
+        <b class="fc"><i>98</i>&nbsp; return new Module(moduleId, title, code);</b>
+        <i>99</i>&nbsp; }
+        <i>100</i>&nbsp;
+        <i>101</i>&nbsp; /** Function used to update
+        <i>102</i>&nbsp; *
+        <i>103</i>&nbsp; * @param module
+        <i>104</i>&nbsp; * @return
+        <i>105</i>&nbsp; */
+        <i>106</i>&nbsp; public static boolean updateModule(Module module){
+        <i>107</i>&nbsp;
+        <b class="fc"><i>108</i>&nbsp; Object[] properties = {</b>
+        <b class="fc"><i>109</i>&nbsp; module.getTitle(),</b>
+        <b class="fc"><i>110</i>&nbsp; module.getCode(),</b>
+        <b class="fc"><i>111</i>&nbsp; module.getId()</b>
+        <i>112</i>&nbsp; };
+        <b class="fc"><i>113</i>&nbsp; try (</b>
+        <b class="fc"><i>114</i>&nbsp; PreparedStatement statement =</b>
+        <b class="fc"><i>115</i>&nbsp; dbhandler.prepareStatement(QUERY_UPDATE_MODULE, false, properties)</b>
+        <i>116</i>&nbsp; ) {
+        <b class="fc"><i>117</i>&nbsp; int updatedRows = statement.executeUpdate();</b>
+        <b class="fc"><i>118</i>&nbsp; if (updatedRows == 0) throw new SPException(&quot;Failed to update Modules. No
+            rows affected&quot;);</b>
+        <b class="fc"><i>119</i>&nbsp; return true;</b>
+        <b class="fc"><i>120</i>&nbsp; } catch (SQLException e) {</b>
+        <b class="nc"><i>121</i>&nbsp; e.printStackTrace();</b>
+        <i>122</i>&nbsp; }
+        <b class="nc"><i>123</i>&nbsp; return false;</b>
+        <i>124</i>&nbsp; }
+        <i>125</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>

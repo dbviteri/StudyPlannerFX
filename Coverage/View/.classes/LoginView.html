@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: LoginView</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">View</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: LoginView (View)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">LoginView</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 4)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 9)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package View;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import Controller.UserController;
+        <i>4</i>&nbsp;import Utils.ControlledScene;
+        <i>5</i>&nbsp;import Utils.StageHandler;
+        <i>6</i>&nbsp;import javafx.fxml.FXML;
+        <i>7</i>&nbsp;import javafx.scene.control.PasswordField;
+        <i>8</i>&nbsp;import javafx.scene.control.TextField;
+        <i>9</i>&nbsp;
+        <i>10</i>&nbsp;/**
+        <i>11</i>&nbsp; * Created by Didac on 07/05/2017.
+        <i>12</i>&nbsp; */
+        <i>13</i>&nbsp;public class LoginView extends UserController implements ControlledScene{
+        <i>14</i>&nbsp; private StageHandler stageHandler;
+        <i>15</i>&nbsp; private UserController userController;
+        <i>16</i>&nbsp; @FXML private TextField usernameField;
+        <i>17</i>&nbsp; @FXML private PasswordField passwordField;
+        <i>18</i>&nbsp;
+        <b class="nc"><i>19</i>&nbsp; public LoginView(){</b>
+        <b class="nc"><i>20</i>&nbsp; userController = new UserController();</b>
+        <i>21</i>&nbsp; }
+        <i>22</i>&nbsp; /** Function used to log a user in
+        <i>23</i>&nbsp; * on button press, if credentials are valid.
+        <i>24</i>&nbsp; * it also creates a new session based on the user
+        <i>25</i>&nbsp; * and sets the scene to semester
+        <i>26</i>&nbsp; *
+        <i>27</i>&nbsp; */
+        <i>28</i>&nbsp; @FXML
+        <i>29</i>&nbsp; public void directLogIn() {
+        <b class="nc"><i>30</i>&nbsp; String username = usernameField.getText();//&quot;xdn15mcu&quot;;</b>
+        <b class="nc"><i>31</i>&nbsp; String password = passwordField.getText();//&quot;test&quot;;</b>
+        <b class="nc"><i>32</i>&nbsp; userController.logIn(username, password);</b>
+        <i>33</i>&nbsp;
+        <i>34</i>&nbsp; // Reload scene after creating a session
+        <b class="nc"><i>35</i>&nbsp; stageHandler.reloadScene(StageHandler.SCENE.SEMESTER);</b>
+        <b class="nc"><i>36</i>&nbsp; stageHandler.setScene(StageHandler.SCENE.SEMESTER, true, 1024, 768);</b>
+        <i>37</i>&nbsp;
+        <i>38</i>&nbsp; }
+        <i>39</i>&nbsp;
+        <i>40</i>&nbsp; /** Basic FXML function, on button press
+        <i>41</i>&nbsp; * sets scene to register
+        <i>42</i>&nbsp; *
+        <i>43</i>&nbsp; */
+        <i>44</i>&nbsp; @FXML
+        <i>45</i>&nbsp; private void showRegister() {
+        <b class="nc"><i>46</i>&nbsp; stageHandler.setScene(StageHandler.SCENE.REGISTER, false);</b>
+        <i>47</i>&nbsp; }
+        <i>48</i>&nbsp; @Override
+        <i>49</i>&nbsp; public void setParentScene(StageHandler stageHandler) {
+        <b class="nc"><i>50</i>&nbsp; this.stageHandler = stageHandler;</b>
+        <i>51</i>&nbsp; }
+        <i>52</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: AssessmentController</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">Controller</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: AssessmentController (Controller)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">AssessmentController</td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+                <span class="absValue">
+    (5/ 7)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    52.9%
+  </span>
+                <span class="absValue">
+    (37/ 70)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package Controller;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import Model.Assessment;
+        <i>4</i>&nbsp;import Utils.SPException;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;import java.sql.PreparedStatement;
+        <i>7</i>&nbsp;import java.sql.ResultSet;
+        <i>8</i>&nbsp;import java.sql.SQLException;
+        <i>9</i>&nbsp;import java.util.ArrayList;
+        <i>10</i>&nbsp;import java.util.Date;
+        <i>11</i>&nbsp;/**
+        <i>12</i>&nbsp; * Created by 100125468 on 04/05/2017.
+        <i>13</i>&nbsp; */
+        <b class="fc"><i>14</i>&nbsp;public class AssessmentController implements DBQuery {</b>
+        <i>15</i>&nbsp;
+        <i>16</i>&nbsp; // QUERIES
+        ---------------------------------------------------------------------------------------------------------
+        <i>17</i>&nbsp;
+        <i>18</i>&nbsp; private static final String QUERY_FIND_ASSESSMENTS =
+        <i>19</i>&nbsp; //&quot;SELECT * FROM Assessment LEFT JOIN Assessment ON (Assessment.module_code = Module.code)
+        WHERE Module.code = ?&quot;;
+        <i>20</i>&nbsp; &quot;SELECT * FROM Assessment WHERE Assessment.module_id = ?&quot;;
+        <i>21</i>&nbsp; private static final String QUERY_INSERT_ASSESSMENT =
+        <i>22</i>&nbsp; &quot;INSERT INTO Assessment (assessment_title, assessment_type, weight, deadline, completion,
+        module_id) VALUES (?,?,?,?,?,?)&quot;;
+        <i>23</i>&nbsp; private static final String QUERY_UPDATE_ASSESSMENT =
+        <i>24</i>&nbsp; &quot;UPDATE Assessment SET assessment_title = ?, assessment_type = ?, weight = ?, deadline = ?,
+        completion = ? WHERE assessment_id = ?&quot;;
+        <i>25</i>&nbsp; private static final String QUERY_DELETE_ASSESSMENT =
+        <i>26</i>&nbsp; &quot;&quot;;
+        <i>27</i>&nbsp; private static final String QUERY_UPDATE_DEADLINE =
+        <i>28</i>&nbsp; &quot;UPDATE Assessment SET deadline = ? WHERE assessment_title = ? and weight = ?&quot;;
+        <i>29</i>&nbsp;
+        <i>30</i>&nbsp; // DATABASE INSTANCE
+        -----------------------------------------------------------------------------------------------
+        <i>31</i>&nbsp;
+        <b class="fc"><i>32</i>&nbsp; private static DatabaseHandler dbhandler = DatabaseHandler.getInstance();</b>
+        <i>33</i>&nbsp;
+        <i>34</i>&nbsp; // METHODS
+        ---------------------------------------------------------------------------------------------------------
+        <i>35</i>&nbsp;
+        <i>36</i>&nbsp; public ArrayList&lt;Assessment&gt; findAll(int moduleId) {
+        <b class="fc"><i>37</i>&nbsp; ArrayList&lt;Assessment&gt; assessments = new ArrayList&lt;&gt;();</b>
+        <i>38</i>&nbsp;
+        <b class="fc"><i>39</i>&nbsp; try (</b>
+        <b class="fc"><i>40</i>&nbsp; PreparedStatement statement = dbhandler.prepareStatement(QUERY_FIND_ASSESSMENTS,
+            false, moduleId);</b>
+        <b class="fc"><i>41</i>&nbsp; ResultSet resultSet = statement.executeQuery()</b>
+        <i>42</i>&nbsp; ) {
+        <b class="fc"><i>43</i>&nbsp; while (resultSet.next()) {</b>
+        <b class="fc"><i>44</i>&nbsp; assessments.add(formAssessment(resultSet));</b>
+        <i>45</i>&nbsp; }
+        <b class="fc"><i>46</i>&nbsp; } catch (SQLException e) {</b>
+        <b class="nc"><i>47</i>&nbsp; e.printStackTrace();</b>
+        <b class="fc"><i>48</i>&nbsp; }</b>
+        <i>49</i>&nbsp;
+        <b class="fc"><i>50</i>&nbsp; return assessments;</b>
+        <i>51</i>&nbsp; }
+        <i>52</i>&nbsp;
+        <i>53</i>&nbsp; public void insertAssessment(Assessment assessment, int moduleId) {
+        <b class="fc"><i>54</i>&nbsp; Object[] properties = {</b>
+        <b class="fc"><i>55</i>&nbsp; assessment.getTitle(),</b>
+        <b class="fc"><i>56</i>&nbsp; assessment.getType().toString(),</b>
+        <b class="fc"><i>57</i>&nbsp; assessment.getWeight(),</b>
+        <b class="fc"><i>58</i>&nbsp; assessment.getDeadLine(),</b>
+        <b class="fc"><i>59</i>&nbsp; assessment.getCompletion(),</b>
+        <b class="fc"><i>60</i>&nbsp; moduleId</b>
+        <i>61</i>&nbsp; };
+        <i>62</i>&nbsp;
+        <b class="fc"><i>63</i>&nbsp; try (</b>
+        <b class="fc"><i>64</i>&nbsp; PreparedStatement statement =</b>
+        <b class="fc"><i>65</i>&nbsp; dbhandler.prepareStatement(QUERY_INSERT_ASSESSMENT, true, properties)</b>
+        <i>66</i>&nbsp; ) {
+        <b class="fc"><i>67</i>&nbsp; int updatedRows = statement.executeUpdate();</b>
+        <b class="fc"><i>68</i>&nbsp; if (updatedRows == 0) throw new SPException(&quot;Failed to create new assessment.
+            No rows affected&quot;);</b>
+        <i>69</i>&nbsp;
+        <b class="fc"><i>70</i>&nbsp; try (ResultSet set = statement.getGeneratedKeys()) {</b>
+        <b class="fc"><i>71</i>&nbsp; if (set.next()) {</b>
+        <b class="fc"><i>72</i>&nbsp; assessment.setId(set.getInt(1));</b>
+        <i>73</i>&nbsp; } else {
+        <b class="nc"><i>74</i>&nbsp; throw new SPException(&quot;Failed to create new assessment. No key obtained&quot;);</b>
+        <i>75</i>&nbsp; }
+        <b class="fc"><i>76</i>&nbsp; }</b>
+        <b class="fc"><i>77</i>&nbsp; }</b>
+        <b class="nc"><i>78</i>&nbsp; catch (SQLException e) {</b>
+        <b class="nc"><i>79</i>&nbsp; e.printStackTrace();</b>
+        <b class="fc"><i>80</i>&nbsp; }</b>
+        <b class="fc"><i>81</i>&nbsp; }</b>
+        <i>82</i>&nbsp;
+        <i>83</i>&nbsp; public boolean updateAssessment(Assessment assessment) {
+        <b class="nc"><i>84</i>&nbsp; Object[] properties = {</b>
+        <b class="nc"><i>85</i>&nbsp; assessment.getTitle(),</b>
+        <b class="nc"><i>86</i>&nbsp; assessment.getType().toString(),</b>
+        <b class="nc"><i>87</i>&nbsp; assessment.getWeight(),</b>
+        <b class="nc"><i>88</i>&nbsp; assessment.getDeadLine(), // TODO: CHANGE TO SQL DATE</b>
+        <b class="nc"><i>89</i>&nbsp; assessment.getCompletion(),</b>
+        <b class="nc"><i>90</i>&nbsp; assessment.getId()</b>
+        <i>91</i>&nbsp; };
+        <i>92</i>&nbsp;
+        <b class="nc"><i>93</i>&nbsp; try (</b>
+        <b class="nc"><i>94</i>&nbsp; PreparedStatement statement =</b>
+        <b class="nc"><i>95</i>&nbsp; dbhandler.prepareStatement(QUERY_UPDATE_ASSESSMENT, false, properties)</b>
+        <i>96</i>&nbsp; ) {
+        <b class="nc"><i>97</i>&nbsp; int updatedRows = statement.executeUpdate();</b>
+        <b class="nc"><i>98</i>&nbsp; if (updatedRows == 0) throw new SPException(&quot;Failed to update Assessments. No
+            rows affected&quot;);</b>
+        <b class="nc"><i>99</i>&nbsp; return true;</b>
+        <b class="nc"><i>100</i>&nbsp; } catch (SQLException e) {</b>
+        <b class="nc"><i>101</i>&nbsp; e.printStackTrace();</b>
+        <i>102</i>&nbsp; }
+        <i>103</i>&nbsp;
+        <b class="nc"><i>104</i>&nbsp; return false;</b>
+        <i>105</i>&nbsp; }
+        <i>106</i>&nbsp; public static boolean updateDeadline(Assessment assessment){
+        <b class="nc"><i>107</i>&nbsp; Object[] properties = {</b>
+        <b class="nc"><i>108</i>&nbsp; assessment.getDeadLine(),</b>
+        <b class="nc"><i>109</i>&nbsp; assessment.getTitle(),</b>
+        <b class="nc"><i>110</i>&nbsp; assessment.getWeight()</b>
+        <i>111</i>&nbsp; };
+        <b class="nc"><i>112</i>&nbsp; try (</b>
+        <b class="nc"><i>113</i>&nbsp; PreparedStatement statement =</b>
+        <b class="nc"><i>114</i>&nbsp; dbhandler.prepareStatement(QUERY_UPDATE_DEADLINE, false, properties)</b>
+        <i>115</i>&nbsp; ) {
+        <b class="nc"><i>116</i>&nbsp; int updatedRows = statement.executeUpdate();</b>
+        <b class="nc"><i>117</i>&nbsp; if (updatedRows == 0) throw new SPException(&quot;Failed to update Assessments.
+            No rows affected&quot;);</b>
+        <b class="nc"><i>118</i>&nbsp; return true;</b>
+        <b class="nc"><i>119</i>&nbsp; } catch (SQLException e) {</b>
+        <b class="nc"><i>120</i>&nbsp; e.printStackTrace();</b>
+        <i>121</i>&nbsp; }
+        <b class="nc"><i>122</i>&nbsp; return false;</b>
+        <i>123</i>&nbsp; }
+        <i>124</i>&nbsp;
+        <i>125</i>&nbsp; // HELPER FUNCTIONS
+        ------------------------------------------------------------------------------------------------
+        <i>126</i>&nbsp;
+        <i>127</i>&nbsp; static Assessment formAssessment(ResultSet resultSet) throws SQLException {
+        <b class="fc"><i>128</i>&nbsp; int id = resultSet.getInt(&quot;assessment_id&quot;);</b>
+        <b class="fc"><i>129</i>&nbsp; String title = resultSet.getString(&quot;assessment_title&quot;);</b>
+        <b class="fc"><i>130</i>&nbsp; Assessment.Type eventType = Assessment.Type.valueOf(resultSet.getString(&quot;assessment_type&quot;));</b>
+        <b class="fc"><i>131</i>&nbsp; int weight = resultSet.getInt(&quot;weight&quot;);</b>
+        <b class="fc"><i>132</i>&nbsp; Date deadline = resultSet.getDate(&quot;deadline&quot;);</b>
+        <b class="fc"><i>133</i>&nbsp; double completion = resultSet.getDouble(&quot;completion&quot;);</b>
+        <i>134</i>&nbsp;
+        <b class="fc"><i>135</i>&nbsp; return new Assessment(id, title, eventType, weight, deadline, completion);</b>
+        <i>136</i>&nbsp; }
+        <i>137</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>

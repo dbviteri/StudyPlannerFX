@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: GanttChart</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">Model</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: GanttChart (Model)</h1>
+
+    <table class="coverageStats">
+
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">GanttChart</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 13)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 80)
+  </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="name">GanttChart$MetaData</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 5)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 7)
+  </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="name"><strong>total</strong></td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 18)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 87)
+  </span>
+            </td>
+        </tr>
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package Model;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import javafx.collections.FXCollections;
+        <i>4</i>&nbsp;import javafx.collections.ObservableList;
+        <i>5</i>&nbsp;import javafx.scene.Node;
+        <i>6</i>&nbsp;import javafx.scene.chart.Axis;
+        <i>7</i>&nbsp;import javafx.scene.chart.CategoryAxis;
+        <i>8</i>&nbsp;import javafx.scene.chart.NumberAxis;
+        <i>9</i>&nbsp;import javafx.scene.chart.XYChart;
+        <i>10</i>&nbsp;import javafx.scene.layout.StackPane;
+        <i>11</i>&nbsp;import javafx.scene.shape.Rectangle;
+        <i>12</i>&nbsp;
+        <i>13</i>&nbsp;import java.util.ArrayList;
+        <i>14</i>&nbsp;import java.util.Iterator;
+        <i>15</i>&nbsp;
+        <i>16</i>&nbsp;/**
+        <i>17</i>&nbsp; * Gantt chart representation for a module.
+        <i>18</i>&nbsp; * Created by Dinara Adilova on 14/05/2017.
+        <i>19</i>&nbsp; */
+        <i>20</i>&nbsp;public class GanttChart&lt;X,Y&gt; extends XYChart&lt;X,Y&gt; {
+        <b class="nc"><i>21</i>&nbsp; private double frameHeight = 10;</b>
+        <i>22</i>&nbsp;
+        <i>23</i>&nbsp; /** Helper class holds metadata about
+        <i>24</i>&nbsp; * a data point(length of time and stylesheet)
+        <i>25</i>&nbsp; *
+        <i>26</i>&nbsp; */
+        <i>27</i>&nbsp; public static class MetaData {
+        <i>28</i>&nbsp; public double length;
+        <i>29</i>&nbsp; public String style;
+        <i>30</i>&nbsp;
+        <b class="nc"><i>31</i>&nbsp; public MetaData(double length, String style) {</b>
+        <i>32</i>&nbsp; //super();
+        <b class="nc"><i>33</i>&nbsp; this.length = length;</b>
+        <b class="nc"><i>34</i>&nbsp; this.style = style;</b>
+        <i>35</i>&nbsp; }
+        <i>36</i>&nbsp;
+        <b class="nc"><i>37</i>&nbsp; public double getLength() { return length; }</b>
+        <b class="nc"><i>38</i>&nbsp; public String getStyle() { return style; }</b>
+        <i>39</i>&nbsp;
+        <b class="nc"><i>40</i>&nbsp; public void setLength(long length) { this.length = length; }</b>
+        <b class="nc"><i>41</i>&nbsp; public void setStyle(String style) { this.style = style; }</b>
+        <i>42</i>&nbsp; }
+        <i>43</i>&nbsp;
+        <i>44</i>&nbsp; /**
+        <i>45</i>&nbsp; * Constructs a XYChart given the two axes. The initial content for the chart
+        <i>46</i>&nbsp; * plot background and plot area that includes vertical and horizontal grid
+        <i>47</i>&nbsp; * lines and fills, are added.
+        <i>48</i>&nbsp; *
+        <i>49</i>&nbsp; * @param X X Axis for this XY chart
+        <i>50</i>&nbsp; * @param Y Y Axis for this XY chart
+        <i>51</i>&nbsp; */
+        <i>52</i>&nbsp; public GanttChart(Axis&lt;X&gt; X, Axis&lt;Y&gt; Y) {
+        <b class="nc"><i>53</i>&nbsp; this(X, Y, FXCollections.observableArrayList());</b>
+        <i>54</i>&nbsp; }
+        <i>55</i>&nbsp; public GanttChart(Axis&lt;X&gt;X, Axis&lt;Y&gt; Y, ObservableList&lt;Series&lt;X,Y&gt;&gt; data)
+        {
+        <b class="nc"><i>56</i>&nbsp; super(X,Y);</b>
+        <b class="nc"><i>57</i>&nbsp; if (!(X instanceof NumberAxis &amp;&amp; Y instanceof CategoryAxis)) {</b>
+        <b class="nc"><i>58</i>&nbsp; throw new IllegalArgumentException(&quot;Axis type incorrect, X and Y should not
+            both be NumberAxis&quot;);</b>
+        <i>59</i>&nbsp; }
+        <b class="nc"><i>60</i>&nbsp; setData(data);</b>
+        <i>61</i>&nbsp;
+        <i>62</i>&nbsp; }
+        <b class="nc"><i>63</i>&nbsp; public double getFrameHeight(){ return this.frameHeight; }</b>
+        <b class="nc"><i>64</i>&nbsp; public void setFrameHeight(double frameHeight){ this.frameHeight =
+            frameHeight;}</b>
+        <i>65</i>&nbsp;
+        <i>66</i>&nbsp; // Helper functions to retrieve metadata from data items
+        <b class="nc"><i>67</i>&nbsp; private static String getStyleClass(Object obj) { return
+            ((MetaData)obj).getStyle(); }</b>
+        <b class="nc"><i>68</i>&nbsp; private static double getLength(Object obj) { return ((MetaData)obj).getLength();
+            }</b>
+        <i>69</i>&nbsp; //
+        Overrides--------------------------------------------------------------------------------------------------------
+        <i>70</i>&nbsp;
+        <i>71</i>&nbsp; /** Function used to add
+        <i>72</i>&nbsp; * a data item to the graph
+        <i>73</i>&nbsp; *
+        <i>74</i>&nbsp; * @param series
+        <i>75</i>&nbsp; * @param dataIndex
+        <i>76</i>&nbsp; * @param dataItem
+        <i>77</i>&nbsp; */
+        <i>78</i>&nbsp; @Override
+        <i>79</i>&nbsp; protected void dataItemAdded(Series&lt;X,Y&gt; series, int dataIndex, Data&lt;X,Y&gt; dataItem)
+        {
+        <b class="nc"><i>80</i>&nbsp; Node frame = createFrameHolder(dataItem);</b>
+        <b class="nc"><i>81</i>&nbsp; getPlotChildren().add(frame);</b>
+        <i>82</i>&nbsp; }
+        <i>83</i>&nbsp;
+        <i>84</i>&nbsp; /** Function used to remove a data item
+        <i>85</i>&nbsp; * of a series from the graph
+        <i>86</i>&nbsp; *
+        <i>87</i>&nbsp; * @param item
+        <i>88</i>&nbsp; * @param series
+        <i>89</i>&nbsp; */
+        <i>90</i>&nbsp; @Override
+        <i>91</i>&nbsp; protected void dataItemRemoved(Data item, Series series) {
+        <b class="nc"><i>92</i>&nbsp; Node frame = item.getNode();</b>
+        <b class="nc"><i>93</i>&nbsp; getPlotChildren().remove(frame);</b>
+        <b class="nc"><i>94</i>&nbsp; removeDataItemFromDisplay(series,item);</b>
+        <i>95</i>&nbsp; }
+        <i>96</i>&nbsp;
+        <i>97</i>&nbsp; /** function used to add a series
+        <i>98</i>&nbsp; * of data points to the chart
+        <i>99</i>&nbsp; *
+        <i>100</i>&nbsp; * @param series
+        <i>101</i>&nbsp; * @param seriesIndex
+        <i>102</i>&nbsp; */
+        <i>103</i>&nbsp; @Override
+        <i>104</i>&nbsp; protected void seriesAdded(Series&lt;X,Y&gt; series, int seriesIndex) {
+        <b class="nc"><i>105</i>&nbsp; for(int c=0; c&lt; series.getData().size();c++){</b>
+        <b class="nc"><i>106</i>&nbsp; Data&lt;X,Y&gt; xyData = series.getData().get(c);</b>
+        <b class="nc"><i>107</i>&nbsp; Node frameHolder = createFrameHolder(xyData);</b>
+        <b class="nc"><i>108</i>&nbsp; getPlotChildren().add(frameHolder);</b>
+        <i>109</i>&nbsp; }
+        <i>110</i>&nbsp; }
+        <i>111</i>&nbsp;
+        <i>112</i>&nbsp; /** Function updates axis range based on current data
+        <i>113</i>&nbsp; *
+        <i>114</i>&nbsp; */
+        <i>115</i>&nbsp; @Override
+        <i>116</i>&nbsp; protected void updateAxisRange(){
+        <b class="nc"><i>117</i>&nbsp; Axis&lt;X&gt; xAxis = getXAxis();</b>
+        <b class="nc"><i>118</i>&nbsp; Axis&lt;Y&gt; yAxis = getYAxis();</b>
+        <b class="nc"><i>119</i>&nbsp; ArrayList&lt;X&gt; xList = null;</b>
+        <b class="nc"><i>120</i>&nbsp; ArrayList&lt;Y&gt; yList = null;</b>
+        <b class="nc"><i>121</i>&nbsp; if(xAxis.isAutoRanging()) { xList = new ArrayList&lt;&gt;(); }</b>
+        <b class="nc"><i>122</i>&nbsp; if(yAxis.isAutoRanging()) { yList = new ArrayList&lt;&gt;(); }</b>
+        <i>123</i>&nbsp;
+        <b class="nc"><i>124</i>&nbsp; if(xAxis != null || yAxis != null) {</b>
+        <b class="nc"><i>125</i>&nbsp; for (Series&lt;X, Y&gt; series : getData()) {</b>
+        <b class="nc"><i>126</i>&nbsp; for (Data&lt;X, Y&gt; data : series.getData()) {</b>
+        <b class="nc"><i>127</i>&nbsp; if(xList != null) {</b>
+        <b class="nc"><i>128</i>&nbsp; xList.add(data.getXValue());</b>
+        <b class="nc"><i>129</i>&nbsp; xList.add(xAxis.toRealValue(xAxis.toNumericValue(data.getXValue())</b>
+        <b class="nc"><i>130</i>&nbsp; + getLength(data.getExtraValue())));</b>
+        <i>131</i>&nbsp; }
+        <b class="nc"><i>132</i>&nbsp; if(yList != null) {</b>
+        <b class="nc"><i>133</i>&nbsp; yList.add(data.getYValue());</b>
+        <i>134</i>&nbsp; }
+        <b class="nc"><i>135</i>&nbsp; }</b>
+        <b class="nc"><i>136</i>&nbsp; }</b>
+        <b class="nc"><i>137</i>&nbsp; if(xList != null) { xAxis.invalidateRange(xList); }</b>
+        <b class="nc"><i>138</i>&nbsp; if(yList != null) { yAxis.invalidateRange(yList); }</b>
+        <i>139</i>&nbsp; }
+        <i>140</i>&nbsp;
+        <i>141</i>&nbsp; }
+        <i>142</i>&nbsp;
+        <i>143</i>&nbsp; /** Function used to remove a
+        <i>144</i>&nbsp; * series of data points from the graph
+        <i>145</i>&nbsp; *
+        <i>146</i>&nbsp; * @param series
+        <i>147</i>&nbsp; */
+        <i>148</i>&nbsp; @Override
+        <i>149</i>&nbsp; protected void seriesRemoved(Series&lt;X,Y&gt; series) {
+        <b class="nc"><i>150</i>&nbsp; for(XYChart.Data&lt;X,Y&gt; xydata : series.getData() ){</b>
+        <b class="nc"><i>151</i>&nbsp; Node holder = xydata.getNode();</b>
+        <b class="nc"><i>152</i>&nbsp; getPlotChildren().remove(holder);</b>
+        <b class="nc"><i>153</i>&nbsp; }</b>
+        <b class="nc"><i>154</i>&nbsp; removeSeriesFromDisplay(series);</b>
+        <i>155</i>&nbsp; }
+        <i>156</i>&nbsp;
+        <i>157</i>&nbsp; /** Function used to create
+        <i>158</i>&nbsp; * a node placeholder for a dataItem
+        <i>159</i>&nbsp; *
+        <i>160</i>&nbsp; * @param dataItem
+        <i>161</i>&nbsp; * @return node
+        <i>162</i>&nbsp; */
+        <i>163</i>&nbsp; private Node createFrameHolder(Data&lt;X,Y&gt; dataItem){
+        <b class="nc"><i>164</i>&nbsp; Node frameHolder = dataItem.getNode();</b>
+        <b class="nc"><i>165</i>&nbsp; if (frameHolder == null){</b>
+        <b class="nc"><i>166</i>&nbsp; frameHolder = new StackPane();</b>
+        <b class="nc"><i>167</i>&nbsp; dataItem.setNode(frameHolder);</b>
+        <i>168</i>&nbsp; }
+        <b class="nc"><i>169</i>&nbsp; frameHolder.getStyleClass().add(getStyleClass(dataItem.getExtraValue()));</b>
+        <b class="nc"><i>170</i>&nbsp; return frameHolder;</b>
+        <i>171</i>&nbsp; }
+        <i>172</i>&nbsp;
+        <i>173</i>&nbsp; /** Function used to plot points onto the graph
+        <i>174</i>&nbsp; *
+        <i>175</i>&nbsp; */
+        <i>176</i>&nbsp; @Override
+        <i>177</i>&nbsp; protected void layoutPlotChildren() {
+        <b class="nc"><i>178</i>&nbsp; for(int index=0; index &lt; getData().size(); index++){</b>
+        <b class="nc"><i>179</i>&nbsp; Series&lt;X,Y&gt; series = getData().get(index);</b>
+        <b class="nc"><i>180</i>&nbsp; Iterator&lt;Data&lt;X,Y&gt;&gt; it = getDisplayedDataIterator(series);</b>
+        <b class="nc"><i>181</i>&nbsp; while(it.hasNext()){</b>
+        <b class="nc"><i>182</i>&nbsp; Data&lt;X,Y&gt; data = it.next();</b>
+        <b class="nc"><i>183</i>&nbsp; double y = getYAxis().getDisplayPosition(data.getYValue());</b>
+        <b class="nc"><i>184</i>&nbsp; double x = getXAxis().getDisplayPosition(data.getXValue());</b>
+        <b class="nc"><i>185</i>&nbsp; if( Double.isNaN(x) || Double.isNaN(y)){ // CHECK THIS AND CHANGE</b>
+        <b class="nc"><i>186</i>&nbsp; continue;</b>
+        <i>187</i>&nbsp; }
+        <b class="nc"><i>188</i>&nbsp; Node frame = data.getNode();</b>
+        <i>189</i>&nbsp; javafx.scene.shape.Rectangle rectangle;
+        <b class="nc"><i>190</i>&nbsp; if (frame != null) {</b>
+        <b class="nc"><i>191</i>&nbsp; if (frame instanceof StackPane) {</b>
+        <b class="nc"><i>192</i>&nbsp; StackPane region = (StackPane)data.getNode();</b>
+        <b class="nc"><i>193</i>&nbsp; if (region.getShape() == null) {</b>
+        <b class="nc"><i>194</i>&nbsp; double width = getLength(data.getExtraValue());</b>
+        <b class="nc"><i>195</i>&nbsp; rectangle = new javafx.scene.shape.Rectangle(width,getFrameHeight());</b>
+        <b class="nc"><i>196</i>&nbsp; } else if( region.getShape() instanceof Rectangle) {</b>
+        <b class="nc"><i>197</i>&nbsp; rectangle = (Rectangle)region.getShape();</b>
+        <i>198</i>&nbsp; } else return;
+        <b class="nc"><i>199</i>&nbsp; rectangle.setWidth(getLength(data.getExtraValue()) * ((getXAxis() instanceof
+            NumberAxis)</b>
+        <b class="nc"><i>200</i>&nbsp; ? Math.abs(((NumberAxis)getXAxis()).getScale()) : 1));</b>
+        <b class="nc"><i>201</i>&nbsp; rectangle.setHeight(getFrameHeight() * ((getYAxis() instanceof NumberAxis)</b>
+        <b class="nc"><i>202</i>&nbsp; ? Math.abs(((NumberAxis)getYAxis()).getScale()) : 1));</b>
+        <b class="nc"><i>203</i>&nbsp; y -= getFrameHeight() / 2;</b>
+        <i>204</i>&nbsp;
+        <b class="nc"><i>205</i>&nbsp; region.setShape(null);</b>
+        <b class="nc"><i>206</i>&nbsp; region.setShape(rectangle);</b>
+        <b class="nc"><i>207</i>&nbsp; region.setScaleShape(false);</b>
+        <b class="nc"><i>208</i>&nbsp; region.setCenterShape(false);</b>
+        <b class="nc"><i>209</i>&nbsp; region.setCacheShape(false);</b>
+        <i>210</i>&nbsp;
+        <b class="nc"><i>211</i>&nbsp; frame.setLayoutX(x);</b>
+        <b class="nc"><i>212</i>&nbsp; frame.setLayoutY(y);</b>
+        <i>213</i>&nbsp; }
+        <i>214</i>&nbsp;
+        <i>215</i>&nbsp; }
+        <b class="nc"><i>216</i>&nbsp; }</b>
+        <i>217</i>&nbsp;
+        <i>218</i>&nbsp; }
+        <i>219</i>&nbsp; }
+        <i>220</i>&nbsp;
+        <i>221</i>&nbsp; @Override
+        <i>222</i>&nbsp; protected void dataItemChanged(Data item) { }
+        <i>223</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>

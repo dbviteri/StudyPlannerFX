@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: GanttChartView</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">View</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: GanttChartView (View)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">GanttChartView</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 2)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 34)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package View;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import Model.Assessment;
+        <i>4</i>&nbsp;import Model.GanttChart;
+        <i>5</i>&nbsp;import Model.Module;
+        <i>6</i>&nbsp;import javafx.collections.FXCollections;
+        <i>7</i>&nbsp;import javafx.scene.Scene;
+        <i>8</i>&nbsp;import javafx.scene.chart.CategoryAxis;
+        <i>9</i>&nbsp;import javafx.scene.chart.NumberAxis;
+        <i>10</i>&nbsp;import javafx.scene.chart.XYChart;
+        <i>11</i>&nbsp;import javafx.scene.control.ScrollPane;
+        <i>12</i>&nbsp;import javafx.scene.paint.Color;
+        <i>13</i>&nbsp;
+        <i>14</i>&nbsp;import java.util.ArrayList;
+        <i>15</i>&nbsp;
+        <i>16</i>&nbsp;// TODO: use date for x-axis
+        <b class="nc"><i>17</i>&nbsp;public class GanttChartView {</b>
+        <i>18</i>&nbsp;
+        <i>19</i>&nbsp; public Scene load(Module module) {
+        <i>20</i>&nbsp; //Assessment[] assessments = new Assessment[module.getAssessments().values().size()];
+        <i>21</i>&nbsp; //module.getAssessments().values().toArray(assessments);
+        <i>22</i>&nbsp;// HashMap&lt;Task,Task&gt; tasks = new HashMap&lt;&gt;();
+        <i>23</i>&nbsp;// HashMap&lt;Activity, Activity&gt; activities = new HashMap&lt;&gt;();
+        <i>24</i>&nbsp;// HashMap&lt;Milestone,Milestone&gt; milestones = new HashMap&lt;&gt;();
+        <b class="nc"><i>25</i>&nbsp; ArrayList&lt;String&gt; assessmentTitles = new ArrayList&lt;&gt;();</b>
+        <b class="nc"><i>26</i>&nbsp; ArrayList&lt;XYChart.Series&gt; chartEntry = new ArrayList&lt;&gt;();</b>
+        <b class="nc"><i>27</i>&nbsp; int i = 0;</b>
+        <i>28</i>&nbsp;
+        <i>29</i>&nbsp; // For each assessment create a series
+        <b class="nc"><i>30</i>&nbsp; for (Assessment assessment : module.getAssessments().values()) {</b>
+        <b class="nc"><i>31</i>&nbsp; XYChart.Series series = new XYChart.Series();</b>
+        <b class="nc"><i>32</i>&nbsp; assessmentTitles.add(assessment.getTitle());</b>
+        <b class="nc"><i>33</i>&nbsp; series.getData().add(new XYChart.Data(0, assessment.getDeadLine().toString(), new
+            GanttChart.MetaData(1, &quot;status-red&quot;)));</b>
+        <i>34</i>&nbsp;
+        <i>35</i>&nbsp;// for(Task task : assessment.getTasks().values()){
+        <i>36</i>&nbsp;// Activity[] activities = new Activity[task.getActivities().size()];
+        <i>37</i>&nbsp;// task.getActivities().values().toArray(activities);
+        <i>38</i>&nbsp;// series.getData().add(new XYChart.Data(assessment, assessment.getDeadLine(), new
+        GanttChart.MetaData((assessment.getCompletion() / 10),&quot;status-red&quot;)));
+        <i>39</i>&nbsp;// for(Activity activity : activities){
+        <i>40</i>&nbsp;// series.getData().add(new XYChart.Data(assessment, assessment.getDeadLine(), new
+        GanttChart.MetaData((assessment.getCompletion() / 10),&quot;status-purple&quot;)));
+        <i>41</i>&nbsp;// }
+        <i>42</i>&nbsp;// }
+        <i>43</i>&nbsp; //series.getData().add(new XYChart.Data(4, entry.getTitle(), new GanttChart.MetaData(6,&quot;status-blue&quot;)));
+        <b class="nc"><i>44</i>&nbsp; chartEntry.add(series);</b>
+        <i>45</i>&nbsp; //series = new XYChart.Series();
+        <b class="nc"><i>46</i>&nbsp; i++;</b>
+        <b class="nc"><i>47</i>&nbsp; }</b>
+        <i>48</i>&nbsp;
+        <i>49</i>&nbsp;
+        <b class="nc"><i>50</i>&nbsp; NumberAxis xAxis = new NumberAxis();</b>
+        <b class="nc"><i>51</i>&nbsp; CategoryAxis yAxis = new CategoryAxis();</b>
+        <b class="nc"><i>52</i>&nbsp; GanttChart ganttChart = new GanttChart&lt;&gt;(xAxis, yAxis);</b>
+        <i>53</i>&nbsp;
+        <b class="nc"><i>54</i>&nbsp; ganttChart.setTitle(module.getTitle() + &quot; chart&quot;);</b>
+        <b class="nc"><i>55</i>&nbsp; ganttChart.setLegendVisible(false);</b>
+        <b class="nc"><i>56</i>&nbsp; ganttChart.setFrameHeight(50);</b>
+        <i>57</i>&nbsp;
+        <b class="nc"><i>58</i>&nbsp; xAxis.setLabel(&quot;&quot;);</b>
+        <b class="nc"><i>59</i>&nbsp; xAxis.setTickLabelFill(Color.CHOCOLATE);</b>
+        <b class="nc"><i>60</i>&nbsp; xAxis.setMinorTickCount(4);</b>
+        <i>61</i>&nbsp;
+        <b class="nc"><i>62</i>&nbsp; yAxis.setLabel(&quot;&quot;);</b>
+        <b class="nc"><i>63</i>&nbsp; yAxis.setTickLabelFill(Color.CHOCOLATE);</b>
+        <b class="nc"><i>64</i>&nbsp; yAxis.setTickLabelGap(10);</b>
+        <b class="nc"><i>65</i>&nbsp; yAxis.setCategories(FXCollections.observableArrayList(assessmentTitles));</b>
+        <i>66</i>&nbsp;
+        <b class="nc"><i>67</i>&nbsp; for (XYChart.Series series1 : chartEntry) {</b>
+        <b class="nc"><i>68</i>&nbsp; ganttChart.getData().add(series1);</b>
+        <b class="nc"><i>69</i>&nbsp; }</b>
+        <b class="nc"><i>70</i>&nbsp; ganttChart.getStylesheets().add(getClass().getResource(&quot;ganttchart.css&quot;).toExternalForm());</b>
+        <i>71</i>&nbsp;
+        <i>72</i>&nbsp; //series.getData().add(new XYChart.Data(tasks.get, assessmentTitles.get(0), new
+        GanttChart.MetaData( 1, &quot;status-red&quot;)));
+        <i>73</i>&nbsp;
+        <b class="nc"><i>74</i>&nbsp; ScrollPane pane = new ScrollPane();</b>
+        <b class="nc"><i>75</i>&nbsp; pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);</b>
+        <b class="nc"><i>76</i>&nbsp; pane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);</b>
+        <i>77</i>&nbsp;
+        <b class="nc"><i>78</i>&nbsp; Scene chartScene = new Scene(pane, 620, 350);</b>
+        <b class="nc"><i>79</i>&nbsp; pane.setContent(ganttChart);</b>
+        <b class="nc"><i>80</i>&nbsp; return chartScene;</b>
+        <i>81</i>&nbsp; }
+        <i>82</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>

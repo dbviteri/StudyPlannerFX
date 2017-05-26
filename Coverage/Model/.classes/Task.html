@@ -1,0 +1,407 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: Task</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">Model</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: Task (Model)</h1>
+
+    <table class="coverageStats">
+
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">Task</td>
+            <td class="coverageStat">
+  <span class="percent">
+    59.4%
+  </span>
+                <span class="absValue">
+    (19/ 32)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    51.6%
+  </span>
+                <span class="absValue">
+    (47/ 91)
+  </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="name">Task$TaskType</td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="name"><strong>total</strong></td>
+            <td class="coverageStat">
+  <span class="percent">
+    60.6%
+  </span>
+                <span class="absValue">
+    (20/ 33)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    52.2%
+  </span>
+                <span class="absValue">
+    (48/ 92)
+  </span>
+            </td>
+        </tr>
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package Model;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import javafx.collections.FXCollections;
+        <i>4</i>&nbsp;import javafx.collections.ObservableList;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;import java.util.Date;
+        <i>7</i>&nbsp;import java.util.HashMap;
+        <i>8</i>&nbsp;import java.util.Map;
+        <i>9</i>&nbsp;import java.util.UUID;
+        <i>10</i>&nbsp;
+        <i>11</i>&nbsp;/**
+        <i>12</i>&nbsp; * Model representation for a task
+        <i>13</i>&nbsp; * It holds dependencies, task notes and activities
+        <i>14</i>&nbsp; * Created by Didac on 02/05/2017.
+        <i>15</i>&nbsp; */
+        <i>16</i>&nbsp;public class Task {
+        <i>17</i>&nbsp;
+        <i>18</i>&nbsp; // Properties
+        ------------------------------------------------------------------------------------------------------
+        <i>19</i>&nbsp;
+        <b class="fc"><i>20</i>&nbsp; public enum TaskType {PROGRAMMING, READING}</b>
+        <i>21</i>&nbsp; private Integer id;
+        <i>22</i>&nbsp; private String title;
+        <i>23</i>&nbsp; private TaskType type;
+        <i>24</i>&nbsp; private int time;
+        <i>25</i>&nbsp; private String criterion;
+        <i>26</i>&nbsp; private int criterionValue;
+        <i>27</i>&nbsp; private int criterionSoFar;
+        <i>28</i>&nbsp; private double progress; // related to criterion value
+        <i>29</i>&nbsp; private Date date;
+        <i>30</i>&nbsp; // TODO :&#39;a task cannot be started before another has been completed&#39;
+        <i>31</i>&nbsp; private Task dependency;
+        <i>32</i>&nbsp; //private Map&lt;TaskNote, TaskNote&gt; notes = new HashMap&lt;&gt;();
+        <i>33</i>&nbsp; private TaskNote taskNote;
+        <b class="fc"><i>34</i>&nbsp; private Map&lt;Activity, Activity&gt; activities = new HashMap&lt;&gt;();</b>
+        <b class="fc"><i>35</i>&nbsp; private ObservableList&lt;Activity&gt; activityObservableList =
+            FXCollections.observableArrayList();</b>
+        <i>36</i>&nbsp;
+        <i>37</i>&nbsp; // Constructor
+        -----------------------------------------------------------------------------------------------------
+        <i>38</i>&nbsp;
+        <b class="fc"><i>39</i>&nbsp; public Task() {}</b>
+        <i>40</i>&nbsp;
+        <i>41</i>&nbsp; /** Constructor for use when
+        <i>42</i>&nbsp; * first creating a task in memory
+        <i>43</i>&nbsp; *
+        <i>44</i>&nbsp; * @param title
+        <i>45</i>&nbsp; * @param type
+        <i>46</i>&nbsp; * @param criterion
+        <i>47</i>&nbsp; * @param criterionValue
+        <i>48</i>&nbsp; * @param progress
+        <i>49</i>&nbsp; * @param date
+        <i>50</i>&nbsp; */
+        <i>51</i>&nbsp; public Task(String title, TaskType type, String criterion,
+        <b class="fc"><i>52</i>&nbsp; int criterionValue, int progress, Date date) {</b>
+        <i>53</i>&nbsp; // IF FIRST ADDED TO PROFILE DATE = CURRENT DATE
+        <b class="fc"><i>54</i>&nbsp; this.id = UUID.randomUUID().hashCode();</b>
+        <b class="fc"><i>55</i>&nbsp; this.title = title;</b>
+        <b class="fc"><i>56</i>&nbsp; this.type = type;</b>
+        <b class="fc"><i>57</i>&nbsp; this.criterion = criterion;</b>
+        <b class="fc"><i>58</i>&nbsp; this.criterionValue = criterionValue;</b>
+        <b class="fc"><i>59</i>&nbsp; this.progress = progress;</b>
+        <b class="fc"><i>60</i>&nbsp; this.date = date;</b>
+        <b class="fc"><i>61</i>&nbsp; this.time = 0;</b>
+        <b class="fc"><i>62</i>&nbsp; }</b>
+        <i>63</i>&nbsp;
+        <i>64</i>&nbsp; /** Constructor for use when
+        <i>65</i>&nbsp; * recreating a task from database
+        <i>66</i>&nbsp; *
+        <i>67</i>&nbsp; * @param id
+        <i>68</i>&nbsp; * @param title
+        <i>69</i>&nbsp; * @param type
+        <i>70</i>&nbsp; * @param criterion
+        <i>71</i>&nbsp; * @param criterionValue
+        <i>72</i>&nbsp; * @param progress
+        <i>73</i>&nbsp; * @param date
+        <i>74</i>&nbsp; */
+        <i>75</i>&nbsp; public Task(Integer id, String title, TaskType type, String criterion,
+        <i>76</i>&nbsp; int criterionValue, int progress, Date date) {
+        <b class="fc"><i>77</i>&nbsp; this(title,type,criterion,criterionValue,progress,date);</b>
+        <b class="fc"><i>78</i>&nbsp; this.id = id;</b>
+        <b class="fc"><i>79</i>&nbsp; }</b>
+        <i>80</i>&nbsp;
+        <i>81</i>&nbsp; // Methods
+        ---------------------------------------------------------------------------------------------------------
+        <i>82</i>&nbsp;
+        <i>83</i>&nbsp;// public void addNote(TaskNote note) {
+        <i>84</i>&nbsp;// if (!notes.containsKey(note))
+        <i>85</i>&nbsp;// notes.put(note, note);
+        <i>86</i>&nbsp;// }
+        <i>87</i>&nbsp;
+        <i>88</i>&nbsp; public void setTaskNote(TaskNote taskNote) {
+        <b class="nc"><i>89</i>&nbsp; this.taskNote = taskNote;</b>
+        <b class="nc"><i>90</i>&nbsp; }</b>
+        <i>91</i>&nbsp;
+        <i>92</i>&nbsp; public TaskNote getTaskNote() {
+        <b class="nc"><i>93</i>&nbsp; return taskNote;</b>
+        <i>94</i>&nbsp; }
+        <i>95</i>&nbsp; // Getters and setters
+        ---------------------------------------------------------------------------------------------
+        <i>96</i>&nbsp;
+        <i>97</i>&nbsp; public ObservableList&lt;Activity&gt; getObservableActivityList() {
+        <b class="nc"><i>98</i>&nbsp; for (Activity activity : activities.values()) {</b>
+        <b class="nc"><i>99</i>&nbsp; if (!activityObservableList.contains(activity)) {</b>
+        <b class="nc"><i>100</i>&nbsp; activityObservableList.add(activity);</b>
+        <i>101</i>&nbsp; }
+        <b class="nc"><i>102</i>&nbsp; }</b>
+        <b class="nc"><i>103</i>&nbsp; return activityObservableList;</b>
+        <i>104</i>&nbsp; }
+        <i>105</i>&nbsp;
+        <b class="fc"><i>106</i>&nbsp; public Integer getId() {return id;}</b>
+        <i>107</i>&nbsp;
+        <b class="fc"><i>108</i>&nbsp; public Date getDate() { return date; }</b>
+        <i>109</i>&nbsp;
+        <b class="fc"><i>110</i>&nbsp; public void setId(Integer id) { this.id = id; }</b>
+        <i>111</i>&nbsp;
+        <i>112</i>&nbsp; public String getTitle() {
+        <b class="fc"><i>113</i>&nbsp; return title;</b>
+        <i>114</i>&nbsp; }
+        <i>115</i>&nbsp;
+        <i>116</i>&nbsp; public void setTitle(String title) {
+        <b class="fc"><i>117</i>&nbsp; this.title = title;</b>
+        <b class="fc"><i>118</i>&nbsp; }</b>
+        <i>119</i>&nbsp;
+        <i>120</i>&nbsp; public TaskType getType() {
+        <b class="fc"><i>121</i>&nbsp; return type;</b>
+        <i>122</i>&nbsp; }
+        <i>123</i>&nbsp;
+        <i>124</i>&nbsp; public void setType(TaskType type) {
+        <b class="fc"><i>125</i>&nbsp; this.type = type;</b>
+        <b class="fc"><i>126</i>&nbsp; }</b>
+        <i>127</i>&nbsp;
+        <i>128</i>&nbsp; public int getTime() {
+        <b class="fc"><i>129</i>&nbsp; return time;</b>
+        <i>130</i>&nbsp; }
+        <i>131</i>&nbsp;
+        <i>132</i>&nbsp; public void setTime(int time) {
+        <b class="fc"><i>133</i>&nbsp; this.time = time;</b>
+        <b class="fc"><i>134</i>&nbsp; }</b>
+        <i>135</i>&nbsp;
+        <i>136</i>&nbsp; public String getCriterion() {
+        <b class="fc"><i>137</i>&nbsp; return criterion;</b>
+        <i>138</i>&nbsp; }
+        <i>139</i>&nbsp;
+        <i>140</i>&nbsp; public void setCriterion(String criterion) {
+        <b class="nc"><i>141</i>&nbsp; this.criterion = criterion;</b>
+        <b class="nc"><i>142</i>&nbsp; }</b>
+        <i>143</i>&nbsp;
+        <i>144</i>&nbsp; public int getCriterionValue() {
+        <b class="fc"><i>145</i>&nbsp; return criterionValue;</b>
+        <i>146</i>&nbsp; }
+        <i>147</i>&nbsp;
+        <i>148</i>&nbsp; public int getCriterionSoFar() {
+        <b class="nc"><i>149</i>&nbsp; return criterionSoFar;</b>
+        <i>150</i>&nbsp; }
+        <i>151</i>&nbsp;
+        <i>152</i>&nbsp; public void setCriterionValue(int criterionValue) {
+        <b class="nc"><i>153</i>&nbsp; this.criterionValue = criterionValue;</b>
+        <b class="nc"><i>154</i>&nbsp; }</b>
+        <i>155</i>&nbsp;
+        <i>156</i>&nbsp; public double getProgress() {
+        <b class="fc"><i>157</i>&nbsp; return progress;</b>
+        <i>158</i>&nbsp; }
+        <i>159</i>&nbsp;
+        <i>160</i>&nbsp; public void setProgress(int progress) {
+        <b class="nc"><i>161</i>&nbsp; this.progress = progress;</b>
+        <b class="nc"><i>162</i>&nbsp; }</b>
+        <i>163</i>&nbsp;
+        <i>164</i>&nbsp; /** Function used to delete an activity from this task
+        <i>165</i>&nbsp; * updates criterion,progress and time accordingly
+        <i>166</i>&nbsp; *
+        <i>167</i>&nbsp; * @param activity
+        <i>168</i>&nbsp; * @return true if deleted / false otherwise
+        <i>169</i>&nbsp; */
+        <i>170</i>&nbsp; public boolean deleteActivity(Activity activity) {
+        <b class="nc"><i>171</i>&nbsp; if (!activities.containsKey(activity)) return false;</b>
+        <b class="nc"><i>172</i>&nbsp; this.criterionSoFar -= activity.getQuantity();</b>
+        <b class="nc"><i>173</i>&nbsp; this.time -= activity.getTime();</b>
+        <b class="nc"><i>174</i>&nbsp; this.progress = (criterionSoFar / criterionValue) * 100;</b>
+        <b class="nc"><i>175</i>&nbsp; activities.remove(activity);</b>
+        <b class="nc"><i>176</i>&nbsp; return true;</b>
+        <i>177</i>&nbsp; }
+        <i>178</i>&nbsp;
+        <b class="fc"><i>179</i>&nbsp; public Task getDependency() { return dependency; }</b>
+        <i>180</i>&nbsp;
+        <i>181</i>&nbsp; /** Function used to add an activity
+        <i>182</i>&nbsp; * that works towards completing the task.
+        <i>183</i>&nbsp; * It also updates the progress and time take by this task
+        <i>184</i>&nbsp; *
+        <i>185</i>&nbsp; * @param activity
+        <i>186</i>&nbsp; * @return true if added / false otherwise
+        <i>187</i>&nbsp; */
+        <i>188</i>&nbsp; public boolean addActivity(Activity activity) {
+        <b class="nc"><i>189</i>&nbsp; if (!activities.containsKey(activity) &amp;&amp; criterionSoFar &lt;
+            criterionValue) {</b>
+        <b class="nc"><i>190</i>&nbsp; activities.put(activity, activity);</b>
+        <b class="nc"><i>191</i>&nbsp; criterionSoFar += activity.getQuantity();</b>
+        <b class="nc"><i>192</i>&nbsp; progress = ((double) criterionSoFar / criterionValue) * 100;</b>
+        <b class="nc"><i>193</i>&nbsp; System.out.println(progress);</b>
+        <b class="nc"><i>194</i>&nbsp; this.time += activity.getTime();</b>
+        <b class="nc"><i>195</i>&nbsp; return true;</b>
+        <i>196</i>&nbsp; }
+        <b class="nc"><i>197</i>&nbsp; return false;</b>
+        <i>198</i>&nbsp; }
+        <i>199</i>&nbsp;
+        <i>200</i>&nbsp; /** Function used to return a HashMap containing
+        <i>201</i>&nbsp; * all the activities related to this task
+        <i>202</i>&nbsp; *
+        <i>203</i>&nbsp; * @return new HashMap
+        <i>204</i>&nbsp; */
+        <b class="nc"><i>205</i>&nbsp; public Map&lt;Activity, Activity&gt; getActivities() { return new HashMap&lt;&gt;(activities);
+            }</b>
+        <i>206</i>&nbsp;
+        <i>207</i>&nbsp; public void addDependency(Task dependency) {
+        <b class="nc"><i>208</i>&nbsp; this.dependency = dependency;</b>
+        <b class="nc"><i>209</i>&nbsp; }</b>
+        <i>210</i>&nbsp;
+        <i>211</i>&nbsp; /** Function checks if task is completed based on all the related activities
+        <i>212</i>&nbsp; * if complete , it returns true
+        <i>213</i>&nbsp; * if not , it returns false and
+        <i>214</i>&nbsp; * updates progress to level of completion
+        <i>215</i>&nbsp; *
+        <i>216</i>&nbsp; * @return
+        <i>217</i>&nbsp; */
+        <i>218</i>&nbsp; public boolean isComplete(){
+        <b class="nc"><i>219</i>&nbsp; updateProgress();</b>
+        <b class="nc"><i>220</i>&nbsp; return progress == 100;</b>
+        <i>221</i>&nbsp;
+        <i>222</i>&nbsp; }
+        <i>223</i>&nbsp;
+        <i>224</i>&nbsp; /** Function used to update the progress
+        <i>225</i>&nbsp; * based on related activities
+        <i>226</i>&nbsp; *
+        <i>227</i>&nbsp; */
+        <i>228</i>&nbsp; public void updateProgress() {
+        <b class="nc"><i>229</i>&nbsp; double count = 0;</b>
+        <b class="nc"><i>230</i>&nbsp; for (Activity activity : activities.values()) {</b>
+        <b class="nc"><i>231</i>&nbsp; count += activity.getQuantity();</b>
+        <b class="nc"><i>232</i>&nbsp; }</b>
+        <i>233</i>&nbsp;
+        <b class="nc"><i>234</i>&nbsp; if (progress == criterionValue) progress = 100;</b>
+        <i>235</i>&nbsp; else {
+        <b class="nc"><i>236</i>&nbsp; if (count != 0) progress = (criterionValue / count) * 100;</b>
+        <b class="nc"><i>237</i>&nbsp; else progress = 0;</b>
+        <i>238</i>&nbsp; }
+        <b class="nc"><i>239</i>&nbsp; }</b>
+        <i>240</i>&nbsp;
+        <i>241</i>&nbsp;// public Map&lt;TaskNote, TaskNote&gt; getNotes() {
+        <i>242</i>&nbsp;// return notes;
+        <i>243</i>&nbsp;// }
+        <i>244</i>&nbsp;
+        <i>245</i>&nbsp; //public List&lt;TaskNote&gt; getNotes() { return new ArrayList&lt;&gt;(notes.values()); }
+        <i>246</i>&nbsp; // Overrides
+        -------------------------------------------------------------------------------------------------------
+        <i>247</i>&nbsp;
+        <i>248</i>&nbsp; @Override
+        <i>249</i>&nbsp; public String toString() {
+        <i>250</i>&nbsp;
+        <b class="fc"><i>251</i>&nbsp; StringBuilder stringBuilder = new StringBuilder();</b>
+        <i>252</i>&nbsp;
+        <b class="fc"><i>253</i>&nbsp; stringBuilder.append(title).append(&quot;\n&quot;)</b>
+        <b class="fc"><i>254</i>&nbsp; .append(type.toString()).append(&quot;\n&quot;)</b>
+        <b class="fc"><i>255</i>&nbsp; .append(time).append(&quot;\n&quot;)</b>
+        <b class="fc"><i>256</i>&nbsp; .append(criterion).append(&quot;\n&quot;)</b>
+        <b class="fc"><i>257</i>&nbsp; .append(criterionValue).append(&quot;\n&quot;)</b>
+        <b class="fc"><i>258</i>&nbsp; .append(progress).append(&quot;\n&quot;);</b>
+        <i>259</i>&nbsp;
+        <i>260</i>&nbsp;// if (dependency.title != null) {
+        <i>261</i>&nbsp;// stringBuilder.append(title).append(&quot; depends on &quot;).append(dependency.title);
+        <i>262</i>&nbsp;// }
+        <i>263</i>&nbsp;
+        <b class="fc"><i>264</i>&nbsp; return stringBuilder.toString();</b>
+        <i>265</i>&nbsp; }
+        <i>266</i>&nbsp;
+        <i>267</i>&nbsp; /**
+        <i>268</i>&nbsp; *
+        <i>269</i>&nbsp; * @param obj
+        <i>270</i>&nbsp; * @return
+        <i>271</i>&nbsp; */
+        <i>272</i>&nbsp; @Override
+        <i>273</i>&nbsp; public boolean equals(Object obj) {
+        <b class="fc"><i>274</i>&nbsp; if (obj == null) return false;</b>
+        <i>275</i>&nbsp;
+        <b class="fc"><i>276</i>&nbsp; if (getClass() != obj.getClass())</b>
+        <b class="nc"><i>277</i>&nbsp; return false;</b>
+        <i>278</i>&nbsp;
+        <b class="fc"><i>279</i>&nbsp; if (id == null) return false;</b>
+        <i>280</i>&nbsp;
+        <i>281</i>&nbsp;
+        <b class="fc"><i>282</i>&nbsp; Task task = (Task) obj;</b>
+        <b class="fc"><i>283</i>&nbsp; return this.id.equals(task.id);</b>
+        <i>284</i>&nbsp; }
+        <i>285</i>&nbsp;
+        <i>286</i>&nbsp; @Override
+        <i>287</i>&nbsp; public int hashCode() {
+        <b class="fc"><i>288</i>&nbsp; if (id == null)</b>
+        <b class="nc"><i>289</i>&nbsp; return title.hashCode();</b>
+        <i>290</i>&nbsp;
+        <b class="fc"><i>291</i>&nbsp; return id.hashCode();</b>
+        <i>292</i>&nbsp; }
+        <i>293</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: FileParser</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">Utils</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: FileParser (Utils)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">FileParser</td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 6)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+                <span class="absValue">
+    (0/ 49)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package Utils;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import Model.Assessment;
+        <i>4</i>&nbsp;import Model.Module;
+        <i>5</i>&nbsp;import Model.SemesterProfile;
+        <i>6</i>&nbsp;import org.json.simple.JSONArray;
+        <i>7</i>&nbsp;import org.json.simple.JSONObject;
+        <i>8</i>&nbsp;import org.json.simple.parser.JSONParser;
+        <i>9</i>&nbsp;
+        <i>10</i>&nbsp;import java.io.*;
+        <i>11</i>&nbsp;import java.text.ParseException;
+        <i>12</i>&nbsp;import java.text.SimpleDateFormat;
+        <i>13</i>&nbsp;import java.util.Date;
+        <i>14</i>&nbsp;
+        <i>15</i>&nbsp;/**
+        <i>16</i>&nbsp; * Created by 100125468 on 06/05/2017.
+        <i>17</i>&nbsp; */
+        <b class="nc"><i>18</i>&nbsp;public class FileParser {</b>
+        <i>19</i>&nbsp;
+        <i>20</i>&nbsp; private static SemesterProfile parseJson(JSONObject json){
+        <i>21</i>&nbsp; // Get data for a Semester profile
+        <b class="nc"><i>22</i>&nbsp; Date sem_start = makeDate((String)json.get(&quot;start_date&quot;));</b>
+        <b class="nc"><i>23</i>&nbsp; Date sem_end = makeDate((String)json.get(&quot;end_date&quot;));</b>
+        <i>24</i>&nbsp; // Create the semester profile
+        <b class="nc"><i>25</i>&nbsp; SemesterProfile semester = new SemesterProfile(sem_start,sem_end);</b>
+        <b class="nc"><i>26</i>&nbsp; JSONArray modules = (JSONArray)json.get(&quot;modules&quot;);</b>
+        <b class="nc"><i>27</i>&nbsp; for(int i=0; i&lt;modules.size(); i++) {</b>
+        <i>28</i>&nbsp; // Get a module
+        <b class="nc"><i>29</i>&nbsp; JSONObject jsonModule = (JSONObject)modules.get(i);</b>
+        <b class="nc"><i>30</i>&nbsp; String name = (String)jsonModule.get(&quot;title&quot;);</b>
+        <b class="nc"><i>31</i>&nbsp; String code = (String)jsonModule.get(&quot;code&quot;);</b>
+        <b class="nc"><i>32</i>&nbsp; Module module = new Module(name,code);</b>
+        <i>33</i>&nbsp; // Get all Assessments from module
+        <b class="nc"><i>34</i>&nbsp; JSONArray assessments = (JSONArray)jsonModule.get(&quot;assessments&quot;);</b>
+        <b class="nc"><i>35</i>&nbsp; if(assessments != null) {</b>
+        <b class="nc"><i>36</i>&nbsp; for (int j = 0; j &lt; assessments.size(); j++) {</b>
+        <i>37</i>&nbsp; // Get Assessment
+        <b class="nc"><i>38</i>&nbsp; JSONObject jsonAssessment = (JSONObject)assessments.get(j);</b>
+        <b class="nc"><i>39</i>&nbsp; String title = (String) jsonAssessment.get(&quot;title&quot;);</b>
+        <b class="nc"><i>40</i>&nbsp; String t = (String) jsonAssessment.get(&quot;type&quot;);</b>
+        <b class="nc"><i>41</i>&nbsp; Assessment.Type type = Assessment.Type.valueOf(t.toUpperCase());</b>
+        <b class="nc"><i>42</i>&nbsp; int weight = (int)(long) jsonAssessment.get(&quot;weight&quot;);</b>
+        <b class="nc"><i>43</i>&nbsp; Date deadline = makeDate((String) jsonAssessment.get(&quot;deadline&quot;));</b>
+        <i>44</i>&nbsp; // Create and add assessment to module
+        <b class="nc"><i>45</i>&nbsp; Assessment assessment = new Assessment(title, type, weight, deadline, 0.0);</b>
+        <b class="nc"><i>46</i>&nbsp; module.addAssessment(assessment);</b>
+        <i>47</i>&nbsp; }
+        <i>48</i>&nbsp; }
+        <i>49</i>&nbsp; //semester.addModule(null, module);
+        <b class="nc"><i>50</i>&nbsp; semester.addModule(module);</b>
+        <i>51</i>&nbsp; }
+        <b class="nc"><i>52</i>&nbsp; return semester;</b>
+        <i>53</i>&nbsp; }
+        <i>54</i>&nbsp; /** Helper Function takes a string representation of a date
+        <i>55</i>&nbsp; * and turns it into Date object (DD,MM,YYYY) format
+        <i>56</i>&nbsp; *
+        <i>57</i>&nbsp; * @param sDate
+        <i>58</i>&nbsp; * @return date
+        <i>59</i>&nbsp; */
+        <i>60</i>&nbsp; public static Date makeDate(String sDate) {
+        <b class="nc"><i>61</i>&nbsp; SimpleDateFormat format = new SimpleDateFormat(&quot;dd/MM/yyyy&quot;);</b>
+        <b class="nc"><i>62</i>&nbsp; Date date = new Date();</b>
+        <i>63</i>&nbsp; try {
+        <b class="nc"><i>64</i>&nbsp; date = format.parse(sDate);</b>
+        <b class="nc"><i>65</i>&nbsp; } catch (ParseException e) {</b>
+        <b class="nc"><i>66</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>67</i>&nbsp; }</b>
+        <b class="nc"><i>68</i>&nbsp; return date;</b>
+        <i>69</i>&nbsp; }
+        <i>70</i>&nbsp; public static boolean validate(File file){
+        <b class="nc"><i>71</i>&nbsp; return file.getName().contains(&quot;.json&quot;);</b>
+        <i>72</i>&nbsp; }
+        <i>73</i>&nbsp;
+        <i>74</i>&nbsp; /** Function takes a file, reads it and returns
+        <i>75</i>&nbsp; * a JSON object containing the data
+        <i>76</i>&nbsp; *
+        <i>77</i>&nbsp; * @param file
+        <i>78</i>&nbsp; * @return SemesterProfile
+        <i>79</i>&nbsp; * @throws IOException
+        <i>80</i>&nbsp; */
+        <i>81</i>&nbsp; public static SemesterProfile parseFile(File file) {
+        <b class="nc"><i>82</i>&nbsp; validate(file);</b>
+        <b class="nc"><i>83</i>&nbsp; JSONParser parser = new JSONParser();</b>
+        <i>84</i>&nbsp; try {
+        <b class="nc"><i>85</i>&nbsp; FileReader rd = new FileReader(file);</b>
+        <b class="nc"><i>86</i>&nbsp; Object obj = parser.parse(rd);</b>
+        <b class="nc"><i>87</i>&nbsp; JSONObject json = (JSONObject)obj;</b>
+        <b class="nc"><i>88</i>&nbsp; return parseJson(json);</b>
+        <b class="nc"><i>89</i>&nbsp; } catch (org.json.simple.parser.ParseException e){</b>
+        <b class="nc"><i>90</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>91</i>&nbsp; } catch (IOException e) {</b>
+        <b class="nc"><i>92</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>93</i>&nbsp; }</b>
+        <b class="nc"><i>94</i>&nbsp; return null;</b>
+        <i>95</i>&nbsp; }
+        <i>96</i>&nbsp; /** Function takes a file and returns a file reader
+        <i>97</i>&nbsp; *
+        <i>98</i>&nbsp; * @param file
+        <i>99</i>&nbsp; * @return BufferedReader
+        <i>100</i>&nbsp; * @throws IOException
+        <i>101</i>&nbsp; */
+        <i>102</i>&nbsp; private static BufferedReader openFile(File file){
+        <b class="nc"><i>103</i>&nbsp; BufferedReader reader = null;</b>
+        <i>104</i>&nbsp; try {
+        <b class="nc"><i>105</i>&nbsp; reader = new BufferedReader(new FileReader(file));</b>
+        <b class="nc"><i>106</i>&nbsp; } catch (FileNotFoundException e) {</b>
+        <b class="nc"><i>107</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>108</i>&nbsp; }</b>
+        <b class="nc"><i>109</i>&nbsp; return reader;</b>
+        <i>110</i>&nbsp; }
+        <i>111</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2017-05-26 14:29</div>
+</div>
+</body>
+</html>
