@@ -52,7 +52,6 @@ public class Activity {
      * @param time
      * @param date
      */
-    // TODO: Decide whether we need constructors
     public Activity(Integer activityId, String title, int quantity, int time, Date date) {
         this(title,quantity,time,date);
         this.activityId = activityId;
@@ -103,10 +102,6 @@ public class Activity {
         this.time = time;
     }
 
-
-//    public void setNotes(ArrayList<ActivityNote> notes) {
-//        this.notes = notes;
-//    }
 
     // Overrides -------------------------------------------------------------------------------------------------------
     // TODO: Write toString

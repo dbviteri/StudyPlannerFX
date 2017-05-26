@@ -95,9 +95,12 @@ public class Assessment {
      *
      * @param milestone
      */
-    public void addMilestone(Milestone milestone) {
-        if (!milestones.containsKey(milestone))
+    public boolean addMilestone(Milestone milestone) {
+        if (!milestones.containsKey(milestone)){
             milestones.put(milestone, milestone);
+            return true;
+        }
+        return false;
     }
 
     /** Function used to delete a
@@ -155,10 +158,13 @@ public class Assessment {
      *
      * @param task
      */
-    public void addTask(Task task) {
-        if (!tasks.containsKey(task))
+    public boolean addTask(Task task) {
+        if (!tasks.containsKey(task)){
             tasks.put(task, task);
-        updateCompletion();
+            updateCompletion();
+            return  true;
+        }
+        return false;
     }
 
     public ObservableList<Task> getObservableTaskList() {
