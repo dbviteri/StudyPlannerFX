@@ -129,11 +129,13 @@ public class Milestone {
      *
      * @param task
      */
-    public void addTask(Task task){
+    public boolean addTask(Task task){
         if(!tasks.containsKey(task)){
             tasks.put(task,task);
+            updateProgress();
+            return true;
         }
-        updateProgress();
+        return false;
     }
     @Override
     public String toString(){
