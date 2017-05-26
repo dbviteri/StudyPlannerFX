@@ -20,6 +20,10 @@ import java.util.Iterator;
 public class GanttChart<X,Y> extends XYChart<X,Y> {
     private double frameHeight = 10;
 
+    /** Helper class holds metadata about
+     *  a data point(length of time and stylesheet)
+     *
+     */
     public static class MetaData {
         public double length;
         public String style;
@@ -51,7 +55,7 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
     public GanttChart(Axis<X>X, Axis<Y> Y, ObservableList<Series<X,Y>> data) {
         super(X,Y);
         if (!(X instanceof NumberAxis && Y instanceof CategoryAxis)) {
-            throw new IllegalArgumentException("Axis type incorrect, X and Y should both be NumberAxis");
+            throw new IllegalArgumentException("Axis type incorrect, X and Y should not both be NumberAxis");
         }
         setData(data);
 
@@ -63,12 +67,26 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
     private static String getStyleClass(Object obj) { return ((MetaData)obj).getStyle(); }
     private static double getLength(Object obj) { return ((MetaData)obj).getLength(); }
     // Overrides--------------------------------------------------------------------------------------------------------
+
+    /** Function used to add
+     *  a data item to the graph
+     *
+     * @param series
+     * @param dataIndex
+     * @param dataItem
+     */
     @Override
     protected void dataItemAdded(Series<X,Y> series, int dataIndex, Data<X,Y> dataItem) {
-        Node frame = createFrameHolder(series,getData().indexOf(series),dataItem, dataIndex);
+        Node frame = createFrameHolder(dataItem);
         getPlotChildren().add(frame);
     }
 
+    /** Function used to remove a data item
+     *  of a series from the graph
+     *
+     * @param item
+     * @param series
+     */
     @Override
     protected void dataItemRemoved(Data item, Series series) {
         Node frame = item.getNode();
@@ -76,14 +94,24 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
         removeDataItemFromDisplay(series,item);
     }
 
+    /** function used to add a series
+     *  of data points to the chart
+     *
+     * @param series
+     * @param seriesIndex
+     */
     @Override
     protected void seriesAdded(Series<X,Y> series, int seriesIndex) {
         for(int c=0; c< series.getData().size();c++){
             Data<X,Y> xyData = series.getData().get(c);
-            Node frameHolder = createFrameHolder(series,seriesIndex,xyData,c);
+            Node frameHolder = createFrameHolder(xyData);
             getPlotChildren().add(frameHolder);
         }
     }
+
+    /** Function updates axis range based on current data
+     *
+     */
     @Override
     protected void updateAxisRange(){
         Axis<X> xAxis = getXAxis();
@@ -112,6 +140,11 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
 
     }
 
+    /** Function used to remove a
+     *  series of data points from the graph
+     *
+     * @param series
+     */
     @Override
     protected void seriesRemoved(Series<X,Y> series) {
         for(XYChart.Data<X,Y> xydata : series.getData() ){
@@ -120,7 +153,14 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
         }
         removeSeriesFromDisplay(series);
     }
-    private Node createFrameHolder(Series<X,Y> series, int seriesIndex, Data<X,Y> dataItem, int dataIndex){
+
+    /** Function used to create
+     *  a node placeholder for a dataItem
+     *
+     * @param dataItem
+     * @return node
+     */
+    private Node createFrameHolder(Data<X,Y> dataItem){
         Node frameHolder = dataItem.getNode();
         if (frameHolder == null){
             frameHolder = new StackPane();
@@ -129,6 +169,10 @@ public class GanttChart<X,Y> extends XYChart<X,Y> {
         frameHolder.getStyleClass().add(getStyleClass(dataItem.getExtraValue()));
         return frameHolder;
     }
+
+    /** Function used to plot points onto the graph
+     *
+     */
     @Override
     protected void layoutPlotChildren() {
         for(int index=0; index < getData().size(); index++){

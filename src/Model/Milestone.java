@@ -23,6 +23,13 @@ public class Milestone {
 
     private ObservableList<Task> observableTaskList = FXCollections.observableArrayList();
 
+    /** Constructor used when first
+     *  creating a milestone into memory
+     *
+     * @param title
+     * @param start
+     * @param deadline
+     */
     public Milestone(String title, Date start, Date deadline) {
         // IF FIRST TIME MILESTONE IS ADDED DATE = CURRENT DATE
         id = UUID.randomUUID().hashCode();
@@ -31,6 +38,15 @@ public class Milestone {
         this.deadline = deadline;
     }
 
+    /** Constructor used when recreating
+     *  a milestone from Database into memory
+     *
+     * @param id
+     * @param title
+     * @param progress
+     * @param start
+     * @param deadline
+     */
     public Milestone(Integer id, String title, double progress, Date start, Date deadline) {
         this(title, start, deadline);
         this.progress.setValue(progress);

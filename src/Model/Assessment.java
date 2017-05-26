@@ -32,10 +32,6 @@ public class Assessment {
     private ObservableList<Task> observableTaskList = FXCollections.observableArrayList();
     private ObservableList<Milestone> observableMilestoneList = FXCollections.observableArrayList();
 
-    //TODO: Be able to define study milestones which must be attached to coursework or exams
-    //TODO: Be able to define study tasks contributing towards specific coursework or exams
-
-    // EMPTY CONSTRUCTOR FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!
     public Assessment() {}
 
     public Assessment(String title, Type type, int weight, Date deadline, Double completion) {
@@ -45,7 +41,6 @@ public class Assessment {
         this.weight = weight;
         this.deadline = deadline;
         this.completion.set(completion);
-        //this.moduleCode = moduleCode;
     }
     public Assessment(int id, String title, Type type, int weight, Date deadline, double completion) {
         this(title,type,weight,deadline,completion);
@@ -95,18 +90,29 @@ public class Assessment {
 
     public Map<Task, Task> getTasks() { return new HashMap<>(tasks); }
 
+    /** Function used to add a milestone
+     *  to this assessment if not already present
+     *
+     * @param milestone
+     */
     public void addMilestone(Milestone milestone) {
         if (!milestones.containsKey(milestone))
             milestones.put(milestone, milestone);
     }
 
+    /** Function used to delete a
+     *  milestone from this assessment
+     *
+     * @param milestone
+     */
     public void deleteMilestone(Milestone milestone) { milestones.remove(milestone); }
 
-    //public void addTasks(Map<Integer, Task> tasks) { this.tasks = tasks; }
-
-    //public void addAllTasks(ArrayList<Task> tasks) { this.tasks = tasks; }
-
-
+    /** Function used to delete
+     *  a task from this assessment
+     *
+     * @param passedTask
+     * @return true if deleted / false otherwise
+     */
     public boolean deleteTask(Task passedTask) {
         for (Task task : tasks.values()) {
             if (!task.equals(passedTask)) {
@@ -115,8 +121,6 @@ public class Assessment {
                 }
             }
         }
-
-        //if (!task.getDependencies().isEmpty()) return false;
         tasks.remove(passedTask);
         updateCompletion();
         return true;
@@ -128,6 +132,10 @@ public class Assessment {
         return completion;
     }
 
+    /** Function used to update assessment completion based on tasks
+     *  which in turn are based on activities
+     *
+     */
     public void updateCompletion() {
         double count = 0;
         if (tasks.isEmpty()) {
@@ -142,6 +150,11 @@ public class Assessment {
         completion.set(count / tasks.size());
     }
 
+    /** Function used to add
+     *  a task to this assessment
+     *
+     * @param task
+     */
     public void addTask(Task task) {
         if (!tasks.containsKey(task))
             tasks.put(task, task);

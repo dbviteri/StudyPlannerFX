@@ -15,19 +15,30 @@ public class Module {
     private String title;
     private String code;
     private HashMap<Assessment, Assessment> assessments = new HashMap<>();
-    //private int semesterID;
 
     // Constructors ----------------------------------------------------------------------------------------------------
 
-    // TODO: Decide whether we need constructors
-    // Might be optional if we set everything by the setters
     public Module() {}
 
+    /** Constructor used when first
+     *  creating a module into memory
+     *
+     * @param title
+     * @param code
+     */
     public Module(String title, String code) {
         this.moduleId = null;
         this.title = title;
         this.code = code;
     }
+
+    /** Constructor used when recreating a module
+     *  from Database into memory
+     *
+     * @param moduleId
+     * @param title
+     * @param code
+     */
     public Module(int moduleId, String title, String code) {
         this(title,code);
         this.moduleId = moduleId;
@@ -40,7 +51,6 @@ public class Module {
         return title;
     }
     public String getCode() { return code; }
-    //public int getSemesterID() { return semesterID;}
 
     public void setModuleId(int moduleId) { this.moduleId = moduleId; }
     public void setTitle(String title){
@@ -49,15 +59,16 @@ public class Module {
     public void setCode(String code){
         this.code = code;
     }
-    //public void setSemesterID(int semesterID) {this.semesterID = semesterID;}
 
+    /** Function adds a new assessment to
+     *  this module if not already present
+     *
+     * @param assessment
+     */
     public void addAssessment(Assessment assessment){
         if (!assessments.containsKey(assessment))
             assessments.put(assessment, assessment);
     }
-//    public void addAssessments(Set<Assessment> assessments){
-//        this.assessments = assessments;
-//    }
 
     public HashMap<Assessment, Assessment> getAssessments() {return assessments;}
     // Overrides -------------------------------------------------------------------------------------------------------

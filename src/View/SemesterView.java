@@ -134,7 +134,6 @@ public class SemesterView implements ControlledScene {
     }
     @FXML
     public void updateSemesterProfile() {
-        // TODO: CALL UPLOAD A FILE HERE, UPDATE USING THIS USER's ID
         File file = null;
         final FileChooser fileChooser = new FileChooser();
         file = fileChooser.showOpenDialog(stageHandler.getStage());

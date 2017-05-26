@@ -16,7 +16,6 @@ public class Note {
 
     // Constructor -----------------------------------------------------------------------------------------------------
 
-    // TODO: Decide whether we need constructors
     public Note(String title, String text, Date date) {
         this.title = title;
         this.text = text;

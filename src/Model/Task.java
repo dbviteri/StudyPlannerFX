@@ -38,7 +38,16 @@ public class Task {
 
     public Task() {}
 
-    // TODO: Decide whether we need constructors
+    /** Constructor for use when
+     *  first creating a task in memory
+     *
+     * @param title
+     * @param type
+     * @param criterion
+     * @param criterionValue
+     * @param progress
+     * @param date
+     */
     public Task(String title, TaskType type, String criterion,
                 int criterionValue, int progress, Date date) {
         // IF FIRST ADDED TO PROFILE DATE = CURRENT DATE
@@ -51,6 +60,18 @@ public class Task {
         this.date = date;
         this.time = 0;
     }
+
+    /** Constructor for use when
+     *  recreating a task from database
+     *
+     * @param id
+     * @param title
+     * @param type
+     * @param criterion
+     * @param criterionValue
+     * @param progress
+     * @param date
+     */
     public Task(Integer id, String title, TaskType type, String criterion,
                 int criterionValue, int progress, Date date) {
         this(title,type,criterion,criterionValue,progress,date);
@@ -140,6 +161,12 @@ public class Task {
         this.progress = progress;
     }
 
+    /** Function used to delete an activity from this task
+     *  updates criterion,progress and time accordingly
+     *
+     * @param activity
+     * @return true if deleted / false otherwise
+     */
     public boolean deleteActivity(Activity activity) {
         if (!activities.containsKey(activity)) return false;
         this.criterionSoFar -= activity.getQuantity();
@@ -149,9 +176,15 @@ public class Task {
         return true;
     }
 
-    //public Map<Task, Task> getDependencyTasks() {return dependencies;}
     public Task getDependency() { return dependency; }
 
+    /** Function used to add an activity
+     *  that works towards completing the task.
+     *  It also updates the progress and time take by this task
+     *
+     * @param activity
+     * @return true if added / false otherwise
+     */
     public boolean addActivity(Activity activity) {
         if (!activities.containsKey(activity) && criterionSoFar < criterionValue) {
             activities.put(activity, activity);
@@ -164,7 +197,11 @@ public class Task {
         return false;
     }
 
-    //public Map<Activity, Activity> getActivities() { return activities; }
+    /** Function used to return a HashMap containing
+     *  all the activities related to this task
+     *
+     * @return new HashMap
+     */
     public Map<Activity, Activity> getActivities() { return new HashMap<>(activities); }
 
     public void addDependency(Task dependency) {
@@ -173,7 +210,8 @@ public class Task {
 
     /** Function checks if task is completed based on all the related activities
      *  if complete , it returns true
-     *  if not , it sets progress to the
+     *  if not , it returns false and
+     *  updates progress to level of completion
      *
      * @return
      */
@@ -183,6 +221,10 @@ public class Task {
 
     }
 
+    /** Function used to update the progress
+     *  based on related activities
+     *
+     */
     public void updateProgress() {
         double count = 0;
         for (Activity activity : activities.values()) {
