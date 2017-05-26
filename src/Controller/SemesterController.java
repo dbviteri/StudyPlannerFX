@@ -19,11 +19,6 @@ public class SemesterController implements DBQuery {
 
     // Constant queries ------------------------------------------------------------------------------------------------
 
-    //TODO-IMPORTANT: Queries for semester. What data will be stored in the database?
-
-    //? Query to insert a module after reading the file
-    //? Query to
-
     private static final String QUERY_COUNT_SEMESTERS =
             "SELECT *, count *";
     private static final String QUERY_ALL_SEMESTERS =
@@ -67,15 +62,6 @@ public class SemesterController implements DBQuery {
     // Constructor -----------------------------------------------------------------------------------------------------
 
 
-    /**
-     * Find semesters for a given user
-     *
-     * @param
-     * @return
-     */
-//    public static SemesterProfile find(int userId) {
-//        return find(QUERY_USER_SEMESTER, userId);
-//    }
     public void loadSemester(int userId) {
         Session.addSemesterToUser(find(QUERY_USER_SEMESTER, userId));
     }
@@ -95,6 +81,11 @@ public class SemesterController implements DBQuery {
         return semesterProfile;
     }
 
+    /** Function used to insert
+     *  a semester into the Database
+     *
+     * @param semester
+     */
     public void insertSemester(SemesterProfile semester) {
         Object[] properties = {
                 semester.getStartDate(),
@@ -123,6 +114,13 @@ public class SemesterController implements DBQuery {
         }
     }
 
+    /** Function used to create a semester
+     *  from data in the database(ResultSet)
+     *
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     private SemesterProfile formSemester(ResultSet resultSet) throws SQLException {
         TaskController taskController = new TaskController();
         ActivityController activityController = new ActivityController();
@@ -241,6 +239,11 @@ public class SemesterController implements DBQuery {
         return semesterProfile;
     }
 
+    /** Function used to update
+     *  a semester in the database
+     *
+     * @param semesterProfile
+     */
     public void updateSemester(SemesterProfile semesterProfile){
         for(Module module : semesterProfile.getModules().values()) {
             for(Assessment assessment : module.getAssessments().values()){
@@ -248,6 +251,12 @@ public class SemesterController implements DBQuery {
             }
         }
     }
+
+    /** Function used to log user out
+     *  sets scene to login
+     *
+     * @param stageHandler
+     */
     public void logOut(StageHandler stageHandler){
         dbhandler.deleteSession();
         stageHandler.reloadScene(StageHandler.SCENE.LOGIN);

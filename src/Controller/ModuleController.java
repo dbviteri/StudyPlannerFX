@@ -98,10 +98,11 @@ public class ModuleController implements DBQuery {
         return new Module(moduleId, title, code);
     }
 
-    /** Function used to update
+    /** Function used to update a
+     *  module in the database
      *
      * @param module
-     * @return
+     * @return true if updated / false otherwise
      */
     public static boolean updateModule(Module module){
 

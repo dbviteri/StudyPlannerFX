@@ -28,6 +28,12 @@ public class ActivityController implements DBQuery {
 
     // METHODS ---------------------------------------------------------------------------------------------------------
 
+    /** Function used to return everything
+     *  matching the taskID from DB
+     *
+     * @param taskId
+     * @return
+     */
     public ArrayList<Activity> findAll(int taskId) {
         ArrayList<Activity> activities = new ArrayList<>();
 
@@ -45,6 +51,13 @@ public class ActivityController implements DBQuery {
         return activities;
     }
 
+    /** Function used to insert an
+     *  activity into the Database
+     *
+     * @param activity
+     * @param taskId
+     * @return
+     */
     public boolean insertActivity(Activity activity, int taskId) {
         Object[] properties = {
                 activity.getQuantity(),
@@ -72,7 +85,13 @@ public class ActivityController implements DBQuery {
         return true;
     }
 
-
+    /** Method used to create an
+     *  activity from a resultSet
+     *
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     public Activity formActivity(ResultSet resultSet) throws SQLException {
         Integer activityId = resultSet.getInt("activity_ID");
         int quantity = resultSet.getInt("quantity");
@@ -82,6 +101,13 @@ public class ActivityController implements DBQuery {
         return new Activity(activityId, title, quantity, time,date);
         //return new Activity();
     }
+
+    /** Function used to update
+     *  an activity in the Database
+     *
+     * @param activity
+     * @return
+     */
     public boolean updateActivity(Activity activity){
         Object[] properties = {
                 activity.getQuantity(),

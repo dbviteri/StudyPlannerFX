@@ -46,6 +46,13 @@ public class NoteController implements DBQuery {
         return notes;
     }
 
+    /** Function used to update
+     *  a note in the Database
+     *
+     * @param note
+     * @param taskId
+     * @param activityId
+     */
     public void updateNote(Note note, Integer taskId, Integer activityId) {
         Object[] properties = {
                 note.getTitle(),
@@ -68,6 +75,12 @@ public class NoteController implements DBQuery {
         }
     }
 
+    /** Function used to update
+     *  a note in the database
+     *
+     * @param sql
+     * @param properties
+     */
     private void updateNote(String sql, Object... properties) {
         try (
                 PreparedStatement statement = dbhandler.prepareStatement(sql, false, properties)
@@ -79,6 +92,12 @@ public class NoteController implements DBQuery {
         }
     }
 
+    /** Function checks if note is present in database
+     *
+     * @param taskId
+     * @param activityId
+     * @return true if present / false otherwise
+     */
     private boolean noteExists(Integer taskId, Integer activityId) {
         Object[] properties = {
                 taskId,
@@ -97,6 +116,13 @@ public class NoteController implements DBQuery {
         return false;
     }
 
+    /** Function used to create
+     *  a note from a result set
+     *
+     * @param resultSet
+     * @return a note
+     * @throws SQLException
+     */
     static Note formNote(ResultSet resultSet) throws SQLException {
         String title = resultSet.getString("note_title");
         String text = resultSet.getString("text");
