@@ -61,13 +61,12 @@ public class DatabaseHandler {
 
     //TODO: close connection on logging out? Or keep connection alive
     public void closeConnection() {
-        System.out.println("nuttin");
-//        try {
-//            this.connection.close();
-//            this.connection = null;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            this.connection.close();
+            this.connection = null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

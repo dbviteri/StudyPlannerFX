@@ -6,7 +6,6 @@ import Model.SemesterProfile;
 import Model.User;
 import Utils.FileParser;
 import Utils.SPException;
-import Utils.StageHandler;
 import View.AlertDialog;
 import javafx.scene.control.Alert;
 
@@ -135,7 +134,8 @@ public class UserController implements DBQuery {
 
         return false;
     }
-    public boolean logIn(StageHandler stageHandler, String username, String password){
+
+    public boolean logIn(String username, String password) {
 
         User user = find(username, password);
 
@@ -146,10 +146,6 @@ public class UserController implements DBQuery {
         }
         //databaseHandler.createSession(user);
         DatabaseHandler.getInstance().createSession(user);
-
-        // Reload scene after creating a session
-        stageHandler.reloadScene(StageHandler.SCENE.SEMESTER);
-        stageHandler.setScene(StageHandler.SCENE.SEMESTER, true, 1024, 768);
 
         return true;
     }

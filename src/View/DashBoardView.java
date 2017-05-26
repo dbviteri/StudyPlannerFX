@@ -137,124 +137,58 @@ public class DashBoardView {
         }
     }
 
-//    public void openChart(Module module){
-//
-//        Assessment[] assessments = new Assessment[module.getAssessments().values().size()];
-//        module.getAssessments().values().toArray(assessments);
-////        HashMap<Task,Task> tasks = new HashMap<>();
-////        HashMap<Activity, Activity> activities = new HashMap<>();
-////        HashMap<Milestone,Milestone> milestones = new HashMap<>();
-//        ArrayList<String> assessmentTitles = new ArrayList<>();
-//        ArrayList<XYChart.Series> chartEntry = new ArrayList<>();
-//        XYChart.Series series = new XYChart.Series();
-//        int i = 0;
-//        for(Assessment entry : assessments) {
-//            Task[] tasks = new Task[entry.getTasks().size()];
-//            entry.getTasks().values().toArray(tasks);
-//            assessmentTitles.add(entry.getTitle());
-//            for(Task task : tasks){
-//                Activity[] activities = new Activity[task.getActivities().size()];
-//                task.getActivities().values().toArray(activities);
-//                series.getData().add(new XYChart.Data(0, task.getTitle(), new GanttChart.MetaData(2,"status-red")));
-//                for(Activity activity : activities){
-//                    series.getData().add(new XYChart.Data(2, activity.getTitle(), new GanttChart.MetaData(4,"status-purple")));
-//                }
-//            }
-//            series.getData().add(new XYChart.Data(4, entry.getTitle(), new GanttChart.MetaData(6,"status-blue")));
-//            chartEntry.add(series);
-//            series = new XYChart.Series();
-//        }
-//
-//        NumberAxis xAxis = new NumberAxis();
-//        CategoryAxis yAxis = new CategoryAxis();
-//        GanttChart ganttChart = new GanttChart<>(xAxis,yAxis);
-//
-//        ganttChart.setTitle(module.getTitle()+" chart");
-//        ganttChart.setLegendVisible(false);
-//        ganttChart.setFrameHeight( 50);
-//
-//        xAxis.setLabel("");
-//        xAxis.setTickLabelFill(Color.CHOCOLATE);
-//        xAxis.setMinorTickCount(4);
-//
-//        yAxis.setLabel("");
-//        yAxis.setTickLabelFill(Color.CHOCOLATE);
-//        yAxis.setTickLabelGap(10);
-//        yAxis.setCategories(FXCollections.observableArrayList(assessmentTitles));
-//
-//        for(XYChart.Series series1 : chartEntry){
-//            ganttChart.getData().add(series1);
-//        }
-//        ganttChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
-//
-//        //series.getData().add(new XYChart.Data(tasks.get, assessmentTitles.get(0), new GanttChart.MetaData( 1, "status-red")));
-//
-//        ScrollPane pane = new ScrollPane();
-//        pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-//        pane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-//
-//        Scene chartScene = new Scene(pane,620,350);
-//        pane.setContent(ganttChart);
-//
-//        Stage stage = new Stage();
-//        stage.setScene(chartScene);
-//        stage.show();
-//    }
-
     public void openChart(Module module){
-        createJson();
+        createJson(module);
         Stage stage = new Stage();
-        Browser webView = new Browser(stage);
+        Browser webView = new Browser();
         //stage.setScene(new GanttChartView().load(module));
         stage.setScene(new Scene(webView));
         stage.show();
     }
 
-    private void createJson() {
-        SemesterProfile semesterProfile = databaseHandler.getSemesterSession();
-        ArrayList<Module> moduleList = new ArrayList<>(semesterProfile.getModules().values());
+    private void createJson(Module module) {
+        DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
+        SemesterProfile semester = databaseHandler.getSemesterSession();
+        //semester.put("start_date", String.valueOf(semesterProfile.getStartDate()));
+        //semester.put("end_date", String.valueOf(semesterProfile.getEndDate()));
 
-        JSONObject semester = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
-        List<JSONObject> modules = new ArrayList<>();
+//            JSONObject jsonModule = new JSONObject();
+//            jsonModule.put("title", module.getTitle());
+//            jsonModule.put("code", module.getCode());
+        //JSONObject moduleJson = new JSONObject();
+        JSONArray moduleJson = new JSONArray();
+        //List<JSONObject> assessments = new ArrayList<>();
+        module.getAssessments().values().forEach(assessment -> {
+            JSONObject jsonAssessment = new JSONObject();
+//                jsonAssessment.put("title", assessment.getTitle());
+//                jsonAssessment.put("type", assessment.getType().toString());
+//                jsonAssessment.put("weight", assessment.getWeight());
+//                jsonAssessment.put("completion", assessment.getCompletion());
+            jsonAssessment.put("assessmentTitle", assessment.getTitle());
+            jsonAssessment.put("start", String.valueOf(semester.getStartDate()));
+            jsonAssessment.put("deadline", String.valueOf(assessment.getDeadLine()));
 
-        semester.put("start_date", String.valueOf(semesterProfile.getStartDate()));
-        semester.put("end_date", String.valueOf(semesterProfile.getEndDate()));
+            List<JSONObject> assessmentTasks = new ArrayList<>();
+            assessment.getTasks().values().forEach(task -> {
+                JSONObject jsonTask = new JSONObject();
+//                    jsonTask.put("title", task.getTitle());
+//                    jsonTask.put("type", task.getType().toString());
+//                    jsonTask.put("criterion", task.getCriterion());
+//                    jsonTask.put("criterion value", task.getCriterionValue());
+//                    jsonTask.put("progress", task.getProgress());
+                jsonTask.put("date", String.valueOf(task.getDate()));
+                assessmentTasks.add(jsonTask);
 
-        semesterProfile.getModules().values().forEach(module -> {
-            JSONObject jsonModule = new JSONObject();
-            jsonModule.put("title", module.getTitle());
-            jsonModule.put("code", module.getCode());
-            List<JSONObject> assessments = new ArrayList<>();
-            module.getAssessments().values().forEach(assessment -> {
-                JSONObject jsonAssessment = new JSONObject();
-                jsonAssessment.put("title", assessment.getTitle());
-                jsonAssessment.put("type", assessment.getType().toString());
-                jsonAssessment.put("weight", assessment.getWeight());
-                jsonAssessment.put("completion", assessment.getCompletion());
-                jsonAssessment.put("deadline", String.valueOf(assessment.getDeadLine()));
-
-                List<JSONObject> assessmentTasks = new ArrayList<>();
-                assessment.getTasks().values().forEach(task -> {
-                    JSONObject jsonTask = new JSONObject();
-                    jsonTask.put("title", task.getTitle());
-                    jsonTask.put("type", task.getType().toString());
-                    jsonTask.put("criterion", task.getCriterion());
-                    jsonTask.put("criterion value", task.getCriterionValue());
-                    jsonTask.put("progress", task.getProgress());
-                    jsonTask.put("date", String.valueOf(task.getDate()));
-                    assessmentTasks.add(jsonTask);
-
-                    List<JSONObject> activities = new ArrayList<>();
-                    task.getActivities().values().forEach(activity -> {
-                        JSONObject jsonActivitiy = new JSONObject();
-                        jsonActivitiy.put("title", activity.getTitle());
-                        jsonActivitiy.put("date", String.valueOf(activity.getDate()));
-                        jsonActivitiy.put("time", activity.getTime());
-                        activities.add(jsonActivitiy);
-                    });
+                List<JSONObject> activities = new ArrayList<>();
+                task.getActivities().values().forEach(activity -> {
+                    JSONObject jsonActivitiy = new JSONObject();
+                    jsonActivitiy.put("title", activity.getTitle());
+                    jsonActivitiy.put("date", String.valueOf(activity.getDate()));
+                    jsonActivitiy.put("time", activity.getTime());
+                    activities.add(jsonActivitiy);
                 });
-                jsonAssessment.put("Tasks", assessmentTasks);
+            });
+            jsonAssessment.put("tasks", assessmentTasks);
 
 //                List<JSONObject> milestones = new ArrayList<>();
 //                assessment.getMilestones().values().forEach(milestone -> {
@@ -264,24 +198,21 @@ public class DashBoardView {
 //                });
 //                jsonAssessment.put("Milestones", milestones);
 
-                assessments.add(jsonAssessment);
-            });
-
-            jsonModule.put("assessments", assessments);
-            modules.add(jsonModule);
+            //assessments.add(jsonAssessment);
+            moduleJson.add(jsonAssessment);
         });
 
-        semester.put("modules", modules);
+        //moduleJson.add(jsonAssessment);
 
-        try (FileWriter file = new FileWriter("../View/ganttInclude/data.json")) {
-            file.write(semester.toJSONString());
+        try (FileWriter file = new FileWriter("data.json")) {
+            file.write(moduleJson.toJSONString());
             System.out.println("Successfully Copied JSON Object to File...");
-            System.out.println("\nJSON Object: " + semester);
+            System.out.println("\nJSON Object: " + moduleJson);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        System.out.println(semester.toJSONString());
+        System.out.println(moduleJson.toJSONString());
     }
 
     class Browser extends Region {
@@ -291,9 +222,7 @@ public class DashBoardView {
         final WebEngine webEngine = browser.getEngine();
 
 
-        public Browser(Stage stage) {
-            browser.prefWidthProperty().bind(stage.widthProperty());
-            browser.prefHeightProperty().bind(stage.heightProperty());
+        public Browser() {
             // load the web page
             URL url = getClass().getResource(URL_LOCATION);
             webEngine.load(url.toExternalForm());

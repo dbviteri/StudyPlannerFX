@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Created by Didac on 07/05/2017.
+ * Test
  */
 public class AlertDialogTest {
     @Before
@@ -24,10 +24,7 @@ public class AlertDialogTest {
             new JFXPanel(); // Initializes the JavaFx Platform
             Platform.runLater(() -> {
                 //throw new SPException("Test");
-                new AlertDialog(Alert.AlertType.ERROR, "Error message"); // Create and
-                // initialize
-                // your app.
-
+                new AlertDialog(Alert.AlertType.ERROR, "Error message"); // Create
             });
         });
         thread.start();// Initialize the thread
