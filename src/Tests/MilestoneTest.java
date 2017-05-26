@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.Date;
 
 /**
- * Created by 100125468 on 26/05/2017.
+ * Created by Dinara Adilova on 26/05/2017.
  */
 public class MilestoneTest {
     Milestone milestone = new Milestone("Test milestone",new Date(), new Date());

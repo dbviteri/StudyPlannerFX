@@ -115,6 +115,7 @@ public class Milestone {
      *
      * @return HashMap<Task,Task>
      */
+    @Deprecated
     public HashMap<Task,Task> getIncompletes(){
         HashMap<Task,Task> incomplete = new HashMap<>();
         for(HashMap.Entry entry : tasks.entrySet()){
